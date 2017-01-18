@@ -22,9 +22,14 @@ angular.module('RDash')
             } else if (valid) {
                 var method = $scope.student.editId ? 'put' : 'post';
                 
-                Data[method]('students', { id: $scope.student.editId, student: $scope.student }).then(function (result) {
-                    $scope.students = data.students;
+                Data[method]('recomends', { data: $scope.student, table: 'students' }).then(function (result) {
+                    $scope.students = result.data;
+                    alert(result.success || result.error);
                 });
+
+                // Data[method]('students', { id: $scope.student.editId, student: $scope.student }).then(function (result) {
+                //     $scope.students = data.students;
+                // });
 
                 $scope.close();
             }

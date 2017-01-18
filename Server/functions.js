@@ -48,10 +48,19 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    if (db.ADD('recomends', req.body.recomend)) {
+        var newRecomend = {
+            UserID: req.cookies.UserID,
+            Type: 'הוספה',
+            Requested: new Date(),
+            Approved: undefined,
+            TableName: req.body.table,
+            Data: req.body.data
+        }
+
+    if (db.ADD('recomends', newRecomend)) {
         res.send({
             success: 'ההוספה בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-            recomends: db.GET('recomends', req.cookies.UserID)
+            data: db.GET(req.body.table, req.cookies.UserID)
         });
     } else {
         res.send({
