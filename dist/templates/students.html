@@ -10,13 +10,13 @@
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.firstName.$dirty) && studentForm.firstName.$invalid }">
             <label class="col-md-4 control-label">שם פרטי</label>
             <div class="col-md-8">
-              <input name="firstName" type="text" ng-model="student.firstName" class="form-control" ng-minlength="2" required>
+              <input name="firstName" type="text" ng-model="student.firstName" class="form-control" ng-minlength="3" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.lastName.$dirty) && studentForm.lastName.$invalid }">
             <label class="col-md-4 control-label">שם משפחה</label>
             <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="student.lastName" class="form-control" ng-minlength="2" required>
+              <input name="lastName" type="text" ng-model="student.lastName" class="form-control" ng-minlength="3" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.phone.$dirty) && studentForm.phone.$invalid }">

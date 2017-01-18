@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var Admin = 'Admin';
 var User = 'User';
 var currentUser;
-var db = require('./database.js');
+var db = require('./Server/database.js');
+var f = require('./Server/functions.js');
 
 var Users = {
     userList: [
@@ -44,15 +45,29 @@ app.get('/' + User, requireRole([User]), sendHomePage);
 
 app.post('/login', requireRole([Admin, User]), sendCookies);
 
-app.get('/students', requireRole([Admin, User]), getStudents);
-app.post('/students', requireRole([Admin]), newStudent);
-app.put('/students', requireRole([Admin]), editStudent);
-app.delete('/students', requireRole([Admin]), deleteStudent);
+app.get('/students', requireRole([Admin, User]), f.getStudents);
+app.post('/students', requireRole([Admin]), f.newStudent);
+app.put('/students', requireRole([Admin]), f.editStudent);
+app.delete('/students', requireRole([Admin]), f.deleteStudent);
 
-app.get('/recomends', requireRole([Admin, User]), getRecomends);
-app.post('/recomends', requireRole([User]), newRecomend);
-app.put('/recomends', requireRole([User]), editRecomend);
-app.delete('/recomends', requireRole([User]), deleteRecomend);
+app.get('/recomends', requireRole([Admin, User]), f.getRecomends);
+app.post('/recomends', requireRole([User]), f.newRecomend);
+app.put('/recomends', requireRole([User]), f.editRecomend);
+app.delete('/recomends', requireRole([User]), f.deleteRecomend);
+
+function validate(credentials, key) {
+    currentUser = Users.userList.filter(function (value) {
+        return value.token === credentials.token;
+    })[0];
+
+    if (!currentUser) {
+        currentUser = Users.userList.filter(function (value) {
+            return (value.username === credentials.username && value.password === credentials.password);
+        })[0];
+    }
+
+    if (currentUser) return (currentUser.permission === key);
+}
 
 function requireRole(role) {
     return function (req, res, next) {
@@ -70,20 +85,6 @@ function requireRole(role) {
     }
 }
 
-function validate(credentials, key) {
-    currentUser = Users.userList.filter(function (value) {
-        return value.token === credentials.token;
-    })[0];
-
-    if (!currentUser) {
-        currentUser = Users.userList.filter(function (value) {
-            return (value.username === credentials.username && value.password === credentials.password);
-        })[0];
-    }
-
-    if (currentUser) return (currentUser.permission === key);
-}
-
 function sendCookies(req, res) {
     res.send({
         token: currentUser.token,
@@ -95,86 +96,6 @@ function sendCookies(req, res) {
 function sendHomePage(req, res) {
     console.log(User);
     res.sendFile(__dirname + '/dist/index.html');
-};
-
-function getStudents(req, res) {
-    res.send({
-        students: db.GET('students', req.cookies.UserID)
-    });
-};
-
-function newStudent(req, res) {
-    // try and save object in database, and send result to client.
-    if (db.ADD('students', req.body.student)) {
-        res.send({
-            success: 'האברך נוסף בהצלחה',
-            students: db.GET('students', req.cookies.UserID)
-        });
-    } else {
-        res.send({
-            error: 'המשתמש כבר קיים'
-        });
-    };
-};
-
-function editStudent(req, res) {
-    // Save object in database.
-    db.UPD('students', req.body.id, req.body.student);
-
-    res.send({
-        success: 'האברך עודכן בהצלחה',
-        students: db.GET('students', req.cookies.UserID)
-    });
-};
-
-function deleteStudent(req, res) {
-    // Save object in database.
-    db.SUB('students', req.body.id);
-
-    res.send({
-        success: 'האברך נמחק בהצלחה',
-        students: db.GET('students', req.cookies.UserID)
-    });
-};
-
-function getRecomends(req, res) {
-    res.send({
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
-};
-
-function newRecomend(req, res) {
-    // try and save object in database, and send result to client.
-    if (db.ADD('recomends', req.body.recomend)) {
-        res.send({
-            success: 'ההוספה בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-            recomends: db.GET('recomends', req.cookies.UserID)
-        });
-    } else {
-        res.send({
-            error: 'הבקשה כבר נשלחה בעבר'
-        });
-    };
-};
-
-function editRecomend(req, res) {
-    // Save object in database.
-    db.UPD('recomends', req.body.id, req.body.recomend);
-
-    res.send({
-        success: 'העדכון בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
-};
-
-function deleteRecomend(req, res) {
-    // Save object in database.
-    db.SUB('recomends', req.body.id);
-
-    res.send({
-        success: 'העדכון נמחק בהצלחה',
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
 };
 
 var port = process.env.PORT || 8080;
