@@ -5,3 +5,14 @@
 .lborder {
   border-left: 1px solid #ddd;
 }
+
+.action-ok {
+    border-radius: 50%;
+    background-color: #1bff00;
+    cursor: pointer;
+}
+.action-error {
+    border-radius: 50%;
+    background-color: #ff0500;
+    cursor: pointer;
+}

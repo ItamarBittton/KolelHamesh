@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-lg-4">
+    <rd-widget ng-if="display">
+      <form name="recomendForm" novalidate>
+        <rd-widget-header icon="icon-note" title="פרטי הבקשה">
+          <button ng-click="save(recomendForm.$valid)" ng-class="{'disabled': recomendForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+          <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+        </rd-widget-header>
+        <rd-widget-body classes="xlarge no-padding">
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.UserID.$dirty) && recomendForm.UserID.$invalid }">
+            <label class="col-md-4 control-label">כולל מבקש</label>
+            <div class="col-md-8">
+              <input name="UserID" type="text" ng-model="recomends.UserID" class="form-control" ng-minlength="3" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Type.$dirty) && recomendForm.Type.$invalid }">
+            <label class="col-md-4 control-label">סוג בקשה</label>
+            <div class="col-md-8">
+              <input name="Type" type="text" ng-model="recomends.Type" class="form-control" ng-minlength="3" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Requested.$dirty) && recomendForm.Requested.$invalid }">
+            <label class="col-md-4 control-label">תאריך בקשה</label>
+            <div class="col-md-8">
+              <input name="Requested" type="text" ng-model="recomends.Requested" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Approved.$dirty) && recomendForm.Approved.$invalid }">
+            <label class="col-md-4 control-label">סטטוס</label>
+            <div class="col-md-8">
+              <input name="Approved" type="text" ng-model="recomends.Approved" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.TableName.$dirty) && recomendForm.TableName.$invalid }">
+            <label class="col-md-4 control-label">סוג הבקשה</label>
+            <div class="col-md-8">
+              <input name="TableName" type="text" ng-model="recomends.TableName" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.data.$dirty) && recomendForm.data.$invalid }">
+            <label class="col-md-4 control-label">תוכן הבקשה</label>
+            <div class="col-md-8">
+              <input name="data" type="text" ng-model="recomends.data" class="form-control" required>
+            </div>
+          </div>
+        </rd-widget-body>
+      </form>
+    </rd-widget>
+  </div>
+
+  <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+    <rd-widget>
+      <rd-widget-header icon="icon-notebook" title="רשימת המלצות">
+        <!--<button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף אברך</button>-->
+      </rd-widget-header>
+      <rd-widget-body classes="xlarge no-padding">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td width="15%">שם הכולל</td>
+              <td width="15%">פעולה</td>
+              <td width="15%">סוג הבקשה</td>
+              <td width="15%">תאריך בקשה</td>
+              <td width="15%">סטטוס</td>
+              <td width="20%">פרטי הבקשה</td>
+              <td width="5%">פעולות</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="recomend in recomends track by $index">
+                <td>{{ recomend.UserID }}</td>
+                <td>{{ recomend.Type }}</td>
+                <td>{{ recomend.TableName }}</td>
+                <td>{{ recomend.Requested }}</td>
+                <td ng-click="display = !display">{{ recomend.Approved || 'ממתין...' }}</td>
+                <td>{{ recomend.Data }}</td>
+                <td>
+                    <span ng-class="display ? 'icon-plus' : 'icon-minus'"></span>
+                    <span class="icon-check action-ok"></span>
+                    <span class="icon-close action-error"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div></div>

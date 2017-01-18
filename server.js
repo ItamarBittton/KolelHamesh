@@ -10,14 +10,14 @@ var db = require('./database.js');
 var Users = {
     userList: [
         {
-            id: '1',
+            id: '0',
             username: 'שמוליק',
             password: '770',
             permission: Admin,
             token: '12345'
         },
         {
-            id: '2',
+            id: '1',
             username: 'שלום',
             password: '770',
             permission: User,
@@ -34,6 +34,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.get('/', function (req, res) {
+    console.log('enter');
+    res.sendFile(__dirname + "/dist/views/enter.html");
+});
+
+app.get('/' + Admin, requireRole([Admin]), sendHomePage);
+app.get('/' + User, requireRole([User]), sendHomePage);
+
+app.post('/login', requireRole([Admin, User]), sendCookies);
+
+app.get('/students', requireRole([Admin, User]), getStudents);
+app.post('/students', requireRole([Admin]), newStudent);
+app.put('/students', requireRole([Admin]), editStudent);
+app.delete('/students', requireRole([Admin]), deleteStudent);
+
+app.get('/recomends', requireRole([Admin, User]), getRecomends);
+app.post('/recomends', requireRole([User]), newRecomend);
+app.put('/recomends', requireRole([User]), editRecomend);
+app.delete('/recomends', requireRole([User]), deleteRecomend);
+
 function requireRole(role) {
     return function (req, res, next) {
         var a = false;
@@ -46,7 +66,7 @@ function requireRole(role) {
             }
         }
         if (!a)
-            res.send(403);
+            res.sendStatus(403);
     }
 }
 
@@ -64,60 +84,98 @@ function validate(credentials, key) {
     if (currentUser) return (currentUser.permission === key);
 }
 
-app.get('/', function (req, res) {
-    console.log('enter');
-    res.sendFile(__dirname + "/dist/views/enter.html");
-});
-
-app.post('/login', requireRole([Admin, User]), function (req, res) {
+function sendCookies(req, res) {
     res.send({
         token: currentUser.token,
         link: currentUser.permission,
         UserID: currentUser.id
     });
-}
-);
+};
 
-app.get('/' + Admin, requireRole([Admin]), function (req, res) {
-    console.log(Admin);
-    res.sendFile(__dirname + '/dist/index.html');
-});
-
-app.get('/' + User, requireRole([User]), function (req, res) {
+function sendHomePage(req, res) {
     console.log(User);
     res.sendFile(__dirname + '/dist/index.html');
-});
+};
 
-
-app.get('/students', requireRole([Admin, User]), function (req, res) {
+function getStudents(req, res) {
     res.send({
-        students: db.DB.students
+        students: db.GET('students', req.cookies.UserID)
     });
-});
+};
 
-app.post('/students', requireRole([Admin, User]), function (req, res) {
+function newStudent(req, res) {
     // try and save object in database, and send result to client.
     if (db.ADD('students', req.body.student)) {
         res.send({
             success: 'האברך נוסף בהצלחה',
-            students: db.DB.students
+            students: db.GET('students', req.cookies.UserID)
         });
     } else {
         res.send({
             error: 'המשתמש כבר קיים'
         });
     };
-});
+};
 
-app.put('/students', requireRole([Admin, User]), function (req, res) {
+function editStudent(req, res) {
     // Save object in database.
     db.UPD('students', req.body.id, req.body.student);
 
     res.send({
         success: 'האברך עודכן בהצלחה',
-        students: db.DB.students
+        students: db.GET('students', req.cookies.UserID)
     });
-});
+};
+
+function deleteStudent(req, res) {
+    // Save object in database.
+    db.SUB('students', req.body.id);
+
+    res.send({
+        success: 'האברך נמחק בהצלחה',
+        students: db.GET('students', req.cookies.UserID)
+    });
+};
+
+function getRecomends(req, res) {
+    res.send({
+        recomends: db.GET('recomends', req.cookies.UserID)
+    });
+};
+
+function newRecomend(req, res) {
+    // try and save object in database, and send result to client.
+    if (db.ADD('recomends', req.body.recomend)) {
+        res.send({
+            success: 'ההוספה בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+            recomends: db.GET('recomends', req.cookies.UserID)
+        });
+    } else {
+        res.send({
+            error: 'הבקשה כבר נשלחה בעבר'
+        });
+    };
+};
+
+function editRecomend(req, res) {
+    // Save object in database.
+    db.UPD('recomends', req.body.id, req.body.recomend);
+
+    res.send({
+        success: 'העדכון בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+        recomends: db.GET('recomends', req.cookies.UserID)
+    });
+};
+
+function deleteRecomend(req, res) {
+    // Save object in database.
+    db.SUB('recomends', req.body.id);
+
+    res.send({
+        success: 'העדכון נמחק בהצלחה',
+        recomends: db.GET('recomends', req.cookies.UserID)
+    });
+};
 
 var port = process.env.PORT || 8080;
 

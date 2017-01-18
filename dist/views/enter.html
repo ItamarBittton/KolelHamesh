@@ -126,12 +126,13 @@
         $(".submit").on('click', function (e) {
             e.preventDefault();
             if ($(".user").val() && $(".pass").val()) {
-                document.cookie = 'token=; Max-Age=0; link=; Max-Age=0;';
+                document.cookie = 'token=; Max-Age=0; link=; Max-Age=0; UserID=; Max-Age=0;';
 
                 $.post("/login", { username: $(".user").val(), password: $(".pass").val() })
                     .done(function (data) {
                         document.cookie = 'token=' + data.token + ";";
                         document.cookie = 'link=' + data.link + ";";
+                        document.cookie = 'UserID=' + data.UserID + ";";
                         console.log(data);
                         window.location.href += data.link;
                     })
