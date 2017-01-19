@@ -48,7 +48,8 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-        var newRecomend = {
+    var newRecomend = {
+            RecomendID: db.COUNT(req.body.table),
             UserID: req.cookies.UserID,
             Type: 'הוספה',
             Requested: new Date(),
@@ -89,6 +90,14 @@ function deleteRecomend(req, res) {
     });
 };
 
+function approveRecomend(req, res) {
+
+ };
+
+function denyRecomend(req, res) {
+    
+ };
+
 module.exports = {
     getStudents: getStudents,
     newStudent: newStudent,
@@ -97,5 +106,7 @@ module.exports = {
     getRecomends: getRecomends,
     newRecomend: newRecomend,
     editRecomend: editRecomend,
-    deleteRecomend: deleteRecomend
+    deleteRecomend: deleteRecomend,
+    approveRecomend: approveRecomend,
+    denyRecomend: denyRecomend
 }

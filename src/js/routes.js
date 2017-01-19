@@ -28,6 +28,11 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/recomends',
                 templateUrl: 'templates/recomends.html',
                 controller: 'recomendController'
+            })
+            .state('daily', {
+                url: '/daily',
+                templateUrl: 'templates/daily.html',
+                controller: 'dailyController'
             });
     }
 ]);

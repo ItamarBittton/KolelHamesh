@@ -39,6 +39,7 @@ var DAL = {
         //     Data: ''
         // },
         {
+            RecomendID: '0',
             UserID: "1",
             Type: "הוספה",
             Requested: "2017-01-18T23:32:42.380Z",
@@ -58,6 +59,7 @@ var DAL = {
             }
         },
         {
+            RecomendID: '1',
             UserID: "1",
             Type: "הוספה",
             Requested: "2017-01-18T23:32:42.380Z",
@@ -106,9 +108,14 @@ var edit = function (table, id, object) {
     DAL[table][id] = object;
 }
 
+var count = function (table) {
+    return DAL[table].length;
+}
+
 module.exports = {
     ADD: add,
     SUB: remove,
     UPD: edit,
-    GET: get
+    GET: get,
+    COUNT: count
 };

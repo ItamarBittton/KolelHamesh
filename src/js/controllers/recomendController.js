@@ -18,6 +18,15 @@ angular.module('RDash')
             $scope.recomend.editId = id.toString();
         }
 
+        $scope.approve = function (index) {
+            submit(index, true);
+        };
+
+        $scope.dismiss = function (index) {
+            submit(index, false);
+        };
+
+
         $scope.save = function (valid) {
             if (!valid) {
                 $scope.formErrors = true;

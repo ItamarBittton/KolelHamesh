@@ -55,6 +55,9 @@ app.post('/recomends', requireRole([User]), f.newRecomend);
 app.put('/recomends', requireRole([User]), f.editRecomend);
 app.delete('/recomends', requireRole([User]), f.deleteRecomend);
 
+app.post('/approve', requireRole([Admin]), f.approveRecomend);
+app.post('/deny', requireRole([Admin]), f.denyRecomend);
+
 function validate(credentials, key) {
     currentUser = Users.userList.filter(function (value) {
         return value.token === credentials.token;
