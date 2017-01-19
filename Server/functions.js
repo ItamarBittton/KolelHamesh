@@ -49,14 +49,14 @@ function getRecomends(req, res) {
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
     var newRecomend = {
-            RecomendID: db.COUNT(req.body.table),
-            UserID: req.cookies.UserID,
-            Type: 'הוספה',
-            Requested: new Date(),
-            Approved: undefined,
-            TableName: req.body.table,
-            Data: req.body.data
-        }
+        RecomendID: db.COUNT(req.body.table),
+        UserID: req.cookies.UserID,
+        Type: 'הוספה',
+        Requested: new Date(),
+        Approved: undefined,
+        TableName: req.body.table,
+        Data: req.body.data
+    }
 
     if (db.ADD('recomends', newRecomend)) {
         res.send({
@@ -92,11 +92,32 @@ function deleteRecomend(req, res) {
 
 function approveRecomend(req, res) {
 
- };
+};
 
 function denyRecomend(req, res) {
-    
- };
+
+};
+
+
+function getDailyReport(req, res) {
+    var AllDaily = db.GETALL('daily');
+    var AllStudents = db.GETALL('students');
+    var rightDaily = [];
+
+    for (var i = 0; i < AllDaily.length; i++) {
+        for (var j = 0; j < AllStudents.length; j++) {
+            if (AllDaily[i].studID === AllStudents[j].id) {
+                rightDaily.push({ id: AllStudents[j].id,
+                                  first: AllStudents[j].firstName,
+                                  last: AllStudents[j].lastName,
+                                  phone: AllStudents[j].phone,
+                                  late : AllDaily[i].late ? AllDaily[i].late : null})
+            }
+        }
+
+    }
+    res.send({ dailyRep: rightDaily });
+};
 
 module.exports = {
     getStudents: getStudents,
@@ -108,5 +129,6 @@ module.exports = {
     editRecomend: editRecomend,
     deleteRecomend: deleteRecomend,
     approveRecomend: approveRecomend,
-    denyRecomend: denyRecomend
+    denyRecomend: denyRecomend,
+    getDailyReport: getDailyReport,
 }

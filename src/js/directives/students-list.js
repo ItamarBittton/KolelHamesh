@@ -17,7 +17,7 @@ angular
 				<td>טלפון</td>
 			  </thead>
 			  <tbody>
-				<tr ng-repeat="student in students">
+				<tr ng-repeat="student in students.dailyRep">
 					<td >{{student.first}}</td>
 					<td >{{student.last}}</td>
 					<td >{{student.phone}}</td>
@@ -31,7 +31,7 @@ angular
 			  </table>
 		</div>`,
             link: function (scope) {
-
+				
             }
 
         }

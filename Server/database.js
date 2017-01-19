@@ -79,6 +79,68 @@ var DAL = {
             }
         }
     ],
+    daily: [
+        {
+            studID: '5770',
+            date: new Date(2017, 0, 19),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 0, 19),
+            late: 0
+        },
+        {
+            studID: '5770',
+            date: new Date(2017, 0, 20),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 0, 20),
+            late: 0
+        },
+        {
+            studID: '5770',
+            date: new Date(2017, 0, 18),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 0, 18),
+            late: 0
+        },
+        {
+            studID: '5770',
+            date: new Date(2017, 1, 19),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 1, 19),
+            late: 0
+        },
+        {
+            studID: '5770',
+            date: new Date(2017, 1, 20),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 1, 20),
+            late: 0
+        },
+        {
+            studID: '5770',
+            date: new Date(2017, 1, 18),
+            late: 10
+        },
+        {
+            studID: '7894',
+            date: new Date(2017, 1, 18),
+            late: 0
+        },
+    ],
 }
 
 var get = function (table, UserID) {
@@ -111,11 +173,15 @@ var edit = function (table, id, object) {
 var count = function (table) {
     return DAL[table].length;
 }
+var getAll = function(table){
+    return DAL[table];
+}
 
 module.exports = {
     ADD: add,
     SUB: remove,
     UPD: edit,
     GET: get,
-    COUNT: count
+    COUNT: count,
+    GETALL: getAll
 };
