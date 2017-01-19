@@ -77,15 +77,17 @@
                                 <td>{{ recomend.Approved || 'ממתין...' }}</td>
                                 <td>
                                     <details>
-                                        <summary>{{ recomend.Data.firstName + ' ' + recomend.Data.lastName }}</summary>
+                                        <summary>{{ recomend.Data.firstName + ' ' + recomend.Data.lastName
+                                            }}
+                                        </summary>
                                         <p ng-repeat="(key, value) in recomend.Data">
                                             <label class="control-label">{{ $root.t[key] }}:</label> {{ value }}
                                         </p>
                                     </details>
                                 </td>
                                 <td>
-                                    <span class="icon-check action-ok"></span>
-                                    <span class="icon-close action-error"></span>
+                                    <span class="action action-ok"></span>
+                                    <span class="action action-error"></span>
                                 </td>
                             </tr>
                         </tbody>

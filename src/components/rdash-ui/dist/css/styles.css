@@ -6,23 +6,10 @@
   border-left: 1px solid #ddd;
 }
 
-.action-ok {
-    border-radius: 50%;
-    background-color: #1bff00;
-    cursor: pointer;
-}
-.action-error {
-    border-radius: 50%;
-    background-color: #ff0500;
-    cursor: pointer;
-}
-
-
-summary {
+summary, .action {
     cursor: pointer;
     font: bold 1em Arial, 
     Helvetica, sans-serif; 
-    padding: 8px 0; 
     position: relative; 
     width: 100%; 
 }
@@ -31,7 +18,7 @@ summary::-webkit-details-marker {
     display: none
 }
 
-summary:after{
+summary:after, .action:after{
     background: #30426a;  
     border-radius: 2px; 
     content: "+"; 
@@ -47,4 +34,19 @@ summary:after{
 
 details[open] summary:after {
     content: "-";
+}
+
+.action-error:after {
+    content: "x";
+    background-color: #ff0500;
+}
+
+.action {
+    width: 50%;
+    float: left;
+}
+
+.action-ok:after {
+    content: "v";
+    background-color: #1bff00;
 }

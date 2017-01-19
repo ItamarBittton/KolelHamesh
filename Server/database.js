@@ -30,15 +30,53 @@ var DAL = {
         }
     ],
     recomends: [
+        // {
+        //     UserID: '1',
+        //     Type: 'הוספה',           // OPTIONS: הוספה, עדכון, מחיקה
+        //     Requested: '',         // Date and Time
+        //     Approved: '',          // Date and Time
+        //     TableName: 'students', // OPTIONS: students, colel
+        //     Data: ''
+        // },
         {
-            UserID: '1',
-            Type: 'הוספה',           // OPTIONS: הוספה, עדכון, מחיקה
-            Requested: '',         // Date and Time
-            Approved: '',          // Date and Time
-            TableName: 'students', // OPTIONS: students, colel
-            Data: ''
+            UserID: "1",
+            Type: "הוספה",
+            Requested: "2017-01-18T23:32:42.380Z",
+            TableName: "students",
+            Data: {
+                firstName: "יוסי",
+                lastName: "כהן",
+                phone: "5770",
+                id: "3",
+                street: "רבי יהודה הנשיא",
+                house: "51",
+                city: "פתח תקווה",
+                bank: "1",
+                branch: "2",
+                account: "3",
+                accountName: "יוסקה"
+            }
+        },
+        {
+            UserID: "1",
+            Type: "הוספה",
+            Requested: "2017-01-18T23:32:42.380Z",
+            TableName: "students",
+            Data: {
+                firstName: "שמעון",
+                lastName: "לוי",
+                phone: "5770",
+                id: "5",
+                street: "מנחם בגין",
+                house: "65",
+                city: "פתח תקווה",
+                bank: "1",
+                branch: "2",
+                account: "3",
+                accountName: "שימי"
+            }
         }
-    ]
+    ],
 }
 
 var get = function (table, UserID) {
