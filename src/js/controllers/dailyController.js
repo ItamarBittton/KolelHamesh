@@ -5,20 +5,36 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         if (date) {
 
             $scope.disable = true;
-            
 
-        Data.post('daily', {date}).then(function (data) {
-               $scope.students = data.dailyRep;
-               $scope.definition = data.presenceStatus;
+
+            Data.post('daily', { date }).then(function (data) {
+                $scope.students = data.dailyRep;
+                $scope.definition = data.presenceStatus;
             })
 
-            
+
         }
     }
-    
+
     $scope.students = [];
     $scope.viewDate = {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1
+    }
+
+    $scope.save = function (valid) {
+        // var method = $scope.editId ? 'put' : 'post';
+
+        // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
+        //     $scope.colels = data.colels;
+        // });
+
+        $scope.close();
+    }
+
+    $scope.close = function () {
+        $scope.students = undefined;
+        $scope.definition = undefined;
+        $scope.disable = false;
     }
 });
