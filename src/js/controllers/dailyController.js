@@ -23,11 +23,15 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
     }
 
     $scope.save = function (valid) {
+        var UPDaily = $scope.students.filter((val) => (val.late !== null));
         // var method = $scope.editId ? 'put' : 'post';
 
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
         //     $scope.colels = data.colels;
         // });
+        Data.put('daily', {UPDaily}).then(function(date){
+            
+        });
 
         $scope.close();
     }

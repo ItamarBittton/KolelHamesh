@@ -121,12 +121,12 @@ function getDailyReport(req, res) {
     var AllDaily = db.GETALL('daily');
     var AllStudents = db.GETALL('students');
     var rightDaily = [];
-    var bool = false;
+    var bool = true;
 
     for (var i = 0; i < AllStudents.length; i++) {
         for (var j = 0; j < AllDaily.length; j++) {
             if (new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
-                new Date(req.body.date).getDay() === AllDaily[j].date.getDay()) {
+                new Date(req.body.date).getDate() === AllDaily[j].date.getDate()) {
                 if (AllDaily[j].studID === AllStudents[i].id) {
                     rightDaily.push({
                         id: AllStudents[i].id,
@@ -135,7 +135,7 @@ function getDailyReport(req, res) {
                         phone: AllStudents[i].phone,
                         late: AllDaily[j].late ? AllDaily[j].late : null
                     });
-                    bool = true;
+                    bool = false;
                 }
             }
         }
@@ -147,8 +147,9 @@ function getDailyReport(req, res) {
                 phone: AllStudents[i].phone,
                 late: null
             });
-            bool = false;
+            
         }
+        bool = true;
     }
     res.send({ dailyRep: rightDaily, presenceStatus: db.GETALL('presenceStatus') });
 };

@@ -56,6 +56,7 @@ app.post('/approve', requireRole([Admin]), f.approveRecomend);
 app.post('/deny', requireRole([Admin]), f.denyRecomend);
 
 app.post('/daily', requireRole([Admin, User]), f.getDailyReport);
+app.put('/daily', requireRole([Admin, User]))
 
 function validate(credentials, key) {
     currentUser = Users.userList.filter(function (value) {
