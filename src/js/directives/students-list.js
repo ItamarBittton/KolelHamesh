@@ -9,12 +9,13 @@ angular
 		<table class="table" >
             <thead style="text-align: center">
               <td colspan="4" class="lborder">פרטי האברך</td>
-			  <td colspan="3" class="lborder">נוכחות</td>
+			  
 			  </thead>
 			  <thead>
 				<td>שם פרטי</td>
 				<td>שם משפחה</td>
 				<td>טלפון</td>
+				<td>נוכחות</td>
 			  </thead>
 			  <tbody>
 				<tr ng-repeat="student in students.dailyRep">

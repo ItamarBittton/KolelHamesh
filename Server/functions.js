@@ -104,14 +104,14 @@ function getDailyReport(req, res) {
     var AllStudents = db.GETALL('students');
     var rightDaily = [];
 
-    for (var i = 0; i < AllDaily.length; i++) {
-        for (var j = 0; j < AllStudents.length; j++) {
-            if (AllDaily[i].studID === AllStudents[j].id) {
-                rightDaily.push({ id: AllStudents[j].id,
-                                  first: AllStudents[j].firstName,
-                                  last: AllStudents[j].lastName,
-                                  phone: AllStudents[j].phone,
-                                  late : AllDaily[i].late ? AllDaily[i].late : null})
+    for (var i = 0; i < AllStudents.length; i++) {
+        for (var j = 0; j < AllDaily.length; j++) {
+            if (AllDaily[j].studID === AllStudents[i].id && req.body.date === AllDaily[j].date) {
+                rightDaily.push({ id: AllStudents[i].id,
+                                  first: AllStudents[i].firstName,
+                                  last: AllStudents[i].lastName,
+                                  phone: AllStudents[i].phone,
+                                  late : AllDaily[j].late ? AllDaily[j].late : null})
             }
         }
 

@@ -173,7 +173,7 @@ var edit = function (table, id, object) {
 var count = function (table) {
     return DAL[table].length;
 }
-var getAll = function(table){
+var getAll = function (table) {
     return DAL[table];
 }
 
