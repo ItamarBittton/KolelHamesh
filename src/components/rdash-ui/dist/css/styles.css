@@ -18,6 +18,10 @@ summary::-webkit-details-marker {
     display: none
 }
 
+.archive summary:after {
+    background: #508e9c;
+}
+
 .action:after,summary:after {
     background: #30426a;
     border-radius: 2px;
@@ -53,6 +57,10 @@ details[open] summary {
 .action-ok:after {
     content: "v";
     background-color: #1bff00
+}
+
+.archive {
+    color: #cecece;
 }
 
 /********************************/

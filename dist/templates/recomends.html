@@ -61,17 +61,19 @@
                             <td width="10%">פעולה</td>
                             <td width="10%">סוג הבקשה</td>
                             <td width="15%">תאריך בקשה</td>
-                            <td width="15%">סטטוס</td>
-                            <td width="35%">פרטי הבקשה</td>
-                            <td width="5%">פעולות</td>
+                            <td width="10%">סטטוס</td>
+                            <td width="15%">תאריך אישור</td>
+                            <td width="25%">פרטי הבקשה</td>
+                            <td width="5%" ng-if="role !== 'User'">פעולות</td>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="recomend in recomends track by $index">
+                            <tr ng-repeat="recomend in recomends track by $index" ng-class="{'archive': recomend.status}">
                                 <td>{{ recomend.UserID }}</td>
                                 <td>{{ recomend.Type }}</td>
                                 <td>{{ $root.t[recomend.TableName] }}</td>
                                 <td>{{ recomend.Requested | date:"MM/dd/yyyy',' h:mma" }}</td>
-                                <td>{{ recomend.Approved || 'ממתין...' }}</td>
+                                <td>{{ recomend.status || 'ממתין...' }}</td>
+                                <td>{{ recomend.Approved | date:"MM/dd/yyyy',' h:mma" }}</td>
                                 <td>
                                     <details>
                                         <summary>{{ recomend.Data.firstName + ' ' + recomend.Data.lastName
@@ -79,13 +81,15 @@
                                         </summary>
                                         <p ng-repeat="(key, value) in recomend.Data">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] }}:</label>
-                                            <input type="text" ng-model="recomend.Data[key]" class="col-lg-7 form-control">
+                                            <input ng-readonly="recomend.status || key === 'id'" type="text" ng-model="recomend.Data[key]" class="col-lg-7 form-control">
                                         </p>
                                     </details>
                                 </td>
-                                <td>
-                                    <span class="action action-ok" ng-click="approve($index)"></span>
-                                    <span class="action action-error" ng-click="dismiss($index)"></span>
+                                <td ng-if="role !== 'User'">
+                                    <div ng-if="!recomend.status">
+                                        <span class="action action-ok" ng-click="approve($index)"></span>
+                                        <span class="action action-error" ng-click="deny($index)"></span>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
