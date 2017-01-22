@@ -18,13 +18,15 @@ angular
 				<td>נוכחות</td>
 			  </thead>
 			  <tbody>
-				<tr ng-repeat="student in students.dailyRep">
+				<tr ng-repeat="student in students">
 					<td >{{student.first}}</td>
 					<td >{{student.last}}</td>
 					<td >{{student.phone}}</td>
 					<td >
-						<select class="form-control">
-							<option ng-repeat="def in definition" val={{def}}>{{def}}</option>
+						
+						<select 
+								ng-model="student.late" 
+								ng-options="def.value as def.name for def in definition" class="form-control">
 						</select>
 					</td>
 				</tr>

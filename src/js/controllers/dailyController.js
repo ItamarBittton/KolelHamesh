@@ -7,9 +7,9 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
             $scope.disable = true;
             
 
-            Data.get('daily').then(function (data) {
-               $scope.students = data;
-               $scope.definition = ['בזמן', 'מאחר']
+        Data.post('daily', {date}).then(function (data) {
+               $scope.students = data.dailyRep;
+               $scope.definition = data.presenceStatus;
             })
 
             

@@ -123,7 +123,9 @@ function getDailyReport(req, res) {
 
     for (var i = 0; i < AllStudents.length; i++) {
         for (var j = 0; j < AllDaily.length; j++) {
-            if (AllDaily[j].studID === AllStudents[i].id && req.body.date === AllDaily[j].date) {
+            if (AllDaily[j].studID === AllStudents[i].id &&
+                new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
+                new Date(req.body.date).getDay() === AllDaily[j].date.getDay()) {
                 rightDaily.push({ id: AllStudents[i].id,
                                   first: AllStudents[i].firstName,
                                   last: AllStudents[i].lastName,
@@ -133,7 +135,7 @@ function getDailyReport(req, res) {
         }
 
     }
-    res.send({ dailyRep: rightDaily });
+    res.send({ dailyRep: rightDaily, presenceStatus : db.GETALL('presenceStatus')});
 };
 
 module.exports = {
