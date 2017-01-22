@@ -1,0 +1,113 @@
+<div class="row">
+  <div class="col-lg-4">
+    <rd-widget ng-if="display">
+      <form name="colelForm" novalidate>
+        <rd-widget-header icon="icon-note" title="פרטי הכולל">
+          <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+          <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+        </rd-widget-header>
+        <rd-widget-body classes="xlarge no-padding">
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
+            <label class="col-md-4 control-label">שם הכולל</label>
+            <div class="col-md-8">
+              <input name="name" type="text" ng-model="colel.name" class="form-control" ng-minlength="3" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.address.$dirty) && colelForm.address.$invalid }">
+            <label class="col-md-4 control-label">כתובת</label>
+            <div class="col-md-8">
+              <input name="address" type="text" ng-model="colel.address" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
+            <label class="col-md-4 control-label">שעות פעילות</label>
+            <div class="col-md-8">
+              <input name="hours" type="text" ng-model="colel.hours" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.id.$dirty) && colelForm.id.$invalid }">
+            <label class="col-md-4 control-label">שם האחראי</label>
+            <div class="col-md-8">
+              <input name="id" type="text" ng-model="colel.id" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.street.$dirty) && colelForm.street.$invalid }">
+            <label class="col-md-4 control-label">רחוב</label>
+            <div class="col-md-8">
+              <input name="street" type="text" ng-model="colel.street" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.house.$dirty) && colelForm.house.$invalid }">
+            <label class="col-md-4 control-label">מס בית</label>
+            <div class="col-md-8">
+              <input name="house" type="text" ng-model="colel.house" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.city.$dirty) && colelForm.city.$invalid }">
+            <label class="col-md-4 control-label">עיר</label>
+            <div class="col-md-8">
+              <input name="city" type="text" ng-model="colel.city" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.bank.$dirty) && colelForm.bank.$invalid }">
+            <label class="col-md-4 control-label">בנק</label>
+            <div class="col-md-8">
+              <input name="bank" type="text" ng-model="colel.bank" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.branch.$dirty) && colelForm.branch.$invalid }">
+            <label class="col-md-4 control-label">סניף</label>
+            <div class="col-md-8">
+              <input name="branch" type="text" ng-model="colel.branch" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.account.$dirty) && colelForm.account.$invalid }">
+            <label class="col-md-4 control-label">חשבון</label>
+            <div class="col-md-8">
+              <input name="account" type="text" ng-model="colel.account" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.accountName.$dirty) && colelForm.accountName.$invalid }">
+            <label class="col-md-4 control-label">על שם</label>
+            <div class="col-md-8">
+              <input name="accountName" type="text" ng-model="colel.accountName" class="form-control" required>
+            </div>
+          </div>
+        </rd-widget-body>
+      </form>
+    </rd-widget>
+  </div>
+
+  <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+    <rd-widget>
+      <rd-widget-header icon="icon-people" title="רשימת כוללים (לחץ על כולל על מנת לערוך אותו)">
+        <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף כולל</button>
+      </rd-widget-header>
+      <rd-widget-body classes="xlarge no-padding">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <td>שם הכולל</td>
+              <td>כתובת</td>
+              <td>שעות פעילות</td>
+              <td>שם האחראי</td>
+              <td>טלפון</td>
+              <td>כתובת דואר</td>
+              <td>סיסמא</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="colel in colels track by $index">
+                <td ng-click="edit($index)">{{ colel.name }}</td>
+                <td ng-click="edit($index)">{{ colel.address }}</td>
+                <td ng-click="edit($index)">{{ colel.hours }}</td>
+                <td ng-click="edit($index)">{{ colel.manager }}</td>
+                <td ng-click="edit($index)">{{ colel.hours }}</td>
+                <td ng-click="edit($index)">{{ colel.mailAddress }}</td>
+                <td ng-click="edit($index)">{{ colel.password }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
