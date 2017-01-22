@@ -1,7 +1,6 @@
 var db = require('./database.js'),
     helper = require('./helper');
-
-function getStudents(req, res) {
+    function getStudents(req, res) {
     res.send({
         students: db.GET('students', req.cookies.UserID)
     });
@@ -59,7 +58,6 @@ function newRecomend(req, res) {
             TableName: req.body.table,
             Data: req.body.data
         }
-    
     newRecomend.Data.UserID = newRecomend.UserID;
 
     if (db.ADD('recomends', newRecomend)) {
@@ -90,14 +88,14 @@ function approveRecomend(req, res) {
             recomends: db.GET('recomends', req.cookies.UserID)
         });
     } else {
-        res.send({
+       res.send({
             error: 'האברך כבר קיים במערכת'
         });
     };
 };
 
 function denyRecomend(req, res) {
-    // Update recomendation to Approved and add date.
+       // Update recomendation to Approved and add date.
     var d = req.body.data;
     var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
     newRecomend.status = 'נדחה';
@@ -108,16 +106,21 @@ function denyRecomend(req, res) {
         success: 'הבקשה נדחתה בהצלחה',
         recomends: db.GET('recomends', req.cookies.UserID)
     });
-
 };
 
 
 function getDailyReport(req, res) {
+
+// if('Admin' ||
+//    'User' && req.body.date.getMonth() === new Date().getMonth() ||
+//    'User' && db.get('monthlyStatus', req.body.date, req.cookies.UserID) !== null){
+
+// }
+
     var AllDaily = db.GETALL('daily');
     var AllStudents = db.GETALL('students');
     var rightDaily = [];
 
-<<<<<<< HEAD
     for (var i = 0; i < AllStudents.length; i++) {
         for (var j = 0; j < AllDaily.length; j++) {
             if (AllDaily[j].studID === AllStudents[i].id && req.body.date === AllDaily[j].date) {
@@ -126,18 +129,6 @@ function getDailyReport(req, res) {
                                   last: AllStudents[i].lastName,
                                   phone: AllStudents[i].phone,
                                   late : AllDaily[j].late ? AllDaily[j].late : null})
-=======
-    for (var i = 0; i < AllDaily.length; i++) {
-        for (var j = 0; j < AllStudents.length; j++) {
-            if (AllDaily[i].studID === AllStudents[j].id) {
-                rightDaily.push({
-                    id: AllStudents[j].id,
-                    first: AllStudents[j].firstName,
-                    last: AllStudents[j].lastName,
-                    phone: AllStudents[j].phone,
-                    late: AllDaily[i].late ? AllDaily[i].late : null
-                })
->>>>>>> origin/master
             }
         }
 
