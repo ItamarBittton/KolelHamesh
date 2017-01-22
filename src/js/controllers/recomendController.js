@@ -19,11 +19,15 @@ angular.module('RDash')
         }
 
         $scope.approve = function (index) {
-            submit(index, true);
+            Data.post('approve', { data: $scope.recomends[index] }).then(function (data) {
+                if (data.recomends) $scope.recomends = data.recomends;
+             });
         };
 
-        $scope.dismiss = function (index) {
-            submit(index, false);
+        $scope.deny = function (index) {
+            Data.post('deny', { data: $scope.recomends[index] }).then(function (data) {
+                if (data.recomends) $scope.recomends = data.recomends;
+             });
         };
 
 

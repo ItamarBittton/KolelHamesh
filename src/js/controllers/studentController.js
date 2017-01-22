@@ -19,12 +19,9 @@ angular.module('RDash')
         $scope.save = function (valid) {
             if (!valid) {
                 $scope.formErrors = true;
-            } else if (valid) {
-                var method = $scope.student.editId ? 'put' : 'post';
-                
-                Data[method]('recomends', { data: $scope.student, table: 'students' }).then(function (result) {
+            } else if (valid) {                
+                Data.post('recomends', { data: $scope.student, table: 'students' }).then(function (result) {
                     $scope.students = result.data;
-                    alert(result.success || result.error);
                 });
 
                 // Data[method]('students', { id: $scope.student.editId, student: $scope.student }).then(function (result) {
