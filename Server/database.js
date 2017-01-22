@@ -30,19 +30,12 @@ var DAL = {
         }
     ],
     recomends: [
-        // {
-        //     UserID: '1',
-        //     Type: 'הוספה',           // OPTIONS: הוספה, עדכון, מחיקה
-        //     Requested: '',         // Date and Time
-        //     Approved: '',          // Date and Time
-        //     TableName: 'students', // OPTIONS: students, colel
-        //     Data: ''
-        // },
         {
-            RecomendID: '0',
+            id: '0',
             UserID: "1",
             Type: "הוספה",
             Requested: "2017-01-18T23:32:42.380Z",
+            Status: undefined,
             TableName: "students",
             Data: {
                 firstName: "יוסי",
@@ -55,27 +48,30 @@ var DAL = {
                 bank: "1",
                 branch: "2",
                 account: "3",
-                accountName: "יוסקה"
+                accountName: "יוסקה",
+                UserID: '1',
             }
         },
         {
-            RecomendID: '1',
+            id: '1',
             UserID: "1",
             Type: "הוספה",
             Requested: "2017-01-18T23:32:42.380Z",
+            Status: undefined,
             TableName: "students",
             Data: {
                 firstName: "שמעון",
                 lastName: "לוי",
                 phone: "5770",
-                id: "5",
+                id: "3",
                 street: "מנחם בגין",
                 house: "65",
                 city: "פתח תקווה",
                 bank: "1",
                 branch: "2",
                 account: "3",
-                accountName: "שימי"
+                accountName: "שימי",
+                UserID: '1',
             }
         }
     ],
@@ -145,14 +141,18 @@ var DAL = {
 
 var get = function (table, UserID) {
     return DAL[table].filter(function (value) {
-        return (value.UserID === UserID || UserID === 0);
+        return (value.UserID === UserID || UserID === "0");
     });
 }
 
-var add = function (table, object = {}) {
-    var match = DAL[table].filter(function (value) {
-        return (value.id === object.id);
+var getByID = function (table, id) {
+    return DAL[table].filter(function (value) {
+        return (value.id === id);
     })[0];
+ };
+
+var add = function (table, object = {}) {
+    var match = getByID(table || object.TableName, object.id);
 
     if (match && match.id) {
         return false
@@ -166,8 +166,9 @@ var remove = function (table, id) {
     DAL[table][id] = undefined;
 }
 
-var edit = function (table, id, object) {
+var edit = function (table, object, id) {
     DAL[table][id] = object;
+    return true
 }
 
 var count = function (table) {
@@ -183,5 +184,6 @@ module.exports = {
     UPD: edit,
     GET: get,
     COUNT: count,
-    GETALL: getAll
+    GETALL: getAll,
+    getByID: getByID
 };

@@ -1,4 +1,5 @@
-var db = require('./database.js');
+var db = require('./database.js'),
+    helper = require('./helper');
 
 function getStudents(req, res) {
     res.send({
@@ -22,7 +23,7 @@ function newStudent(req, res) {
 
 function editStudent(req, res) {
     // Save object in database.
-    db.UPD('students', req.body.id, req.body.student);
+    db.UPD('students', req.body.student, req.body.id);
 
     res.send({
         success: 'האברך עודכן בהצלחה',
@@ -48,19 +49,22 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    var newRecomend = {
-        RecomendID: db.COUNT(req.body.table),
-        UserID: req.cookies.UserID,
-        Type: 'הוספה',
-        Requested: new Date(),
-        Approved: undefined,
-        TableName: req.body.table,
-        Data: req.body.data
-    }
+    var id = req.body.data.editId,
+        newRecomend = {
+            id: db.COUNT('recomends'),
+            UserID: req.cookies.UserID,
+            Type: id ? 'עדכון' : 'הוספה',
+            Requested: new Date(),
+            Approved: undefined,
+            TableName: req.body.table,
+            Data: req.body.data
+        }
+    
+    newRecomend.Data.UserID = newRecomend.UserID;
 
     if (db.ADD('recomends', newRecomend)) {
         res.send({
-            success: 'ההוספה בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+            success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
             data: db.GET(req.body.table, req.cookies.UserID)
         });
     } else {
@@ -70,31 +74,40 @@ function newRecomend(req, res) {
     };
 };
 
-function editRecomend(req, res) {
-    // Save object in database.
-    db.UPD('recomends', req.body.id, req.body.recomend);
-
-    res.send({
-        success: 'העדכון בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
-};
-
-function deleteRecomend(req, res) {
-    // Save object in database.
-    db.SUB('recomends', req.body.id);
-
-    res.send({
-        success: 'העדכון נמחק בהצלחה',
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
-};
-
 function approveRecomend(req, res) {
+    // Update recomendation to Approved and add date.
+    var d = req.body.data;
+    var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
+    newRecomend.status = 'אושר';
+    newRecomend.Approved = new Date();
 
+    var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'   
+    // Post data to relevant table.
+    if (db[method](d.TableName, d.Data, d.Data.id)) {
+        db.UPD('recomends', newRecomend, d.id);
+        res.send({
+            success: 'הבקשה אושרה בהצלחה',
+            recomends: db.GET('recomends', req.cookies.UserID)
+        });
+    } else {
+        res.send({
+            error: 'האברך כבר קיים במערכת'
+        });
+    };
 };
 
 function denyRecomend(req, res) {
+    // Update recomendation to Approved and add date.
+    var d = req.body.data;
+    var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
+    newRecomend.status = 'נדחה';
+    newRecomend.Approved = new Date();
+    db.UPD('recomends', newRecomend, d.id);
+
+    res.send({
+        success: 'הבקשה נדחתה בהצלחה',
+        recomends: db.GET('recomends', req.cookies.UserID)
+    });
 
 };
 
@@ -107,11 +120,13 @@ function getDailyReport(req, res) {
     for (var i = 0; i < AllDaily.length; i++) {
         for (var j = 0; j < AllStudents.length; j++) {
             if (AllDaily[i].studID === AllStudents[j].id) {
-                rightDaily.push({ id: AllStudents[j].id,
-                                  first: AllStudents[j].firstName,
-                                  last: AllStudents[j].lastName,
-                                  phone: AllStudents[j].phone,
-                                  late : AllDaily[i].late ? AllDaily[i].late : null})
+                rightDaily.push({
+                    id: AllStudents[j].id,
+                    first: AllStudents[j].firstName,
+                    last: AllStudents[j].lastName,
+                    phone: AllStudents[j].phone,
+                    late: AllDaily[i].late ? AllDaily[i].late : null
+                })
             }
         }
 
@@ -126,8 +141,6 @@ module.exports = {
     deleteStudent: deleteStudent,
     getRecomends: getRecomends,
     newRecomend: newRecomend,
-    editRecomend: editRecomend,
-    deleteRecomend: deleteRecomend,
     approveRecomend: approveRecomend,
     denyRecomend: denyRecomend,
     getDailyReport: getDailyReport,
