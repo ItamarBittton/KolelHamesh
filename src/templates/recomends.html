@@ -82,7 +82,7 @@
                                         <summary>{{ recomend.Data.firstName + ' ' + recomend.Data.lastName
                                             }}
                                         </summary>
-                                        <p ng-repeat="(key, value) in recomend.Data">
+                                        <p ng-repeat="(key, value) in recomend.Data" ng-if="key !== 'UserID'">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] }}:</label>
                                             <input ng-readonly="recomend.status || key === 'id'" type="text" ng-model="recomend.Data[key]" class="col-lg-7 form-control">
                                         </p>
@@ -90,8 +90,8 @@
                                 </td>
                                 <td ng-if="role !== 'User'">
                                     <div ng-if="!recomend.status">
-                                        <span class="action action-ok" ng-click="approve($index)"></span>
-                                        <span class="action action-error" ng-click="deny($index)"></span>
+                                        <span class="action action-ok" ng-click="action($index, 'approve')"></span>
+                                        <span class="action action-error" ng-click="action($index, 'deny')"></span>
                                     </div>
                                 </td>
                             </tr>

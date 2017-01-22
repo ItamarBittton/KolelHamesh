@@ -49,10 +49,11 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    var id = req.body.data.editId,
+    var id = req.body.editId,
         newRecomend = {
             id: db.COUNT('recomends'),
             UserID: req.cookies.UserID,
+            editId: req.body.editId,
             Type: id ? 'עדכון' : 'הוספה',
             Requested: new Date(),
             Approved: undefined,
