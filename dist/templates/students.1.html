@@ -1,0 +1,129 @@
+<div class="row">
+  <div class="col-lg-4">
+    <rd-widget ng-if="display">
+      <form name="studentForm" novalidate>
+        <rd-widget-header icon="icon-note" title="פרטי האברך">
+          <button ng-click="save(studentForm.$valid)" ng-class="{'disabled': studentForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+          <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+        </rd-widget-header>
+        <rd-widget-body classes="xlarge no-padding">
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.firstName.$dirty) && studentForm.firstName.$invalid }">
+            <label class="col-md-4 control-label">שם פרטי</label>
+            <div class="col-md-8">
+              <input name="firstName" type="text" ng-model="student.firstName" class="form-control" ng-minlength="3" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.lastName.$dirty) && studentForm.lastName.$invalid }">
+            <label class="col-md-4 control-label">שם משפחה</label>
+            <div class="col-md-8">
+              <input name="lastName" type="text" ng-model="student.lastName" class="form-control" ng-minlength="3" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.phone.$dirty) && studentForm.phone.$invalid }">
+            <label class="col-md-4 control-label">טלפון</label>
+            <div class="col-md-8">
+              <input name="phone" type="text" ng-model="student.phone" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.id.$dirty) && studentForm.id.$invalid }">
+            <label class="col-md-4 control-label">תעודת זהות</label>
+            <div class="col-md-8">
+              <input name="id" type="text" ng-model="student.id" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.street.$dirty) && studentForm.street.$invalid }">
+            <label class="col-md-4 control-label">רחוב</label>
+            <div class="col-md-8">
+              <input name="street" type="text" ng-model="student.street" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.house.$dirty) && studentForm.house.$invalid }">
+            <label class="col-md-4 control-label">מס בית</label>
+            <div class="col-md-8">
+              <input name="house" type="text" ng-model="student.house" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.city.$dirty) && studentForm.city.$invalid }">
+            <label class="col-md-4 control-label">עיר</label>
+            <div class="col-md-8">
+              <input name="city" type="text" ng-model="student.city" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.bank.$dirty) && studentForm.bank.$invalid }">
+            <label class="col-md-4 control-label">בנק</label>
+            <div class="col-md-8">
+              <input name="bank" type="text" ng-model="student.bank" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.branch.$dirty) && studentForm.branch.$invalid }">
+            <label class="col-md-4 control-label">סניף</label>
+            <div class="col-md-8">
+              <input name="branch" type="text" ng-model="student.branch" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.account.$dirty) && studentForm.account.$invalid }">
+            <label class="col-md-4 control-label">חשבון</label>
+            <div class="col-md-8">
+              <input name="account" type="text" ng-model="student.account" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.accountName.$dirty) && studentForm.accountName.$invalid }">
+            <label class="col-md-4 control-label">על שם</label>
+            <div class="col-md-8">
+              <input name="accountName" type="text" ng-model="student.accountName" class="form-control" required>
+            </div>
+          </div>
+        </rd-widget-body>
+      </form>
+    </rd-widget>
+  </div>
+
+  <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+    <rd-widget>
+      <rd-widget-header icon="icon-people" title="רשימת אברכים (לחץ על אברך על מנת לערוך אותו)">
+        <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף אברך</button>
+      </rd-widget-header>
+      <rd-widget-body classes="xlarge no-padding">
+        <div class="table-responsive">
+          <table class="table">
+            <thead style="text-align: center">
+              <td colspan="1" ng-if="role !== 'User'"></td>
+              <td colspan="4" class="lborder">פרטי האברך</td>
+              <td colspan="3" class="lborder">כתובת</td>
+              <td colspan="4">חשבון בנק</td>
+            </thead>
+            <thead>
+              <td ng-if="role !== 'User'">שם הכולל</td>
+              <td>שם פרטי</td>
+              <td>שם משפחה</td>
+              <td>טלפון</td>
+              <td class="lborder">זהות</td>
+              <td>רחוב</td>
+              <td>מס בית</td>
+              <td class="lborder">עיר</td>
+              <td>בנק</td>
+              <td>סניף</td>
+              <td>חשבון</td>
+              <td>על שם</td>
+            </thead>
+            <tbody>
+              <tr ng-repeat="student in students track by $index">
+                <td ng-click="edit($index)" ng-if="role !== 'User'">{{ student.UserID }}</td>
+                <td ng-click="edit($index)">{{ student.firstName }}</td>
+                <td ng-click="edit($index)">{{ student.lastName }}</td>
+                <td ng-click="edit($index)">{{ student.phone }}</td>
+                <td ng-click="edit($index)" class="lborder">{{ student.id }}</td>
+                <td ng-click="edit($index)">{{ student.street }}</td>
+                <td ng-click="edit($index)">{{ student.house }}</td>
+                <td ng-click="edit($index)" class="lborder">{{ student.city }}</td>
+                <td ng-click="edit($index)">{{ student.bank }}</td>
+                <td ng-click="edit($index)">{{ student.branch }}</td>
+                <td ng-click="edit($index)">{{ student.account }}</td>
+                <td ng-click="edit($index)">{{ student.accountName }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div></div>

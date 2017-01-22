@@ -1,10 +1,10 @@
 angular.module('RDash')
-    .controller('recomendController', function ($scope, Data, $rootScope) {
-        Data.get('recomends').then(function (data) {
-            $scope.recomends = data.recomends;
+    .controller('colelController', function ($scope, Data, $rootScope) {
+        Data.get('colels').then(function (data) {
+            $scope.colels = data.colels;
         })
 
-        $scope.recomend = {};
+        $scope.colel = {};
 
         $scope.add = function () {
             $scope.display = true;
@@ -12,7 +12,7 @@ angular.module('RDash')
 
         $scope.edit = function (id) {
             $scope.display = true;
-            $scope.recomend = $scope.recomends[id];
+            $scope.colel = $scope.colels[id];
             $scope.editId = id.toString();
         }
 
@@ -22,8 +22,8 @@ angular.module('RDash')
             } else if (valid) {
                 var method = $scope.editId ? 'put' : 'post';
 
-                Data[method]('recomends', { id: $scope.editId, student: $scope.recomend }).then(function (result) {
-                    $scope.recomends = data.recomends;
+                Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
+                    $scope.colels = data.colels;
                 });
 
                 $scope.close();
@@ -31,14 +31,14 @@ angular.module('RDash')
         }
 
         $scope.close = function () {
-            $scope.recomend = {};
+            $scope.colel = {};
             $scope.formErrors = false;
             $scope.display = false;
         }
 
         $scope.action = function (index, action) {
-            Data.post(action, { editId: $scope.editId, data: $scope.recomends[index] }).then(function (data) {
-                if (data.recomends) $scope.recomends = data.recomends;
+            Data.post(action, { editId: $scope.editId, data: $scope.colels[index] }).then(function (data) {
+                if (data.colels) $scope.colels = data.colels;
                 $scope.editId = undefined;
             });
         };

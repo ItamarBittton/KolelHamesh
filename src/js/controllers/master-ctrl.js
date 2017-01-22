@@ -3,7 +3,7 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', function MasterCtrl($scope, $cookies) {
+    .controller('MasterCtrl', function MasterCtrl($scope, $cookies, $rootScope, translate) {
         /**
          * Sidebar Toggle & Cookie Control
          */
@@ -37,6 +37,7 @@ angular.module('RDash')
         };
 
         $scope.role = $cookies.get('link');
+        $rootScope.t = translate;
 
         window.onresize = function () {
             $scope.$apply();
