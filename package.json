@@ -34,12 +34,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItamarBittton/KolelHamesh.git"
+    "url": "git+https://github.com/ItamarBittton/colel.git"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ItamarBittton/KolelHamesh/issues"
+    "url": "https://github.com/ItamarBittton/colel/issues"
   },
-  "homepage": "https://github.com/ItamarBittton/KolelHamesh#readme",
+  "homepage": "https://github.com/ItamarBittton/colel#readme",
   "keywords": []
 }
