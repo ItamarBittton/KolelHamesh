@@ -3,7 +3,7 @@ angular
 		return {
 			scope: {
 				students: "=",
-				definition: "="
+				dropList: "="
 			},
 			template: `<div>
 		<table class="table">
@@ -11,17 +11,17 @@ angular
 				<td>שם פרטי</td>
 				<td>שם משפחה</td>
 				<td>טלפון</td>
-				<td>נוכחות</td>
+				<td ng-repeat="title in dropList.title">{{title}}</td>
 			  </thead>
 			  <tbody>
 				<tr ng-repeat="student in students">
 					<td >{{student.first}}</td>
 					<td >{{student.last}}</td>
 					<td >{{student.phone}}</td>
-					<td >
+					<td ng-repeat="option in dropList.options">
 						<select 
 								ng-model="student.late" 
-								ng-options="def.value as def.name for def in definition" class="form-control">
+								ng-options="def.value as def.name for def in option" class="form-control">
 						</select>
 					</td>
 				</tr>

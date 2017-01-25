@@ -1,6 +1,6 @@
 angular.module('RDash').controller("dailyController", function ($scope, Data) {
     $scope.disable = false;
-    $scope.definition = [];
+    $scope.dropList = [];
     $scope.show = function (date) {
         if (date) {
 
@@ -9,7 +9,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
 
             Data.post('daily', { date }).then(function (data) {
                 $scope.students = data.dailyRep;
-                $scope.definition = data.presenceStatus;
+                $scope.dropList = data.dropList;
             })
 
 
@@ -29,8 +29,8 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
         //     $scope.colels = data.colels;
         // });
-        Data.put('daily', {UPDaily}).then(function(date){
-            
+        Data.put('daily', {daily : UPDaily}).then(function(date){
+
         });
 
         $scope.close();

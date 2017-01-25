@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-lg-4">
+        <rd-widget>
+            <form name="scoresForm" novalidate>
+                <rd-widget-header icon="icon-note" title="ציונים">
+                    <span class="action action-ok" ng-click="save(scoresForm.$valid)" ng-class="{'disabled': scoresForm.$invalid}"></span>
+                    <span class="action action-error" ng-click="close()"></span>
+                </rd-widget-header>
+                <rd-widget-body classes="xlarge no-padding">
+                    <student-list students="students" drop-list="dropList"></student-list>
+                </rd-widget-body>
+            </form>
+        </rd-widget>
+    </div>
+</div>
