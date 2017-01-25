@@ -25,52 +25,28 @@
               <input name="hours" type="text" ng-model="colel.hours" class="form-control" required>
             </div>
           </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.id.$dirty) && colelForm.id.$invalid }">
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
             <label class="col-md-4 control-label">שם האחראי</label>
             <div class="col-md-8">
-              <input name="id" type="text" ng-model="colel.id" class="form-control" required>
+              <input name="hours" type="text" ng-model="colel.hours" class="form-control" required>
             </div>
           </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.street.$dirty) && colelForm.street.$invalid }">
-            <label class="col-md-4 control-label">רחוב</label>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.phone.$dirty) && colelForm.phone.$invalid }">
+            <label class="col-md-4 control-label">טלפון</label>
             <div class="col-md-8">
-              <input name="street" type="text" ng-model="colel.street" class="form-control" required>
+              <input name="phone" type="text" ng-model="colel.phone" class="form-control" required>
             </div>
           </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.house.$dirty) && colelForm.house.$invalid }">
-            <label class="col-md-4 control-label">מס בית</label>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.mailAddress.$dirty) && colelForm.mailAddress.$invalid }">
+            <label class="col-md-4 control-label">כתובת דואר</label>
             <div class="col-md-8">
-              <input name="house" type="text" ng-model="colel.house" class="form-control" required>
+              <input name="mailAddress" type="text" ng-model="colel.mailAddress" class="form-control" required>
             </div>
           </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.city.$dirty) && colelForm.city.$invalid }">
-            <label class="col-md-4 control-label">עיר</label>
+          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.password.$dirty) && colelForm.password.$invalid }">
+            <label class="col-md-4 control-label">סיסמא</label>
             <div class="col-md-8">
-              <input name="city" type="text" ng-model="colel.city" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.bank.$dirty) && colelForm.bank.$invalid }">
-            <label class="col-md-4 control-label">בנק</label>
-            <div class="col-md-8">
-              <input name="bank" type="text" ng-model="colel.bank" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.branch.$dirty) && colelForm.branch.$invalid }">
-            <label class="col-md-4 control-label">סניף</label>
-            <div class="col-md-8">
-              <input name="branch" type="text" ng-model="colel.branch" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.account.$dirty) && colelForm.account.$invalid }">
-            <label class="col-md-4 control-label">חשבון</label>
-            <div class="col-md-8">
-              <input name="account" type="text" ng-model="colel.account" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.accountName.$dirty) && colelForm.accountName.$invalid }">
-            <label class="col-md-4 control-label">על שם</label>
-            <div class="col-md-8">
-              <input name="accountName" type="text" ng-model="colel.accountName" class="form-control" required>
+              <input name="password" type="text" ng-model="colel.password" class="form-control" required>
             </div>
           </div>
         </rd-widget-body>
@@ -101,7 +77,7 @@
                 <td ng-click="edit($index)">{{ colel.address }}</td>
                 <td ng-click="edit($index)">{{ colel.hours }}</td>
                 <td ng-click="edit($index)">{{ colel.manager }}</td>
-                <td ng-click="edit($index)">{{ colel.hours }}</td>
+                <td ng-click="edit($index)">{{ colel.phone }}</td>
                 <td ng-click="edit($index)">{{ colel.mailAddress }}</td>
                 <td ng-click="edit($index)">{{ colel.password }}</td>
               </tr>
