@@ -1,6 +1,5 @@
 var db = require('./database.js'),
     helper = require('./helper');
-
 function getStudents(req, res) {
     res.send({
         students: db.GET('students', req.cookies.UserID)
@@ -60,7 +59,6 @@ function newRecomend(req, res) {
             TableName: req.body.table,
             Data: req.body.data
         }
-    
     newRecomend.Data.UserID = newRecomend.UserID;
 
     if (db.ADD('recomends', newRecomend)) {
@@ -82,7 +80,7 @@ function approveRecomend(req, res) {
     newRecomend.status = 'אושר';
     newRecomend.Approved = new Date();
 
-    var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'   
+    var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'
     // Post data to relevant table.
     if (db[method](d.TableName, d.Data, d.Data.id)) {
         db.UPD('recomends', newRecomend, d.id);
@@ -109,31 +107,65 @@ function denyRecomend(req, res) {
         success: 'הבקשה נדחתה בהצלחה',
         recomends: db.GET('recomends', req.cookies.UserID)
     });
-
 };
 
 
 function getDailyReport(req, res) {
+
+    // if('Admin' ||
+    //    'User' && req.body.date.getMonth() === new Date().getMonth() ||
+    //    'User' && db.get('monthlyStatus', req.body.date, req.cookies.UserID) !== null){
+
+    // }
+
     var AllDaily = db.GETALL('daily');
     var AllStudents = db.GETALL('students');
     var rightDaily = [];
+    var bool = true;
 
-    for (var i = 0; i < AllDaily.length; i++) {
-        for (var j = 0; j < AllStudents.length; j++) {
-            if (AllDaily[i].studID === AllStudents[j].id) {
-                rightDaily.push({
-                    id: AllStudents[j].id,
-                    first: AllStudents[j].firstName,
-                    last: AllStudents[j].lastName,
-                    phone: AllStudents[j].phone,
-                    late: AllDaily[i].late ? AllDaily[i].late : null
-                })
+    for (var i = 0; i < AllStudents.length; i++) {
+        for (var j = 0; j < AllDaily.length; j++) {
+            if (new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
+                new Date(req.body.date).getDate() === AllDaily[j].date.getDate()) {
+                if (AllDaily[j].studID === AllStudents[i].id && AllStudents[i].UserID === req.cookies.UserID) {
+                    rightDaily.push({
+                        id: AllStudents[i].id,
+                        first: AllStudents[i].firstName,
+                        last: AllStudents[i].lastName,
+                        phone: AllStudents[i].phone,
+                        late: AllDaily[j].late ? AllDaily[j].late : null
+                    });
+                    bool = false;
+                }
             }
         }
-
+        if (bool) {
+            rightDaily.push({
+                id: AllStudents[i].id,
+                first: AllStudents[i].firstName,
+                last: AllStudents[i].lastName,
+                phone: AllStudents[i].phone,
+                late: null
+            });
+            
+        }
+        bool = true;
     }
-    res.send({ dailyRep: rightDaily });
+    res.send({ dailyRep: rightDaily, dropList: {title : ['נוכחות'], options :[db.GETALL('presenceStatus') ]}});
 };
+
+function getScores(req, res){
+    var students = db.GETALL('students');
+    var studentList = [];
+    students.map((val) => (studentList.push({
+                id: val.id,
+                first: val.firstName,
+                last: val.lastName,
+                phone: val.phone,
+                late: null
+    })));
+    res.send({studentList: studentList, dropList: {title: ['מבחן בכתב','מבחן בעל פה'], options: [[{name: 'לא עבר', value: 0},{name: 'עבר', value: 1}],[{name: 'לא עבר', value: 0},{name: 'עבר', value: 1}]]}})
+}
 
 module.exports = {
     getStudents: getStudents,
@@ -145,4 +177,5 @@ module.exports = {
     approveRecomend: approveRecomend,
     denyRecomend: denyRecomend,
     getDailyReport: getDailyReport,
+    getScores: getScores
 }

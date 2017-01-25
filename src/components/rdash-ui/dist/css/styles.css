@@ -68,12 +68,12 @@ details[open] summary {
 .board {
   display:flex;
   flex-wrap: wrap;
-  width:50%;
   min-width:300px;
-  margin:0 auto;
+  margin: 10px 20px 0 0;
 }
 
 .square {
+  padding: 10px;
   width:14%;
   outline:1px solid gray;
   height:100px;
@@ -84,6 +84,12 @@ details[open] summary {
 
 .square:hover {
   background-color:gray;
+}
+
+.square .gerg {
+    display: block;
+    text-align: left;
+    line-height: 7;
 }
 
 .date { 

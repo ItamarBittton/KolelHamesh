@@ -52,11 +52,13 @@ app.delete('/students', requireRole([Admin]), f.deleteStudent);
 
 app.get('/recomends', requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', requireRole([User]), f.newRecomend);
-
 app.post('/approve', requireRole([Admin]), f.approveRecomend);
 app.post('/deny', requireRole([Admin]), f.denyRecomend);
 
-app.get('/daily', requireRole([Admin, User]), f.getDailyReport);
+app.post('/daily', requireRole([Admin, User]), f.getDailyReport);
+app.put('/daily', requireRole([Admin, User]));
+
+app.post('/scores', requireRole([Admin, User]), f.getScores);
 
 function validate(credentials, key) {
     currentUser = Users.userList.filter(function (value) {
