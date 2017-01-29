@@ -56,7 +56,7 @@ app.post('/approve', requireRole([Admin]), f.approveRecomend);
 app.post('/deny', requireRole([Admin]), f.denyRecomend);
 
 app.post('/daily', requireRole([Admin, User]), f.getDailyReport);
-app.put('/daily', requireRole([Admin, User]));
+//app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
 
 app.post('/scores', requireRole([Admin, User]), f.getScores);
 
