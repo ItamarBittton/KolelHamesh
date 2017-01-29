@@ -94,7 +94,14 @@ function sendCookies(req, res) {
     res.send({
         token: currentUser.token,
         link: currentUser.permission,
-        UserID: currentUser.id
+        UserID: currentUser.id,
+        alert: [{
+            type: 'success',
+            msg: 'Another alert!'
+        }, {
+            type: 'warning',
+            msg: 'Another alert!'
+        }]
     });
 };
 
