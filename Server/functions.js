@@ -133,7 +133,7 @@ function getDailyReport(req, res) {
                         first: AllStudents[i].firstName,
                         last: AllStudents[i].lastName,
                         phone: AllStudents[i].phone,
-                        late: AllDaily[j].late ? AllDaily[j].late : null
+                        val: AllDaily[j].late ? AllDaily[j].late : null
                     });
                     bool = false;
                 }
@@ -145,7 +145,7 @@ function getDailyReport(req, res) {
                 first: AllStudents[i].firstName,
                 last: AllStudents[i].lastName,
                 phone: AllStudents[i].phone,
-                late: null
+                val: null
             });
             
         }
@@ -162,9 +162,13 @@ function getScores(req, res){
                 first: val.firstName,
                 last: val.lastName,
                 phone: val.phone,
-                late: null
+                oral: null,
+                write: null
     })));
-    res.send({studentList: studentList, dropList: {title: ['מבחן בכתב','מבחן בעל פה'], options: [[{name: 'לא עבר', value: 0},{name: 'עבר', value: 1}],[{name: 'לא עבר', value: 0},{name: 'עבר', value: 1}]]}})
+    res.send({studentList: studentList,
+              dropList: {title: ['מבחן בכתב','מבחן בעל פה'],
+                         options: [{name: 'לא עבר', value: 0},
+                                   {name: 'עבר', value: 100}]}})
 }
 
 module.exports = {

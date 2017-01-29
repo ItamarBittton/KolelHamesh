@@ -20,7 +20,7 @@ angular
 					<td >{{student.phone}}</td>
 					<td ng-repeat="option in dropList.options">
 						<select 
-								ng-model="student.late" 
+								ng-model="student.val" 
 								ng-options="def.value as def.name for def in option" class="form-control">
 						</select>
 					</td>
