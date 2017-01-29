@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-12">
         <rd-widget>
             <form name="scoresForm" novalidate>
                 <rd-widget-header icon="icon-note" title="ציונים">
@@ -7,7 +7,30 @@
                     <span class="action action-error" ng-click="close()"></span>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
-                    <student-list students="students" drop-list="dropList"></student-list>
+                    <div>
+		<table class="table">
+			  <thead>
+				<td>שם פרטי</td>
+				<td>שם משפחה</td>
+				<td>טלפון</td>
+				<td ng-repeat="title in dropList.title">{{title}}</td>
+			  </thead>
+			  <tbody>
+				<tr ng-repeat="student in students">
+					<td >{{student.first}}</td>
+					<td >{{student.last}}</td>
+					<td >{{student.phone}}</td>
+                    <td><input type="number" ng-model="student.write"></td>
+					<td >
+						<select 
+								ng-model="student.oral" 
+								ng-options="def.value as def.name for def in dropList.options" class="form-control">
+						</select>
+					</td>
+				</tr>
+			  </tbody>
+			  </table>
+		</div>
                 </rd-widget-body>
             </form>
         </rd-widget>

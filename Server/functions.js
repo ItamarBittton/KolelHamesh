@@ -151,7 +151,9 @@ function getDailyReport(req, res) {
         }
         bool = true;
     }
-    res.send({ dailyRep: rightDaily, dropList: {title : ['נוכחות'], options :[db.GETALL('presenceStatus') ]}});
+    res.send({ dailyRep: rightDaily, 
+               dropList: {title : ['נוכחות'], options :[db.GETALL('presenceStatus') ]},
+               tempStudents: 3});
 };
 
 function getScores(req, res){

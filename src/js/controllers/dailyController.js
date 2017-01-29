@@ -10,6 +10,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
             Data.post('daily', { date }).then(function (data) {
                 $scope.students = data.dailyRep;
                 $scope.dropList = data.dropList;
+                $scope.tempStudents = data.tempStudents;
             })
 
 
@@ -24,12 +25,13 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
 
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.late !== null));
+        var UPDStud = $scope.tempStudents;
         // var method = $scope.editId ? 'put' : 'post';
 
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
         //     $scope.colels = data.colels;
         // });
-        Data.put('daily', {daily : UPDaily}).then(function(date){
+        Data.put('daily', {daily : UPDaily, oneTimeStud: UPDStud}).then(function(date){
 
         });
 
