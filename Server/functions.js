@@ -1,5 +1,6 @@
 var db = require('./database.js'),
     helper = require('./helper');
+
 function getStudents(req, res) {
     res.send({
         students: db.GET('students', req.cookies.UserID)
@@ -147,30 +148,46 @@ function getDailyReport(req, res) {
                 phone: AllStudents[i].phone,
                 val: null
             });
-            
+
         }
         bool = true;
     }
-    res.send({ dailyRep: rightDaily, 
-               dropList: {title : ['נוכחות'], options :[db.GETALL('presenceStatus') ]},
-               tempStudents: 3});
+    res.send({
+        dailyRep: rightDaily,
+        dropList: {
+            title: ['נוכחות'],
+            options: [db.GETALL('presenceStatus')]
+        },
+        tempStudents: 3
+    });
 };
 
-function getScores(req, res){
+function getScores(req, res) {
     var students = db.GETALL('students');
     var studentList = [];
     students.map((val) => (studentList.push({
-                id: val.id,
-                first: val.firstName,
-                last: val.lastName,
-                phone: val.phone,
-                oral: null,
-                write: null
+        id: val.id,
+        first: val.firstName,
+        last: val.lastName,
+        phone: val.phone,
+        oral: null,
+        write: null
     })));
-    res.send({studentList: studentList,
-              dropList: {title: ['מבחן בכתב','מבחן בעל פה'],
-                         options: [{name: 'לא עבר', value: 0},
-                                   {name: 'עבר', value: 100}]}})
+    res.send({
+        studentList: studentList,
+        dropList: {
+            title: ['מבחן בכתב', 'מבחן בעל פה'],
+            options: [{
+                    name: 'לא עבר',
+                    value: 0
+                },
+                {
+                    name: 'עבר',
+                    value: 100
+                }
+            ]
+        }
+    })
 }
 
 module.exports = {

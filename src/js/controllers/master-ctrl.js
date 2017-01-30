@@ -3,7 +3,7 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', function MasterCtrl($scope, $cookies, $rootScope, translate) {
+    .controller('MasterCtrl', function MasterCtrl($scope, $cookies, $rootScope, translate, $location) {
         /**
          * Sidebar Toggle & Cookie Control
          */
@@ -14,7 +14,7 @@ angular.module('RDash')
         };
 
         $scope.logout = function () {
-            document.cookie = 'token=; Max-Age=0; link=; Max-Age=0;';
+            document.cookie = 'token=; Max-Age=0; link=; Max-Age=0; alert=; Max-Age=0;';
             window.location.href = '/';
         }
 
