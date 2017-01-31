@@ -1,4 +1,5 @@
 var DAL = {
+    colels: [],
     students: [
         {
             firstName: 'שוקי',

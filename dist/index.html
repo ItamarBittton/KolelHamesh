@@ -26,7 +26,7 @@
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
-        <span ng-if="role === 'User'">
+        <span ng-if="role === 'User'" ng-show="$root.agree">
         <li class="sidebar-title"><span>תפריט מנהל כולל</span></li>
         <li class="sidebar-list">
           <a href="#/daily">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
@@ -34,16 +34,8 @@
         <li class="sidebar-list">
           <a href="#/scores">ציונים <span class="menu-icon icon-layers"></span></a>
         </li>
-        <li class="sidebar-title"></li>
         <li class="sidebar-list">
           <a href="#/students">אברכים <span class="menu-icon icon-people"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a href="#">שנה שעות פעילות<span class="menu-icon icon-shuffle"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a href="#">שלח הודעה<span class="menu-icon icon-bubble"></span></a>
         </li>
         <li class="sidebar-title"></li>
         <li class="sidebar-list">
