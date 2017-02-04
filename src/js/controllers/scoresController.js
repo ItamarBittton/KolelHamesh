@@ -1,14 +1,18 @@
 angular.module('RDash')
-    .controller('scoresController', function ($scope, Data){
+    .controller('scoresController', function ($scope, Data) {
         $scope.students = [];
         $scope.dropList = {};
-        
-        Data.post('scores').then(function(data){
+        $scope.UPDstud = [];
+
+        Data.post('scores').then(function (data) {
             $scope.students = data.studentList;
             $scope.dropList = data.dropList;
         });
 
-        $scope.save = function(data){
-            console.log(data);
+        $scope.save = function (data) {
+            if (data) {
+                $scope.UPDstud = $scope.students.filter((val) => (val.oral || val.oral === 0 || val.write));
+                console.log($scope.UPDstud);
+            }
         }
     })

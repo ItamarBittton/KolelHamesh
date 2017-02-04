@@ -79,38 +79,9 @@ var DAL = {
     daily: [
         {
             studID: '5770',
-            date: new Date(2017, 0, 19),
-            late: 10
-        },
-        {
-            studID: '7894',
-            date: new Date(2017, 0, 19),
-            late: 0
-        },
-        {
-            studID: '5770',
-            date: new Date(2017, 0, 20),
-            late: 10
-        },
-        {
-            studID: '7894',
-            date: new Date(2017, 0, 20),
-            late: 0
-        },
-        {
-            studID: '5770',
-            date: new Date(2017, 0, 18),
-            late: 10
-        },
-        {
-            studID: '7894',
-            date: new Date(2017, 0, 18),
-            late: 0
-        },
-        {
-            studID: '5770',
             date: new Date(2017, 1, 19),
-            late: 10
+            late: 10,
+            approval: false
         },
         {
             studID: '7894',
@@ -173,7 +144,7 @@ var DAL = {
         },
         {
             name: 'x',
-            value: -2
+            value: null
         },
     ],
 }
