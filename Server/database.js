@@ -144,7 +144,7 @@ var DAL = {
         },
         {
             name: 'x',
-            value: null
+            value: -1
         },
     ],
 }

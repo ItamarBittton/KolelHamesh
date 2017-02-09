@@ -1,10 +1,31 @@
 var db = require('./database.js'),
+    sql = require('./mysql.js'),
     helper = require('./helper');
 
+function getUser(credentials, callback) {
+    sql.q(`SELECT *
+           FROM tb_user
+           WHERE token = ${sql.v(credentials.token || '0')} OR
+                 (user_name = '${sql.v(credentials.username || '0')}' AND
+                  password = '${sql.v(credentials.password || '0')}')`,
+        function (data) {
+            callback(data.results[0]);
+        }
+    );
+};
+
 function getStudents(req, res) {
-    res.send({
-        students: db.GET('students', req.cookies.UserID)
-    });
+    sql.q(`SELECT *
+        FROM tb_student
+        WHERE COLEL_ID = ${sql.v(13)}`,
+        function (data) {
+            res.send({
+                students: data.results
+            });
+        }
+    );
+
+
 };
 
 function newStudent(req, res) {
@@ -178,19 +199,20 @@ function getScores(req, res) {
         dropList: {
             title: ['מבחן בכתב', 'מבחן בעל פה'],
             options: [{
-                    name: 'לא עבר',
-                    value: 0
-                },
-                {
-                    name: 'עבר',
-                    value: 100
-                }
+                name: 'לא עבר',
+                value: 0
+            },
+            {
+                name: 'עבר',
+                value: 100
+            }
             ]
         }
     })
 }
 
 module.exports = {
+    getUser: getUser,
     getStudents: getStudents,
     newStudent: newStudent,
     editStudent: editStudent,
