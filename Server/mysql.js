@@ -1,9 +1,9 @@
 var mysql = require('mysql'),
     pool = mysql.createPool({
-        host: 'mysql.ato770.com',
-        user: 'itamarbiton',
-        password: 'enTINFaLEt',
-        database: 'colel'
+        host: '***',
+        user: '***',
+        password: '***',
+        database: '***'
     });
 
 function validate(string) {
