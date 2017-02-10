@@ -24,6 +24,7 @@ $RECYCLE.BIN/
 # =========================
 
 /.vscode
+/Server/mysql.js
 .DS_Store
 .AppleDouble
 .LSOverride
