@@ -1,10 +1,9 @@
 <div class="row">
     <div class="col-lg-12">
         <rd-widget>
-            <form name="scoresForm" novalidate>
+            <form name="scoreForm" novalidate>
                 <rd-widget-header icon="icon-note" title="ציונים">
-                    <span class="action action-ok" ng-click="save(scoresForm.$valid)" ng-class="{'disabled': scoresForm.$invalid}"></span>
-                    <span class="action action-error" ng-click="close()"></span>
+                    <button ng-click="save(scoreForm.$valid)" class="btn btn-sm btn-info pull-left">שמור</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
                     <div>
@@ -20,7 +19,7 @@
 					<td>{{student.first}}</td>
 					<td>{{student.last}}</td>
 					<td>{{student.phone}}</td>
-                    <td><input type="number" ng-model="student.write" class="form-control"></td>
+                    <td><input type="number" ng-model="student.write" class="form-control" min="0" max="100"></td>
 					<td>
 						<select ng-model="student.oral" ng-options="def.value as def.name for def in dropList.options" class="form-control">
 						</select>

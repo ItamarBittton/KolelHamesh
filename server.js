@@ -1,12 +1,11 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var Admin = 'Admin';
-var User = 'User';
-var currentUser;
-var db = require('./Server/database.js');
-var f = require('./Server/functions.js');
+var express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    cookieParser = require('cookie-parser'),
+    Admin = 'Admin',
+    User = 'User',
+    currentUser,
+    f = require('./Server/functions.js');
 
 var Users = {
     userList: [
@@ -60,33 +59,34 @@ app.post('/daily', requireRole([Admin, User]), f.getDailyReport);
 
 app.post('/scores', requireRole([Admin, User]), f.getScores);
 
-function validate(credentials, key) {
-    currentUser = Users.userList.filter(function (value) {
-        return value.token === credentials.token;
-    })[0];
+// function validate(credentials, key) {
 
-    if (!currentUser) {
-        currentUser = Users.userList.filter(function (value) {
-            return (value.username === credentials.username && value.password === credentials.password);
-        })[0];
-    }
+//     currentUser = Users.userList.filter(function (value) {
+//         return value.token === credentials.token;
+//     })[0];
 
-    if (currentUser) return (currentUser.permission === key);
-}
+//     if (!currentUser) {
+//         currentUser = Users.userList.filter(function (value) {
+//             return (value.username === credentials.username && value.password === credentials.password);
+//         })[0];
+//     }
+
+//     if (currentUser) return (currentUser.permission === key);
+// }
 
 function requireRole(role) {
     return function (req, res, next) {
-        var a = false;
-        for (i in role) {
-            var credentials = req.cookies.token ? req.cookies : req.body;
+        var a = false,
+            credentials = req.cookies.token ? req.cookies : req.body;
 
-            if (validate(credentials, role[i])) {
-                a = true;
+        f.getUser(credentials, function (user) {
+            if (role.indexOf(user.permission) != -1) {
+                currentUser = user;
                 next();
+            } else {
+                res.sendStatus(403);
             }
-        }
-        if (!a)
-            res.sendStatus(403);
+        });
     }
 }
 
