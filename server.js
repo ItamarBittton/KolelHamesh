@@ -80,7 +80,7 @@ function requireRole(role) {
             credentials = req.cookies.token ? req.cookies : req.body;
 
         f.getUser(credentials, function (user) {
-            if (role.indexOf(user.permission) != -1) {
+            if (role.indexOf(user && user.permission) != -1) {
                 currentUser = user;
                 next();
             } else {

@@ -26,7 +26,7 @@
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
-        <span ng-if="role === 'User'" ng-show="$root.agree">
+        <span ng-if="role === 'User'" ng-show="isAgreed()">
         <li class="sidebar-title"><span>תפריט מנהל כולל</span></li>
         <li class="sidebar-list">
           <a href="#/daily">דוח נוכחות<span class="menu-icon icon-clock"></span></a>

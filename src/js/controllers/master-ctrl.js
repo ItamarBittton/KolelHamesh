@@ -14,7 +14,13 @@ angular.module('RDash')
         };
 
         $scope.logout = function () {
-            document.cookie = 'token=; Max-Age=0; link=; Max-Age=0; alert=; Max-Age=0;';
+            // Clear all cookies.
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c.replace(/^ +/, "").replace(
+                    /=.*/, "=;expires=" + new Date().toUTCString() +
+                    ";path=/");
+            });
+
             window.location.href = '/';
         }
 
@@ -34,6 +40,10 @@ angular.module('RDash')
         $scope.toggleSidebar = function () {
             $scope.toggle = !$scope.toggle;
             $cookies.put('toggle', $scope.toggle);
+        };
+
+        $scope.isAgreed = function () {
+            return $cookies.get('agree');
         };
 
         $scope.role = $cookies.get('link');
