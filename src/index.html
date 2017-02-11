@@ -42,40 +42,40 @@
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
-        <span ng-if="role === 'User'" ng-show="$root.agree">
+        <span ng-if="role === 'User'" ng-show="isAgreed()">
         <li class="sidebar-title"><span>תפריט מנהל כולל</span></li>
         <li class="sidebar-list">
-          <a href="#/daily">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
+          <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/scores">ציונים <span class="menu-icon icon-layers"></span></a>
+          <a ui-sref="scores" ui-sref-active="active">ציונים <span class="menu-icon icon-layers"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/students">אברכים <span class="menu-icon icon-people"></span></a>
+          <a ui-sref="students" ui-sref-active="active">אברכים <span class="menu-icon icon-people"></span></a>
         </li>
         <li class="sidebar-title"></li>
         <li class="sidebar-list">
-          <a href="#/recomends">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
+          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
         </li>
         </span>
         <span ng-if="role === 'Admin'">
         <li class="sidebar-title"><span>תפריט מנהל רשת</span></li>
         <li class="sidebar-list">
-          <a href="#/daily">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
+          <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/scores">ציונים <span class="menu-icon icon-layers"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a href="#/colels">כוללים<span class="menu-icon icon-cup"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a href="#/students">אברכים<span class="menu-icon icon-user"></span></a>
+          <a ui-sref="scores" ui-sref-active="active">ציונים <span class="menu-icon icon-layers"></span></a>
         </li>
         <li class="sidebar-title"></li>
         <li class="sidebar-list">
-          <a href="#/recomends">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
+          <a ui-sref="colels" ui-sref-active="active">כוללים<span class="menu-icon icon-cup"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="students" ui-sref-active="active">אברכים<span class="menu-icon icon-user"></span></a>
+        </li>
+        <li class="sidebar-title"></li>
+        <li class="sidebar-list">
+          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
         </li>
         <li class="sidebar-title"></li>        
         <li class="sidebar-list">
