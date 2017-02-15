@@ -57,6 +57,8 @@ app.post('/deny', requireRole([Admin]), f.denyRecomend);
 app.get('/daily/:date', requireRole([Admin, User]), f.getDailyReport);
 //app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
 
+app.get('/isOnlyDaily',  requireRole([Admin, User]), f.isOnlyDaily);
+
 app.post('/scores', requireRole([Admin, User]), f.getScores);
 
 // function validate(credentials, key) {

@@ -25,7 +25,7 @@
         </rd-widget>
     </div>
 
-    <div ng-class="{'col-lg-12':!disable, 'col-md-8':disable}">
+    <div ng-if="!isOnlyDaily" ng-class="{'col-lg-12':!disable, 'col-md-8':disable}">
         <rd-widget>
             <rd-widget-header icon="icon-people" title="בחר תאריך על מנת לצפות ברשימת התלמידים">
             </rd-widget-header>

@@ -1,6 +1,8 @@
 angular.module('RDash').controller("dailyController", function ($scope, Data) {
     $scope.disable = false;
     $scope.dropList = [];
+    $scope.isOnlyDaily = false;
+
     $scope.show = function (date) {
         if (date) {
 
@@ -22,6 +24,15 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1
     }
+
+    Data.get('isOnlyDaily').then(function(data){
+        if(data.data == true){
+            $scope.isOnlyDaily = data.data;
+            $scope.show(new Date());
+        }
+        
+
+});
 
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.late !== null));
