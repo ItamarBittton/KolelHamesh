@@ -15,13 +15,13 @@ angular
 			  </thead>
 			  <tbody>
 				<tr ng-repeat="student in students">
-					<td >{{student.first}}</td>
-					<td >{{student.last}}</td>
+					<td >{{student.first_name}}</td>
+					<td >{{student.last_name}}</td>
 					<td >{{student.phone}}</td>
-					<td ng-repeat="option in dropList.options">
+					<td >
 						<select 
-								ng-model="student.val" 
-								ng-options="def.value as def.name for def in option" class="form-control">
+								ng-model="student.presence" 
+								ng-options="def.value as def.name for def in dropList.options" class="form-control">
 						</select>
 					</td>
 				</tr>

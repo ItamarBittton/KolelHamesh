@@ -139,48 +139,63 @@ function getDailyReport(req, res) {
     //    'User' && db.get('monthlyStatus', req.body.date, req.cookies.UserID) !== null){
 
     // }
-
-    var AllDaily = db.GETALL('daily');
-    var AllStudents = db.GETALL('students');
-    var rightDaily = [];
-    var bool = true;
-
-    for (var i = 0; i < AllStudents.length; i++) {
-        for (var j = 0; j < AllDaily.length; j++) {
-            if (new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
-                new Date(req.body.date).getDate() === AllDaily[j].date.getDate()) {
-                if (AllDaily[j].studID === AllStudents[i].id && AllStudents[i].UserID === req.cookies.UserID) {
-                    rightDaily.push({
-                        id: AllStudents[i].id,
-                        first: AllStudents[i].firstName,
-                        last: AllStudents[i].lastName,
-                        phone: AllStudents[i].phone,
-                        val: AllDaily[j].late ? AllDaily[j].late : null
-                    });
-                    bool = false;
-                }
-            }
-        }
-        if (bool) {
-            rightDaily.push({
-                id: AllStudents[i].id,
-                first: AllStudents[i].firstName,
-                last: AllStudents[i].lastName,
-                phone: AllStudents[i].phone,
-                val: null
-            });
-
-        }
-        bool = true;
-    }
-    res.send({
-        dailyRep: rightDaily,
-        dropList: {
+    var dailyRep = [];
+    var dropList = {
             title: ['נוכחות'],
-            options: [db.GETALL('presenceStatus')]
-        },
-        tempStudents: 3
-    });
+            options: []
+        }
+    sql.q(`select t1.first_name, t1.last_name, t1.phone, t2.presence
+           from tb_student t1 
+                left outer join tb_daily t2 on (t2.student_id = t1.id and t2.date = '${sql.v(req.params.date)}') 
+           where t1.colel_id = ${sql.v(req.currentUser.colel_id)}`,
+                                                         function(data){
+                                                             dailyRep = data.results;
+                                                             sql.q(`select * from tbk_presence_status`, function(data){
+                                                                 dropList.options = data.results;
+                                                                 res.send({ dailyRep, dropList, tempStudents : 3});
+                                                             });
+                                                         });
+    // var AllDaily = db.GETALL('daily');
+    // var AllStudents = db.GETALL('students');
+    // var rightDaily = [];
+    // var bool = true;
+
+    // for (var i = 0; i < AllStudents.length; i++) {
+    //     for (var j = 0; j < AllDaily.length; j++) {
+    //         if (new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
+    //             new Date(req.body.date).getDate() === AllDaily[j].date.getDate()) {
+    //             if (AllDaily[j].studID === AllStudents[i].id && AllStudents[i].UserID === req.cookies.UserID) {
+    //                 rightDaily.push({
+    //                     id: AllStudents[i].id,
+    //                     first: AllStudents[i].firstName,
+    //                     last: AllStudents[i].lastName,
+    //                     phone: AllStudents[i].phone,
+    //                     val: AllDaily[j].late ? AllDaily[j].late : null
+    //                 });
+    //                 bool = false;
+    //             }
+    //         }
+    //     }
+    //     if (bool) {
+    //         rightDaily.push({
+    //             id: AllStudents[i].id,
+    //             first: AllStudents[i].firstName,
+    //             last: AllStudents[i].lastName,
+    //             phone: AllStudents[i].phone,
+    //             val: null
+    //         });
+
+    //     }
+    //     bool = true;
+    // }
+    // res.send({
+    //     dailyRep: rightDaily,
+    //     dropList: {
+    //         title: ['נוכחות'],
+    //         options: [db.GETALL('presenceStatus')]
+    //     },
+    //     tempStudents: 3
+    // });
 };
 
 function getScores(req, res) {

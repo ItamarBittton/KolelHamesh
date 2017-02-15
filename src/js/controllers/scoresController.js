@@ -4,7 +4,7 @@ angular.module('RDash')
         $scope.dropList = {};
         $scope.UPDstud = [];
 
-        Data.post('scores').then(function (data) {
+        Data.get('scores').then(function (data) {
             $scope.students = data.studentList;
             $scope.dropList = data.dropList;
         });

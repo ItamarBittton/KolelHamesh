@@ -54,7 +54,7 @@ app.post('/recomends', requireRole([User]), f.newRecomend);
 app.post('/approve', requireRole([Admin]), f.approveRecomend);
 app.post('/deny', requireRole([Admin]), f.denyRecomend);
 
-app.post('/daily', requireRole([Admin, User]), f.getDailyReport);
+app.get('/daily/:date', requireRole([Admin, User]), f.getDailyReport);
 //app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
 
 app.post('/scores', requireRole([Admin, User]), f.getScores);
@@ -82,6 +82,7 @@ function requireRole(role) {
         f.getUser(credentials, function (user) {
             if (role.indexOf(user.permission) != -1) {
                 currentUser = user;
+                req.currentUser = user;
                 next();
             } else {
                 res.sendStatus(403);

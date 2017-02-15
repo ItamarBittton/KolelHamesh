@@ -7,7 +7,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
             $scope.disable = true;
 
 
-            Data.post('daily', { date }).then(function (data) {
+            Data.get('daily/' + date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
                 $scope.dropList = data.dropList;
                 $scope.tempStudents = data.tempStudents;
@@ -31,7 +31,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
         //     $scope.colels = data.colels;
         // });
-        Data.put('daily', {daily : UPDaily, oneTimeStud: UPDStud}).then(function(date){
+        Data.put('daily', { daily: UPDaily, oneTimeStud: UPDStud }).then(function (date) {
 
         });
 
