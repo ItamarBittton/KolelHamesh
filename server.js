@@ -7,25 +7,6 @@ var express = require('express'),
     currentUser,
     f = require('./Server/functions.js');
 
-var Users = {
-    userList: [
-        {
-            id: '0',
-            username: 'שמוליק',
-            password: '770',
-            permission: Admin,
-            token: '12345'
-        },
-        {
-            id: '1',
-            username: 'שלום',
-            password: '770',
-            permission: User,
-            token: '65432'
-        }
-    ]
-}
-
 app.use('/javascript', express.static(__dirname + '/dist/js'));
 app.use('/image', express.static(__dirname + '/dist/img'));
 app.use('/lib', express.static(__dirname + '/dist/lib'));
@@ -39,6 +20,7 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
 
+<<<<<<< HEAD
 app.get('/' + Admin, requireRole([Admin]), sendHomePage);
 app.get('/' + User, requireRole([User]), sendHomePage);
 
@@ -72,15 +54,24 @@ app.post('/scores', requireRole([Admin, User]), f.getScores);
 //             return (value.username === credentials.username && value.password === credentials.password);
 //         })[0];
 //     }
+=======
+app.get('/' + Admin, f.requireRole([Admin]), sendHomePage);
+app.get('/' + User, f.requireRole([User]), sendHomePage);
 
-//     if (currentUser) return (currentUser.permission === key);
-// }
+function sendHomePage(req, res) {
+    console.log(User);
+    res.sendFile(__dirname + '/dist/index.html');
+};
+>>>>>>> 37d91cd4f3f1ad070099326c2ca869cbcbe7ffcc
 
-function requireRole(role) {
-    return function (req, res, next) {
-        var a = false,
-            credentials = req.cookies.token ? req.cookies : req.body;
+app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 
+app.get('/students', f.requireRole([Admin, User]), f.getStudents);
+app.post('/students', f.requireRole([Admin]), f.newStudent);
+app.put('/students', f.requireRole([Admin]), f.editStudent);
+app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
+
+<<<<<<< HEAD
         f.getUser(credentials, function (user) {
             if (role.indexOf(user.permission) != -1) {
                 currentUser = user;
@@ -92,26 +83,17 @@ function requireRole(role) {
         });
     }
 }
+=======
+app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
+app.post('/recomends', f.requireRole([User]), f.newRecomend);
+app.post('/approve', f.requireRole([Admin]), f.approveRecomend);
+app.post('/deny', f.requireRole([Admin]), f.denyRecomend);
+>>>>>>> 37d91cd4f3f1ad070099326c2ca869cbcbe7ffcc
 
-function sendCookies(req, res) {
-    res.send({
-        token: currentUser.token,
-        link: currentUser.permission,
-        UserID: currentUser.id,
-        alert: [{
-            type: 'success',
-            msg: 'Another alert!'
-        }, {
-            type: 'warning',
-            msg: 'Another alert!'
-        }]
-    });
-};
+app.post('/daily', f.requireRole([Admin, User]), f.getDailyReport);
+//app.put('/daily', f.requireRole([Admin, User]), f.updateDailyReport);
 
-function sendHomePage(req, res) {
-    console.log(User);
-    res.sendFile(__dirname + '/dist/index.html');
-};
+app.post('/scores', f.requireRole([Admin, User]), f.getScores);
 
 var port = process.env.PORT || 8080;
 

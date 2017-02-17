@@ -2,6 +2,21 @@ var db = require('./database.js'),
     sql = require('./mysql.js'),
     helper = require('./helper');
 
+function requireRole(role) {
+    return function (req, res, next) {
+        var credentials = req.cookies.token ? req.cookies : req.body;
+
+        getUser(credentials, function (user) {
+            if (role.indexOf(user && user.permission) != -1) {
+                currentUser = user;
+                next();
+            } else {
+                res.sendStatus(403);
+            }
+        });
+    }
+}
+
 function getUser(credentials, callback) {
     sql.q(`SELECT *
            FROM tb_user
@@ -14,21 +29,39 @@ function getUser(credentials, callback) {
     );
 };
 
+function sendCookies(req, res) {
+    res.send({
+        token: currentUser.token,
+        link: currentUser.permission,
+        UserID: currentUser.id,
+        alert: [{
+            type: 'success',
+            msg: 'Another alert!'
+        }, {
+            type: 'warning',
+            msg: 'Another alert!'
+        }]
+    });
+};
+
 function getStudents(req, res) {
     sql.q(`SELECT *
         FROM tb_student
-        WHERE COLEL_ID = ${sql.v(13)}`,
+        WHERE COLEL_ID = ${sql.v(req.cookies.UserID)};`,
         function (data) {
             res.send({
                 students: data.results
             });
         }
     );
-
-
 };
 
 function newStudent(req, res) {
+    // sql.q(`INSERT INTO `tb_student` (`id`, `supported_id`, `first_name`, `last_name`, `phone`, `street`, `house`, `city`, `bank`, `branch`, `account`, `account_name`, `colel_id`)
+    //        VALUES ('204305660', '', 'שלום', 'אופן', '770555215', 'החרובים', '8', 'מכבים', '05', '552', '152455', 'שלום אופן', '13');`,
+    //     function (data) { 
+
+    // })
     // try and save object in database, and send result to client.
     if (db.ADD('students', req.body.student)) {
         res.send({
@@ -239,7 +272,9 @@ function getScores(req, res) {
 }
 
 module.exports = {
+    requireRole: requireRole,
     getUser: getUser,
+    sendCookies: sendCookies,
     getStudents: getStudents,
     newStudent: newStudent,
     editStudent: editStudent,

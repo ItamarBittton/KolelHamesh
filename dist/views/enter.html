@@ -1,152 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <style>
-        @import url(http://weloveiconfonts.com/api/?family=entypo);
-        @import url(https://fonts.googleapis.com/css?family=Roboto);
-        
-        /* zocial */
-        [class*="entypo-"]:before {
-        font-family: 'entypo', sans-serif;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+        <style>
+            @import url(http://weloveiconfonts.com/api/?family=entypo);
+            @import url(https://fonts.googleapis.com/css?family=Roboto);
+            /* zocial */
+            
+            [class*="entypo-"]:before {
+                font-family: 'entypo', sans-serif;
+            }
+            
+            *,
+            *:before,
+            *:after {
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+            
+            h2 {
+                color: rgba(255, 255, 255, .8);
+                margin-left: 12px;
+            }
+            
+            body {
+                background: #272125;
+                font-family: 'Roboto', sans-serif;
+            }
+            
+            form {
+                position: relative;
+                margin: 50px auto;
+                width: 380px;
+                height: auto;
+            }
+            
+            input,
+            .result {
+                padding: 16px;
+                border-radius: 7px;
+                border: 0px;
+                background: rgba(255, 255, 255, .2);
+                display: block;
+                margin: 15px;
+                width: 300px;
+                color: white;
+                font-size: 18px;
+                height: 54px;
+            }
+            
+            input:focus {
+                outline-color: rgba(0, 0, 0, 0);
+                background: rgba(255, 255, 255, .95);
+                color: #e74c3c;
+            }
+            
+            button {
+                float: left;
+                height: 121px;
+                width: 50px;
+                border: 0px;
+                background: #e74c3c;
+                border-radius: 7px;
+                padding: 10px;
+                color: white;
+                font-size: 22px;
+            }
+            
+            .inputUserIcon {
+                position: absolute;
+                top: 68px;
+                left: 80px;
+                color: white;
+            }
+            
+            .inputPassIcon {
+                position: absolute;
+                top: 136px;
+                left: 80px;
+                color: white;
+            }
+            
+            input::-webkit-input-placeholder {
+                color: white;
+            }
+            
+            input:focus::-webkit-input-placeholder {
+                color: #e74c3c;
+            }
+        </style>
+    </head>
 
-        *,
-        *:before,
-        *:after {
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box; 
-        }
-
-
-        h2 {
-        color:rgba(255,255,255,.8);
-        margin-left:12px;
-        }
-
-        body {
-        background: #272125;
-        font-family: 'Roboto', sans-serif;
-        
-        }
-
-        form {
-        position:relative;
-        margin: 50px auto;
-        width: 380px;
-        height: auto;
-        }
-
-        input, .result {
-        padding: 16px;
-        border-radius:7px;
-        border:0px;
-        background: rgba(255,255,255,.2);
-        display: block;
-        margin: 15px;
-        width: 300px;  
-        color:white;
-        font-size:18px;
-        height: 54px;
-        }
-
-        input:focus {
-        outline-color: rgba(0,0,0,0);
-        background: rgba(255,255,255,.95);
-        color: #e74c3c;
-        }
-
-        button {
-        float:left;
-        height: 121px;
-        width: 50px;
-        border: 0px;
-        background: #e74c3c;
-        border-radius:7px;
-        padding: 10px;
-        color:white;
-        font-size:22px;
-        }
-
-        .inputUserIcon {
-        position:absolute;
-        top:68px;
-        left: 80px;
-        color:white;
-        }
-
-        .inputPassIcon {
-        position:absolute;
-        top:136px;
-        left: 80px;
-        color:white;
-        }
-
-        input::-webkit-input-placeholder {
-        color: white;
-        }
-
-        input:focus::-webkit-input-placeholder {
-        color: #e74c3c;
-        }
-
-    </style>
-</head>
-
-<body dir="rtl">
-    <form>
-        <h2>
-            <span class="entypo-login"></span> התחבר
-        </h2>
-        <button class="submit">
+    <body dir="rtl">
+        <form>
+            <h2>
+                <span class="entypo-login"></span> התחבר
+            </h2>
+            <button class="submit">
             <span class="entypo-lock"></span>
         </button>
-        <span class="entypo-user inputUserIcon"></span>
-        <input type="text" class="user" placeholder="שם משתמש" />
-        <span class="entypo-key inputPassIcon"></span>
-        <input type="password" class="pass" placeholder="סיסמא" />
-        <div id="result"></div>
-    </form>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script>
-        $(".user").focusin(function () {
-            $(".inputUserIcon").css("color", "#e74c3c");
-        }).focusout(function () {
-            $(".inputUserIcon").css("color", "white");
-        });
+            <span class="entypo-user inputUserIcon"></span>
+            <input type="text" class="user" placeholder="שם משתמש" />
+            <span class="entypo-key inputPassIcon"></span>
+            <input type="password" class="pass" placeholder="סיסמא" />
+            <div id="result"></div>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script>
+            $(".user").focusin(function () {
+                $(".inputUserIcon").css("color", "#e74c3c");
+            }).focusout(function () {
+                $(".inputUserIcon").css("color", "white");
+            });
 
-        $(".pass").focusin(function () {
-            $(".inputPassIcon").css("color", "#e74c3c");
-        }).focusout(function () {
-            $(".inputPassIcon").css("color", "white");
-        });
-        $(".submit").on('click', function (e) {
-            e.preventDefault();
-            if ($(".user").val() && $(".pass").val()) {
-                document.cookie = 'token=; Max-Age=0; link=; Max-Age=0; UserID=; Max-Age=0; alert=; Max-Age=0;';
-
-                $.post("/login", { username: $(".user").val(), password: $(".pass").val() })
-                    .done(function (data) {
-                        document.cookie = 'token=' + data.token + ";";
-                        document.cookie = 'link=' + data.link + ";";
-                        document.cookie = 'UserID=' + data.UserID + ";";
-                        document.cookie = 'alert=' + JSON.stringify(data.alert) + ";";
-                        console.log(data);
-                        window.location.href += data.link;
-                    })
-                    .fail(function (error) {
-                        $('#result').text("שם משתמש או סיסמא אינם נכונים");
-                        $('#result').addClass('result');
+            $(".pass").focusin(function () {
+                $(".inputPassIcon").css("color", "#e74c3c");
+            }).focusout(function () {
+                $(".inputPassIcon").css("color", "white");
+            });
+            $(".submit").on('click', function (e) {
+                e.preventDefault();
+                if ($(".user").val() && $(".pass").val()) {
+                    // Clear all cookies.
+                    document.cookie.split(";").forEach(function (c) {
+                        document.cookie = c.replace(/^ +/, "").replace(
+                            /=.*/, "=;expires=" + new Date().toUTCString() +
+                            ";path=/");
                     });
-            } else {
-                $('#result').text("חסר שם משתמש או סיסמא");
-                $('#result').addClass('result');
-            }
-        });
-    </script>
-</body>
+
+                    $.post("/login", {
+                            username: $(".user").val(),
+                            password: $(".pass").val()
+                        })
+                        .done(function (data) {
+                            document.cookie = 'token=' + data.token + ";";
+                            document.cookie = 'link=' + data.link + ";";
+                            document.cookie = 'UserID=' + data.UserID + ";";
+                            document.cookie = 'alert=' + JSON.stringify(data.alert) +
+                                ";";
+                            console.log(data);
+                            window.location.href += data.link;
+                        })
+                        .fail(function (error) {
+                            $('#result').text("שם משתמש או סיסמא אינם נכונים");
+                            $('#result').addClass('result');
+                        });
+                } else {
+                    $('#result').text("חסר שם משתמש או סיסמא");
+                    $('#result').addClass('result');
+                }
+            });
+        </script>
+    </body>
 
 </html>

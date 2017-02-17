@@ -1,5 +1,5 @@
 angular.module('RDash')
-    .controller('settingsController', function ($scope, Data, $state, $rootScope, Notification) {
+    .controller('settingsController', function ($scope, Data, $state, $cookies, Notification) {
         $scope.data = {
             shulName: 'בית כנסת חב"ד',
             street: "רבי עקיבא",
@@ -22,7 +22,7 @@ angular.module('RDash')
 
         $scope.submitData = function (changed) {
             if ($scope.agree) {
-                $rootScope.agree = true;
+                $cookies.put('agree', true);
 
                 var changedData = {};
 
