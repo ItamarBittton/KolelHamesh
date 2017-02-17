@@ -20,7 +20,6 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
 
-<<<<<<< HEAD
 app.get('/' + Admin, requireRole([Admin]), sendHomePage);
 app.get('/' + User, requireRole([User]), sendHomePage);
 
@@ -54,7 +53,7 @@ app.post('/scores', requireRole([Admin, User]), f.getScores);
 //             return (value.username === credentials.username && value.password === credentials.password);
 //         })[0];
 //     }
-=======
+
 app.get('/' + Admin, f.requireRole([Admin]), sendHomePage);
 app.get('/' + User, f.requireRole([User]), sendHomePage);
 
@@ -62,7 +61,6 @@ function sendHomePage(req, res) {
     console.log(User);
     res.sendFile(__dirname + '/dist/index.html');
 };
->>>>>>> 37d91cd4f3f1ad070099326c2ca869cbcbe7ffcc
 
 app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 
@@ -71,7 +69,6 @@ app.post('/students', f.requireRole([Admin]), f.newStudent);
 app.put('/students', f.requireRole([Admin]), f.editStudent);
 app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
-<<<<<<< HEAD
         f.getUser(credentials, function (user) {
             if (role.indexOf(user.permission) != -1) {
                 currentUser = user;
@@ -81,14 +78,10 @@ app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
                 res.sendStatus(403);
             }
         });
-    }
-}
-=======
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([User]), f.newRecomend);
 app.post('/approve', f.requireRole([Admin]), f.approveRecomend);
 app.post('/deny', f.requireRole([Admin]), f.denyRecomend);
->>>>>>> 37d91cd4f3f1ad070099326c2ca869cbcbe7ffcc
 
 app.post('/daily', f.requireRole([Admin, User]), f.getDailyReport);
 //app.put('/daily', f.requireRole([Admin, User]), f.updateDailyReport);
