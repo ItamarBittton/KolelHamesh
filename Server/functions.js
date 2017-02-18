@@ -8,7 +8,7 @@ function requireRole(role) {
 
         getUser(credentials, function (user) {
             if (role.indexOf(user && user.permission) != -1) {
-                currentUser = user;
+                req.currentUser = user;
                 next();
             } else {
                 res.sendStatus(403);
@@ -31,9 +31,9 @@ function getUser(credentials, callback) {
 
 function sendCookies(req, res) {
     res.send({
-        token: currentUser.token,
-        link: currentUser.permission,
-        UserID: currentUser.id,
+        token: req.currentUser.token,
+        link: req.currentUser.permission,
+        UserID: req.currentUser.id,
         alert: [{
             type: 'success',
             msg: 'Another alert!'

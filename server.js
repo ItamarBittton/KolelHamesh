@@ -20,27 +20,27 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
 
-app.get('/' + Admin, requireRole([Admin]), sendHomePage);
-app.get('/' + User, requireRole([User]), sendHomePage);
+// app.get('/' + Admin, requireRole([Admin]), sendHomePage);
+// app.get('/' + User, requireRole([User]), sendHomePage);
 
-app.post('/login', requireRole([Admin, User]), sendCookies);
+// app.post('/login', requireRole([Admin, User]), sendCookies);
 
-app.get('/students', requireRole([Admin, User]), f.getStudents);
-app.post('/students', requireRole([Admin]), f.newStudent);
-app.put('/students', requireRole([Admin]), f.editStudent);
-app.delete('/students', requireRole([Admin]), f.deleteStudent);
+// app.get('/students', requireRole([Admin, User]), f.getStudents);
+// app.post('/students', requireRole([Admin]), f.newStudent);
+// app.put('/students', requireRole([Admin]), f.editStudent);
+// app.delete('/students', requireRole([Admin]), f.deleteStudent);
 
-app.get('/recomends', requireRole([Admin, User]), f.getRecomends);
-app.post('/recomends', requireRole([User]), f.newRecomend);
-app.post('/approve', requireRole([Admin]), f.approveRecomend);
-app.post('/deny', requireRole([Admin]), f.denyRecomend);
+// app.get('/recomends', requireRole([Admin, User]), f.getRecomends);
+// app.post('/recomends', requireRole([User]), f.newRecomend);
+// app.post('/approve', requireRole([Admin]), f.approveRecomend);
+// app.post('/deny', requireRole([Admin]), f.denyRecomend);
 
-app.get('/daily/:date', requireRole([Admin, User]), f.getDailyReport);
-//app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
+// app.get('/daily/:date', requireRole([Admin, User]), f.getDailyReport);
+// //app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
 
-app.get('/isOnlyDaily',  requireRole([Admin, User]), f.isOnlyDaily);
+// app.get('/isOnlyDaily',  requireRole([Admin, User]), f.isOnlyDaily);
 
-app.post('/scores', requireRole([Admin, User]), f.getScores);
+// app.post('/scores', requireRole([Admin, User]), f.getScores);
 
 // function validate(credentials, key) {
 
@@ -69,15 +69,15 @@ app.post('/students', f.requireRole([Admin]), f.newStudent);
 app.put('/students', f.requireRole([Admin]), f.editStudent);
 app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
-        f.getUser(credentials, function (user) {
-            if (role.indexOf(user.permission) != -1) {
-                currentUser = user;
-                req.currentUser = user;
-                next();
-            } else {
-                res.sendStatus(403);
-            }
-        });
+        // f.getUser(credentials, function (user) {
+        //     if (role.indexOf(user.permission) != -1) {
+        //         currentUser = user;
+        //         req.currentUser = user;
+        //         next();
+        //     } else {
+        //         res.sendStatus(403);
+        //     }
+        // });
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([User]), f.newRecomend);
 app.post('/approve', f.requireRole([Admin]), f.approveRecomend);
