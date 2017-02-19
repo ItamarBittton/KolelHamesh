@@ -261,8 +261,8 @@ function getScores(req, res) {
     var month = sql.v(req.params.date.split('-')[1]);
     sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write'
     from tb_student t1 
-    left outer join tb_score t2 on (t1.id = t2.student_id and year(t2.date) = ${year} and month(t2.date) = ${month} and t2.test_type = 1)
-    left outer join tb_score t3 on (t1.id = t3.student_id and year(t3.date) = ${year} and month(t3.date) = ${month} and t3.test_type = 2)
+    left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
+    left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
             scores = data.results;
@@ -306,12 +306,26 @@ function getScores(req, res) {
 // }
 
 function putScores(req, res) {
+
     var arr = [];
-    score.map(val => arr.push(val.oral >= 0 && { first_name: val.first_name, last_name: val.last_name, score: val.oral, test_type: 1 },
-        val.write >= 0 && { first_name: val.first_name, last_name: val.last_name, score: val.write, test_type: 2 })
-    );
-    sql.q(`insert into tb_score (student_id, date, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
-    ON DUPLICATE KEY UPDATE date=VALUES(date), score=VALUES(score), test_type=VALUES(test_type)`)
+    var year = req.body.date.split('-')[0];
+    var month = req.body.date.split('-')[1];
+    function sliceArr(val) {
+        if (val.oral !== null) {
+            arr.push([ sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1 ]);
+        }
+        if (val.write !== null) {
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2 ]);
+        }
+
+    }
+    
+    req.body.score.map(val => (sliceArr(val)));
+
+    sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
+    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function(data){
+        res.send({ success: 'הציונים הוזנו בהצלחה' });
+    })
 }
 
 module.exports = {
@@ -331,4 +345,5 @@ module.exports = {
     getScores: getScores,
     putScores: putScores,
     isOnlyDaily: isOnlyDaily,
+
 }
