@@ -265,13 +265,13 @@ function getScores(req, res) {
     left outer join tb_score t3 on (t1.id = t3.student_id and year(t3.date) = ${year} and month(t3.date) = ${month} and t3.test_type = 2)
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
-        scores = data.results;
-        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
-            var test_type = data.results;
-            res.send({ scores , test_type, options : [{value:0, name: 'לא עבר'},{value:100, name:'עבר'}]});
-        })
+            scores = data.results;
+            sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+                var test_type = data.results;
+                res.send({ scores, test_type, options: [{ value: 0, name: 'לא עבר' }, { value: 100, name: 'עבר' }] });
+            })
 
-    })
+        })
 
     // var students = db.GETALL('students');
     // var studentList = [];
@@ -300,14 +300,17 @@ function getScores(req, res) {
     // })
 }
 
-function sliceArr(val){
-    var 
-    return 
+function sliceArr(val) {
+    var
+    return
 }
 
-function putScores(req, res){
-    var scores = req.body.scores.map((val, idx) => sliceArr(val));
-    sql.q(`insert into tb_score (student_id, date, score, test_type) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
+function putScores(req, res) {
+    var arr = [];
+    score.map(val => arr.push(val.oral >= 0 && { first_name: val.first_name, last_name: val.last_name, score: val.oral, test_type: 1 },
+        val.write >= 0 && { first_name: val.first_name, last_name: val.last_name, score: val.write, test_type: 2 })
+    );
+    sql.q(`insert into tb_score (student_id, date, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE date=VALUES(date), score=VALUES(score), test_type=VALUES(test_type)`)
 }
 
