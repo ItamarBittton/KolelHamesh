@@ -300,10 +300,10 @@ function getScores(req, res) {
     // })
 }
 
-function sliceArr(val) {
-    var
-    return
-}
+// function sliceArr(val) {
+//     var
+//     return
+// }
 
 function putScores(req, res) {
     var arr = [];
