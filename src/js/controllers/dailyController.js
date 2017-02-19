@@ -36,7 +36,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.presence !== null));
         var UPDStud = $scope.tempStudents;
-        var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('/')
+        var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')
         // var method = $scope.editId ? 'put' : 'post';
 
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {

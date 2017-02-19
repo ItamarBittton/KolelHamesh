@@ -166,30 +166,32 @@ function denyRecomend(req, res) {
 
 
 function getDailyReport(req, res) {
-    
-        if ((req.currentUser.permission === 'Admin') ||
-                (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
-                (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3)
-                //||      (req.currentUser.permission === 'User' && data.results[0] === true && req.params.date.split('-')[2] == new Date().getDate())
-            ) {
 
-                var dailyRep = [];
-                var dropList = {
-                    title: ['נוכחות'],
-                    options: []
-                }
-                sql.q(`select t1.first_name, t1.last_name, t1.phone, t2.presence
+    if ((req.currentUser.permission === 'Admin') ||
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3)
+        //||      (req.currentUser.permission === 'User' && data.results[0] === true && req.params.date.split('-')[2] == new Date().getDate())
+    ) {
+
+        var dailyRep = [];
+        var dropList = {
+            title: ['נוכחות'],
+            options: []
+        }
+        sql.q(`select t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence
                        from tb_student t1 
                        left outer join tb_daily t2 on (t2.student_id = t1.id and t2.date = '${sql.v(req.params.date)}') 
                        where t1.colel_id = ${sql.v(req.currentUser.colel_id)}`,
-                    function (data) {
-                        dailyRep = data.results;
-                        sql.q(`select * from tbk_presence_status`, function (data) {
-                            dropList.options = data.results;
-                            res.send({ dailyRep, dropList, tempStudents: 3 });
-                        });
-                    });
-            }
+            function (data) {
+                dailyRep = data.results;
+                sql.q(`select * from tbk_presence_status`, function (data) {
+                    dropList.options = data.results;
+                    res.send({ dailyRep, dropList, tempStudents: 3 });
+                });
+            });
+    }
+
+
     // var AllDaily = db.GETALL('daily');
     // var AllStudents = db.GETALL('students');
     // var rightDaily = [];
@@ -233,14 +235,24 @@ function getDailyReport(req, res) {
     // });
 };
 
-function isOnlyDaily(req, res){
-     sql.q(`select t1.is_only_daily 
+function updateDailyReport(req, res) {
+    var convertObjtoArr = [];
+    req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
+    sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
+    ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`,function(data){
+        res.send({});
+    })
+    
+};
+
+function isOnlyDaily(req, res) {
+    sql.q(`select t1.is_only_daily 
             from tb_colel t1 
             where t1.id = ${sql.v(req.currentUser.colel_id)}`,
-         function (d) {
-             var data = d.results[0].is_only_daily;
-            res.send({data});
-         });
+        function (d) {
+            var data = d.results[0].is_only_daily;
+            res.send({ data });
+        });
 }
 
 function getScores(req, res) {
@@ -284,6 +296,7 @@ module.exports = {
     approveRecomend: approveRecomend,
     denyRecomend: denyRecomend,
     getDailyReport: getDailyReport,
+    updateDailyReport: updateDailyReport,
     getScores: getScores,
     isOnlyDaily: isOnlyDaily,
 }

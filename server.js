@@ -85,7 +85,7 @@ app.post('/deny', f.requireRole([Admin]), f.denyRecomend);
 
 app.get('/daily/:date', f.requireRole([Admin, User]), f.getDailyReport);
 app.post('/daily', f.requireRole([Admin, User]), f.getDailyReport);
-//app.put('/daily', f.requireRole([Admin, User]), f.updateDailyReport);
+app.put('/daily', f.requireRole([Admin, User]), f.updateDailyReport);
 
 app.get('/isOnlyDaily', f.requireRole([Admin, User]), f.isOnlyDaily);
 
