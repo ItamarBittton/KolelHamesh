@@ -6,7 +6,7 @@ angular
                 show: "&"
             },
             template: `<div class="board">
-                           <div class="square" ng-repeat='day in month' ng-click="show({date : day.gerg})">
+                           <div class="square" ng-repeat='day in month' ng-click="show({date : day.gerg, hebDate: day})">
                                <div class="date">{{day.val}}<span class="gerg">{{day.gerg.getDate()}}</span></div>
                            </div>
                        </div>`,

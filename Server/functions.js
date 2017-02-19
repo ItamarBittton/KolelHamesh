@@ -47,7 +47,7 @@ function sendCookies(req, res) {
 function getStudents(req, res) {
     sql.q(`SELECT *
         FROM tb_student
-        WHERE COLEL_ID = ${sql.v(req.cookies.UserID)};`,
+        WHERE COLEL_ID = ${sql.v(req.currentUser.colel_id)};`,
         function (data) {
             res.send({
                 students: data.results
@@ -239,10 +239,10 @@ function updateDailyReport(req, res) {
     var convertObjtoArr = [];
     req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
     sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
-    ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`,function(data){
-        res.send({});
-    })
-    
+    ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
+            res.send({ success: 'הדוח עודכן בהצלחה' });
+        })
+
 };
 
 function isOnlyDaily(req, res) {
@@ -256,31 +256,59 @@ function isOnlyDaily(req, res) {
 }
 
 function getScores(req, res) {
-    var students = db.GETALL('students');
-    var studentList = [];
-    students.map((val) => (studentList.push({
-        id: val.id,
-        first: val.firstName,
-        last: val.lastName,
-        phone: val.phone,
-        oral: null,
-        write: null
-    })));
-    res.send({
-        studentList: studentList,
-        dropList: {
-            title: ['מבחן בכתב', 'מבחן בעל פה'],
-            options: [{
-                name: 'לא עבר',
-                value: 0
-            },
-            {
-                name: 'עבר',
-                value: 100
-            }
-            ]
-        }
+    var scores = [];
+    var year = sql.v(req.params.date.split('-')[0]);
+    var month = sql.v(req.params.date.split('-')[1]);
+    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write'
+    from tb_student t1 
+    left outer join tb_score t2 on (t1.id = t2.student_id and year(t2.date) = ${year} and month(t2.date) = ${month} and t2.test_type = 1)
+    left outer join tb_score t3 on (t1.id = t3.student_id and year(t3.date) = ${year} and month(t3.date) = ${month} and t3.test_type = 2)
+    where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
+
+        scores = data.results;
+        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+            var test_type = data.results;
+            res.send({ scores , test_type, options : [{value:0, name: 'לא עבר'},{value:100, name:'עבר'}]});
+        })
+
     })
+
+    // var students = db.GETALL('students');
+    // var studentList = [];
+    // students.map((val) => (studentList.push({
+    //     id: val.id,
+    //     first: val.firstName,
+    //     last: val.lastName,
+    //     phone: val.phone,
+    //     oral: null,
+    //     write: null
+    // })));
+    // res.send({
+    //     studentList: studentList,
+    //     dropList: {
+    //         title: ['מבחן בכתב', 'מבחן בעל פה'],
+    //         options: [{
+    //             name: 'לא עבר',
+    //             value: 0
+    //         },
+    //         {
+    //             name: 'עבר',
+    //             value: 100
+    //         }
+    //         ]
+    //     }
+    // })
+}
+
+function sliceArr(val){
+    var 
+    return 
+}
+
+function putScores(req, res){
+    var scores = req.body.scores.map((val, idx) => sliceArr(val));
+    sql.q(`insert into tb_score (student_id, date, score, test_type) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
+    ON DUPLICATE KEY UPDATE date=VALUES(date), score=VALUES(score), test_type=VALUES(test_type)`)
 }
 
 module.exports = {
@@ -298,5 +326,6 @@ module.exports = {
     getDailyReport: getDailyReport,
     updateDailyReport: updateDailyReport,
     getScores: getScores,
+    putScores: putScores,
     isOnlyDaily: isOnlyDaily,
 }

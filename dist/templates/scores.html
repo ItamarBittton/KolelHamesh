@@ -3,7 +3,7 @@
         <rd-widget>
             <form name="scoreForm" novalidate>
                 <rd-widget-header icon="icon-note" title="ציונים">
-                    <button ng-click="save(scoreForm.$valid)" class="btn btn-sm btn-info pull-left">שמור</button>
+                    <button ng-click="save()" class="btn btn-sm btn-info pull-left">שמור</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
                     <div>
@@ -11,17 +11,15 @@
 			  <thead>
 				<td>שם פרטי</td>
 				<td>שם משפחה</td>
-				<td>טלפון</td>
-				<td ng-repeat="title in dropList.title">{{title}}</td>
+				<td ng-repeat="til in title">{{til.name}}</td>
 			  </thead>
 			  <tbody>
 				<tr ng-repeat="student in students">
-					<td>{{student.first}}</td>
-					<td>{{student.last}}</td>
-					<td>{{student.phone}}</td>
+					<td>{{student.first_name}}</td>
+					<td>{{student.last_name}}</td>
                     <td><input type="number" ng-model="student.write" class="form-control" min="0" max="100"></td>
 					<td>
-						<select ng-model="student.oral" ng-options="def.value as def.name for def in dropList.options" class="form-control">
+						<select ng-model="student.oral" ng-options="def.value as def.name for def in options" class="form-control">
 						</select>
 					</td>
 				</tr>

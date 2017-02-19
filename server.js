@@ -89,7 +89,8 @@ app.put('/daily', f.requireRole([Admin, User]), f.updateDailyReport);
 
 app.get('/isOnlyDaily', f.requireRole([Admin, User]), f.isOnlyDaily);
 
-app.post('/scores', f.requireRole([Admin, User]), f.getScores);
+app.get('/scores/:date', f.requireRole([Admin, User]), f.getScores);
+app.put('/scores', f.requireRole([Admin, User]), f.putScores);
 
 var port = process.env.PORT || 8080;
 
