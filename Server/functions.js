@@ -83,8 +83,8 @@ function newStudent(req, res) {
 
 function editStudent(req, res) {
     // Save object in database.
-    var student = req.body.students;
-    sql.q(`${sql.i('tb_daily', student)} 
+    var student = req.body.data;
+    sql.q(`${sql.i('tb_student', student)} 
     ON DUPLICATE KEY UPDATE supported_id=VALUES(supported_id),
                             first_name=VALUES(first_name),
                             last_name=VALUES(last_name),
@@ -129,9 +129,7 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    if (req.currentUser.permission === 'Admin') {
-        res.redirect('/students');
-    } else {
+    
         var id = req.body.data.editId,
             newRecomend = {
                 user_update: sql.v(req.currentUser.id),
@@ -157,7 +155,7 @@ function newRecomend(req, res) {
                 error: 'הבקשה כבר נשלחה בעבר'
             });
         };
-    }
+    
 };
 
 function approveRecomend(req, res) {
