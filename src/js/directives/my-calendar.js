@@ -13,39 +13,44 @@ angular
                            </div>
                        </div>`,
             link: function (scope, element) {
-                var month = scope.viewDate.month - 1,
-                    year = scope.viewDate.year,
-                    range = new Date(year, scope.viewDate.month, 0).getDate(),
-                    start = new Date(year, month, 1).getDay();
+                scope.$watch("viewDate", function (newValue, oldValue) {
+                    var month = scope.viewDate.month - 1,
+                        year = scope.viewDate.year,
+                        range = new Date(year, scope.viewDate.month, 0).getDate(),
+                        start = new Date(year, month, 1).getDay();
 
-                scope.selected = false;
+                    scope.selected = false;
 
-                scope.chooseDay = function (day) {
-                    var elementsSelected = document.querySelector(".selected")
-                    if (elementsSelected) elementsSelected.classList.remove("selected");
-                    document.getElementById(day.key).className += ' selected';
-                    day.selected = true;
-                    scope.show({ date: day.gerg, hebDate: day });
-                }
-
-                scope.month = [];
-                var currDay = 0;
-                for (var i = 0; i < 35; i++) {
-                    if (i < start || i >= range + start) {
-                        scope.month.push({
-                            key: i
+                    scope.chooseDay = function (day) {
+                        var elementsSelected = document.querySelector(".selected")
+                        if (elementsSelected) elementsSelected.classList.remove("selected");
+                        document.getElementById(day.key).className += ' selected';
+                        day.selected = true;
+                        scope.show({
+                            date: day.gerg,
+                            hebDate: day
                         });
-                    } else {
-                        var today = new Date(year, month, currDay + 1),
-                            HebDate = new Hebcal.HDate(new Date(today)).toString('h').split(' ').slice(0, 2).join(' ');
-                        scope.month.push({
-                            key: i,
-                            val: HebDate,
-                            gerg: today
-                        });
-                        currDay++;
                     }
-                }
+
+                    scope.month = [];
+                    var currDay = 0;
+                    for (var i = 0; i < 35; i++) {
+                        if (i < start || i >= range + start) {
+                            scope.month.push({
+                                key: i
+                            });
+                        } else {
+                            var today = new Date(year, month, currDay + 1),
+                                HebDate = new Hebcal.HDate(new Date(today)).toString('h').split(' ').slice(0, 2).join(' ');
+                            scope.month.push({
+                                key: i,
+                                val: HebDate,
+                                gerg: today
+                            });
+                            currDay++;
+                        }
+                    }
+                });
             }
         }
     });

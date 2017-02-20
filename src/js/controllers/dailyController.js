@@ -7,14 +7,12 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         if (date) {
             $scope.date = date;
             $scope.disable = true;
-
-
+            
             Data.get('daily/' + $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
                 $scope.dropList = data.dropList;
                 $scope.tempStudents = data.tempStudents;
             })
-
         }
     }
 
@@ -24,14 +22,20 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         month: new Date().getMonth() + 1
     }
 
-    Data.get('isOnlyDaily').then(function(data){
-        if(data.data == true){
+    Data.get('isOnlyDaily').then(function (data) {
+        if (data.data) {
             $scope.isOnlyDaily = data.data;
             $scope.show(new Date());
         }
-        
+    });
 
-});
+    Data.get('prevDates').then(function (data) {
+        $scope.prevDates = data.prevDates;
+    })
+
+    $scope.changeMonth = function (a) {
+        $scope.viewDate = JSON.parse(a);
+    }
 
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.presence !== null));
@@ -42,7 +46,11 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
         // Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
         //     $scope.colels = data.colels;
         // });
-        Data.put('daily', { daily: UPDaily, oneTimeStud: UPDStud ,date : UPDdate}).then(function (date) {
+        Data.put('daily', {
+            daily: UPDaily,
+            oneTimeStud: UPDStud,
+            date: UPDdate
+        }).then(function (date) {
 
         });
 
