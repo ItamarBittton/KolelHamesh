@@ -408,10 +408,11 @@ function getPreviousDate(req, res) {
         })
     } else {
         var date = new Date().getDate();
-        if(date <= 3){
+        var canGetPrevDate = false;
+        if(date <= 3 || canGetPrevDate){
             sql.q(`select year(t1.date) as year, month(t1.date) as month 
                 from tb_daily t1 
-                where TIMESTAMPDIFF(month,t1.date,CURDATE()) = 1 || TIMESTAMPDIFF(month,t1.date,CURDATE()) = 0
+                where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32
                 group by year(t1.date), month(t1.date)`, function (data) {
              res.send({ prevDates: data.results })
          })
