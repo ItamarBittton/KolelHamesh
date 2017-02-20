@@ -12,21 +12,18 @@ angular.module('RDash')
 
         $scope.edit = function (id) {
             $scope.display = true;
-            $scope.student = $scope.students[id];
+            $scope.student = angular.copy($scope.students[id]);
             $scope.student.editId = id.toString();
         }
 
         $scope.save = function (valid) {
             if (!valid) {
                 $scope.formErrors = true;
-            } else if (valid) {                
+            } else if (valid) {
+                $scope.student.schedule = JSON.stringify($scope.student.schedule);
                 Data.post('recomends', { data: $scope.student, table: 'students' }).then(function (result) {
                     $scope.students = result.data;
                 });
-
-                // Data[method]('students', { id: $scope.student.editId, student: $scope.student }).then(function (result) {
-                //     $scope.students = data.students;
-                // });
 
                 $scope.close();
             }

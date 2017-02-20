@@ -28,7 +28,7 @@
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.id.$dirty) && studentForm.id.$invalid }">
             <label class="col-md-4 control-label">תעודת זהות</label>
             <div class="col-md-8">
-              <input name="id" type="text" ng-model="student.id" class="form-control" required>
+                <input name="id" type="text" ng-model="student.editId" class="form-control" ng-disabled="student.id" required>          
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.street.$dirty) && studentForm.street.$invalid }">

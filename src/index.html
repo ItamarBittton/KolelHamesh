@@ -71,12 +71,11 @@
           <a href="#">דוחות<span class="menu-icon icon-map"></span></a>
         </li>
         <li class="sidebar-title"></li>
-        <li class="sidebar-title"><span>צפה כ:</span></li>
-        <li class="sidebar-list">
+        <li class="sidebar-title"><span>צפה כ:</span>
           <select 
             ng-model="currColel"
             ng-options="colel.id as colel.name for colel in colelList" 
-            class="form-control colelSelect" 
+            class="pull-left form-control colelSelect" 
             ng-change="changedColel(e)">
           </select>
         </li>

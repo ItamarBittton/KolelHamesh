@@ -3,46 +3,58 @@ angular.module('RDash')
         if ($cookies.get('link') === 'Admin') {
             $state.go('recomends');
         }
-        
+
         $scope.data = {
-            shulName: 'בית כנסת חב"ד',
-            street: "רבי עקיבא",
-            number: '4',
-            city: 'אשדוד',
-            comments: '',
-            start1: '20:00',
-            start2: '20:00',
-            start3: '20:00',
-            start4: '20:00',
-            start5: '20:00',
-            start6: '20:00',
-            end1: '21:30',
-            end2: '21:30',
-            end3: '21:30',
-            end4: '21:30',
-            end5: '21:30',
-            end6: '21:30'
-        }
+            address: 'חנה רובינא 23 פתח תקוה בית הכנסת חב"ד יום ג: בית כנסת בישטנא רח\' עדש שפיק פינת עזרה ונחמיה',
+            mail_address: "יהודה הנשיא 41 פתח תקוה",
+            phone: '054-7770847',
+            manager_name: "מענדי גרברצ'יק",
+            schedule: [{
+                "start": "20:00",
+                "end": "21:30"
+            }, {
+                "start": "20:00",
+                "end": "21:30"
+            }, {
+                "start": "20:00",
+                "end": "21:30"
+            }, {
+                "start": "20:00",
+                "end": "21:30"
+            }, {
+                "start": "20:00",
+                "end": "21:30"
+            }, {
+                "start": "20:00",
+                "end": "21:30"
+            }]
+        };
+
+        Data.get('settings').then(function (data) {
+            $scope.data = data
+
+            $scope.data.schedule = JSON.parse($scope.data.schedule);
+        })
 
         $scope.submitData = function (changed) {
             if ($scope.agree) {
                 $cookies.put('agree', true);
 
-                var changedData = {};
+                // var changedData = {};
 
-                angular.forEach($scope.data, function (value, key) {
-                    if ($scope.settingsForm[key].$dirty) {
-                        changedData[key] = value;
-                    };
-                });
+                // angular.forEach($scope.data, function (value, key) {
+                //     if ($scope.settingsForm[key].$dirty) {
+                //         changedData[key] = value;
+                //     };
+                // });
 
-                if (!angular.equals({}, changedData)) {
-                    Data.post('recomends', {
-                        data: changedData,
-                        table: 'colels',
-                        editId: true
-                    })
-                };
+                // if (!angular.equals({}, changedData)) {
+                Data.post('recomends', {
+                    data: $scope.data,
+                    table: 'colels',
+                    editId: true
+                })
+                // };
 
                 $state.go('students');
             } else {

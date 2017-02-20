@@ -19,55 +19,55 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום ראשון</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start1.$dirty) && settingsForm.start1.$invalid }">
-                            <input required type="text" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control spacing" ui-mask="**:**" ng-model="data.start1" name="start1">
+                            <input required type="text" ui-mask-placeholder ui-mask-placeholder-char="_" class="form-control spacing" ui-mask="**:**" ng-model="data.schedule[0].start" name="start1">
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end1.$dirty) && settingsForm.end1.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" type="text" name="end1" ng-model="data.end1" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" type="text" name="end1" ng-model="data.schedule[0].end" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום שני</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start2.$dirty) && settingsForm.start2.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start2" type="text" ng-model="data.start2" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start2" type="text" ng-model="data.schedule[1].start" required>
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end2.$dirty) && settingsForm.end2.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="" ui-mask="**:**" class="form-control spacing" name="end2" type="text" ng-model="data.end2" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="" ui-mask="**:**" class="form-control spacing" name="end2" type="text" ng-model="data.schedule[1].end" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום שלישי</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start3.$dirty) && settingsForm.start3.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start3" type="text" ng-model="data.start3" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start3" type="text" ng-model="data.schedule[2].start" required>
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end3.$dirty) && settingsForm.end3.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end3" type="text" ng-model="data.end3" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end3" type="text" ng-model="data.schedule[2].end" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום רביעי</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start4.$dirty) && settingsForm.start4.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start4" type="text" ng-model="data.start4" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start4" type="text" ng-model="data.schedule[3].start" required>
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end4.$dirty) && settingsForm.end4.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end4" type="text" ng-model="data.end4" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end4" type="text" ng-model="data.schedule[3].end" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום חמישי</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start5.$dirty) && settingsForm.start5.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start5" type="text" ng-model="data.start5" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start5" type="text" ng-model="data.schedule[4].start" required>
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end5.$dirty) && settingsForm.end5.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end5" type="text" ng-model="data.end5" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end5" type="text" ng-model="data.schedule[4].end" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">יום שישי</label>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.start6.$dirty) && settingsForm.start6.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start6" type="text" ng-model="data.start6" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="start6" type="text" ng-model="data.schedule[5].start" required>
                         </div>
                         <div class="col-md-4" ng-class="{ 'has-error': (formErrors || settingsForm.end6.$dirty) && settingsForm.end6.$invalid }">
-                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end6" type="text" ng-model="data.end6" required>
+                            <input ui-mask-placeholder ui-mask-placeholder-char="_" ui-mask="**:**" class="form-control spacing" name="end6" type="text" ng-model="data.schedule[5].end" required>
                         </div>
                     </div>
                 </rd-widget-body>
@@ -79,34 +79,27 @@
                 </rd-widget-header>
                 <rd-widget-body classes="large no-padding">
                     <div class="form-group form-md-line-input">
-                        <label class="col-md-4 control-label">שם בית הכנסת</label>
-                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.shulName.$dirty) && settingsForm.shulName.$invalid }">
-                            <input class="form-control" name="shulName" type="text" ng-model="data.shulName" required>
+                        <label class="col-md-4 control-label">שם האחראי</label>
+                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.manager_name.$dirty) && settingsForm.manager_name.$invalid }">
+                            <input class="form-control" name="manager_name" type="text" ng-model="data.manager_name" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <label class="col-md-4 control-label">רחוב</label>
-                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.street.$dirty) && settingsForm.street.$invalid }">
-                            <input class="form-control" name="street" type="text" ng-model="data.street" required>
+                        <label class="col-md-4 control-label">מספר טלפון</label>
+                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.phone.$dirty) && settingsForm.phone.$invalid }">
+                            <input class="form-control" name="phone" type="text" ng-model="data.phone" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <label class="col-md-4 control-label">מספר</label>
-                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.number.$dirty) && settingsForm.number.$invalid }">
-                            <input class="form-control" name="number" type="text" ng-model="data.number" required>
+                        <label class="col-md-4 control-label">כתובת למשלוח דואר</label>
+                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.mail_address.$dirty) && settingsForm.mail_address.$invalid }">
+                            <input class="form-control" name="mail_address" type="text" ng-model="data.mail_address" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <label class="col-md-4 control-label">עיר</label>
-                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.city.$dirty) && settingsForm.city.$invalid }">
-                            <input class="form-control" name="city" type="text" ng-model="data.city" required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-4 control-label">הערות</label>
-                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.comments.$dirty) && settingsForm.comments.$invalid }">
-                            ​
-                            <textarea class="form-control" name="comments" rows="4" ng-model="data.comments" required></textarea>
+                        <label class="col-md-4 control-label">כתובת הלימודים</label>
+                        <div class="col-md-8" ng-class="{ 'has-error': (formErrors || settingsForm.address.$dirty) && settingsForm.address.$invalid }">
+                            <textarea class="form-control" name="address" rows="4" ng-model="data.address" required></textarea>
                         </div>
                     </div>
                 </rd-widget-body>

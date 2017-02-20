@@ -5,7 +5,7 @@ angular.module('RDash')
             $scope.colels.forEach(x => x.schedule = JSON.parse(x.schedule));
         })
 
-        $scope.colel = {};
+        var colel = {};
 
         $scope.add = function () {
             $scope.display = true;
@@ -13,7 +13,7 @@ angular.module('RDash')
 
         $scope.edit = function (id) {
             $scope.display = true;
-            $scope.colel = $scope.colels[id];
+            $scope.colel = angular.copy($scope.colels[id]);
             $scope.editId = id.toString();
         }
 
@@ -22,6 +22,8 @@ angular.module('RDash')
                 $scope.formErrors = true;
             } else if (valid) {
                 var method = $scope.editId ? 'put' : 'post';
+                $scope.colel.schedule = JSON.stringify($scope.colel.schedule);
+                $scope.colel.note = JSON.stringify({type:$scope.colel.noteType,msg:$scope.colel.note})
 
                 Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
                     $scope.colels = data.colels;

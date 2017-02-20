@@ -106,8 +106,8 @@ details[open] summary {
 }
 
 .colelSelect {
-    width: 80%;
-    margin: 0 auto;
+    width: 60%;
+    margin: 3px 20px;
 }
 
 .square.selected {
