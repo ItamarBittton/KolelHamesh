@@ -119,7 +119,7 @@ function newRecomend(req, res) {
             table_name: req.body.table,
             data: sql.v(JSON.stringify(req.body.data))
         }
-        
+
     sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
         console.log(data);
     })
@@ -252,10 +252,10 @@ function updateDailyReport(req, res) {
     req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
     sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-        res.send({
-            success: 'הדוח עודכן בהצלחה'
-        });
-    })
+            res.send({
+                success: 'הדוח עודכן בהצלחה'
+            });
+        })
 
 };
 
@@ -281,23 +281,23 @@ function getScores(req, res) {
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
-        scores = data.results;
-        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
-            var test_type = data.results;
-            res.send({
-                scores,
-                test_type,
-                options: [{
-                    value: 0,
-                    name: 'לא עבר'
-                }, {
-                    value: 100,
-                    name: 'עבר'
-                }]
-            });
-        })
+            scores = data.results;
+            sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+                var test_type = data.results;
+                res.send({
+                    scores,
+                    test_type,
+                    options: [{
+                        value: 0,
+                        name: 'לא עבר'
+                    }, {
+                        value: 100,
+                        name: 'עבר'
+                    }]
+                });
+            })
 
-    })
+        })
 
     // var students = db.GETALL('students');
     // var studentList = [];
@@ -351,11 +351,23 @@ function putScores(req, res) {
 
     sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function (data) {
-        res.send({
-            success: 'הציונים הוזנו בהצלחה'
-        });
-    })
+            res.send({
+                success: 'הציונים הוזנו בהצלחה'
+            });
+        })
+
 }
+function getColelList(req, res) {
+    sql.q(`select t1.id, t1.name from tb_colel t1`, function (data) {
+        res.send({ colelList: data.results, colel_id: req.currentUser.colel_id });
+    });
+}
+
+function updColelId(req, res) {
+    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
+        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+    })
+};
 
 module.exports = {
     requireRole: requireRole,
@@ -374,5 +386,6 @@ module.exports = {
     getScores: getScores,
     putScores: putScores,
     isOnlyDaily: isOnlyDaily,
-
+    getColelList: getColelList,
+    updColelId: updColelId,
 }
