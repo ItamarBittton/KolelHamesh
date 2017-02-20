@@ -50,7 +50,6 @@ angular
                             currDay++;
                         }
                     }
-                    console.log(scope.month);
                 });
             }
         }
