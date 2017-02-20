@@ -407,9 +407,20 @@ function getPreviousDate(req, res) {
             res.send({ prevDates: data.results })
         })
     } else {
-        // sql.q(`select year(t1.date) as year, month(t1.date) as month from tb_daily t1 where month(t1.date) > current monthgroup by year(t1.date), month(t1.date)`, function (data) {
-        //     res.send({ prevDates: data.results })
-        // })
+        var date = new Date().getDate();
+        if(date <= 3){
+            sql.q(`select year(t1.date) as year, month(t1.date) as month 
+                from tb_daily t1 
+                where TIMESTAMPDIFF(month,t1.date,CURDATE()) = 1 || TIMESTAMPDIFF(month,t1.date,CURDATE()) = 0
+                group by year(t1.date), month(t1.date)`, function (data) {
+                    var dat = data.results;
+                    var arr = [];
+                    dat.map(val => arr.push(val.year + "-" + val.month))
+             res.send({ prevDates: arr })
+         })
+        } else {
+            res.send({  })
+        }
     }
 }
 
