@@ -92,6 +92,9 @@ app.get('/isOnlyDaily', f.requireRole([Admin, User]), f.isOnlyDaily);
 app.get('/scores/:date', f.requireRole([Admin, User]), f.getScores);
 app.put('/scores', f.requireRole([Admin, User]), f.putScores);
 
+app.get('/colelList', f.requireRole([Admin]), f.getColelList);
+app.put('/updColel', f.requireRole([Admin]), f.updColelId);
+
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {

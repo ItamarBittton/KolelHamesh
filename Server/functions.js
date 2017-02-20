@@ -300,11 +300,6 @@ function getScores(req, res) {
     // })
 }
 
-// function sliceArr(val) {
-//     var
-//     return
-// }
-
 function putScores(req, res) {
 
     var arr = [];
@@ -312,21 +307,33 @@ function putScores(req, res) {
     var month = req.body.date.split('-')[1];
     function sliceArr(val) {
         if (val.oral !== null) {
-            arr.push([ sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1 ]);
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1]);
         }
         if (val.write !== null) {
-            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2 ]);
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2]);
         }
 
     }
-    
+
     req.body.score.map(val => (sliceArr(val)));
 
     sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
-    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function(data){
-        res.send({ success: 'הציונים הוזנו בהצלחה' });
-    })
+    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function (data) {
+            res.send({ success: 'הציונים הוזנו בהצלחה' });
+        })
+};
+
+function getColelList(req, res) {
+    sql.q(`select t1.id, t1.name from tb_colel t1`, function (data) {
+        res.send({ colelList: data.results , colel_id: req.currentUser.colel_id});
+    });
 }
+
+function updColelId(req, res){
+    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function(data){
+        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+    })
+};
 
 module.exports = {
     requireRole: requireRole,
@@ -345,5 +352,7 @@ module.exports = {
     getScores: getScores,
     putScores: putScores,
     isOnlyDaily: isOnlyDaily,
+    getColelList: getColelList,
+    updColelId: updColelId,
 
 }

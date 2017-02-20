@@ -3,11 +3,12 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', function MasterCtrl($scope, $cookies, $rootScope, translate, $location) {
+    .controller('MasterCtrl', function MasterCtrl($scope, $cookies, $rootScope, translate, $location, Data, $state) {
         /**
          * Sidebar Toggle & Cookie Control
          */
         var mobileView = 992;
+        var watch = false;
 
         $scope.getWidth = function () {
             return window.innerWidth;
@@ -52,4 +53,16 @@ angular.module('RDash')
         window.onresize = function () {
             $scope.$apply();
         };
+
+        $scope.changedColel = function (e) {
+            
+            Data.put('updColel', { currColel: this.currColel }).then(function (data) {
+                $state.reload();
+            });
+        }
+
+        Data.get('colelList').then(function (data) {
+            $scope.currColel = data.colel_id;
+            $scope.colelList = data.colelList;
+        })
     });

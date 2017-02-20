@@ -28,6 +28,7 @@
         </li>
         <span ng-if="role === 'User'" ng-show="isAgreed()">
         <li class="sidebar-title"><span>תפריט מנהל כולל</span></li>
+
         <li class="sidebar-list">
           <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
         </li>
@@ -45,6 +46,14 @@
         <span ng-if="role === 'Admin'">
         <li class="sidebar-title"><span>תפריט מנהל רשת</span></li>
         <li class="sidebar-list">
+          <select 
+            ng-model="currColel"
+            ng-options="colel.id as colel.name for colel in colelList" 
+            class="form-control" 
+            ng-change="changedColel(e)">
+          </select>
+        </li>
+        <li class="sidebar-list">
           <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
         </li>
         <li class="sidebar-list">
@@ -61,7 +70,7 @@
         <li class="sidebar-list">
           <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
         </li>
-        <li class="sidebar-title"></li>        
+        <li class="sidebar-title"></li>
         <li class="sidebar-list">
           <a href="#">דוחות<span class="menu-icon icon-map"></span></a>
         </li>
