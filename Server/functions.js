@@ -381,7 +381,7 @@ function getColel(req, res) {
     );
 };
 
-[{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'}]
+[{ start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }]
 
 function editColel(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
@@ -401,6 +401,17 @@ function deleteColel(req, res) {
     })
 };
 
+function getPreviousDate(req, res) {
+    if (req.currentUser.permission === 'Admin') {
+        sql.q(`select year(t1.date) as year, month(t1.date) as month from tb_daily t1 group by year(t1.date), month(t1.date)`, function (data) {
+            res.send({ prevDates: data.results })
+        })
+    } else {
+        // sql.q(`select year(t1.date) as year, month(t1.date) as month from tb_daily t1 where month(t1.date) > current monthgroup by year(t1.date), month(t1.date)`, function (data) {
+        //     res.send({ prevDates: data.results })
+        // })
+    }
+}
 
 module.exports = {
     requireRole: requireRole,
@@ -410,7 +421,7 @@ module.exports = {
     newStudent: newStudent,
     editStudent: editStudent,
     deleteStudent: deleteStudent,
-    
+
     getColel: getColel,
     editColel: editColel,
     newColel: newColel,
@@ -425,6 +436,8 @@ module.exports = {
     getScores: getScores,
     putScores: putScores,
     isOnlyDaily: isOnlyDaily,
+
     getColelList: getColelList,
     updColelId: updColelId,
+    getPreviousDate: getPreviousDate,
 }

@@ -89,6 +89,8 @@ app.put('/scores', f.requireRole([Admin, User]), f.putScores);
 app.get('/colelList', f.requireRole([Admin]), f.getColelList);
 app.put('/updColel', f.requireRole([Admin]), f.updColelId);
 
+app.get('/prevDates', f.requireRole([Admin, User]), f.getPreviousDate);
+
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {
