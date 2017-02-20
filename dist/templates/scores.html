@@ -4,7 +4,7 @@
             <form name="scoreForm" novalidate>
                 <rd-widget-header icon="icon-note" title="ציונים">
                     <button ng-click="save()" class="btn btn-info pull-left">שמור</button>
-                    <select style="margin: 0 15px; width: 120px" ng-model="current" ng-change="changeMonth(current)" class="form-control pull-left">
+                    <select ng-if="prevDates" style="margin: 0 15px; width: 120px" ng-model="current" ng-change="changeMonth(current)" class="form-control pull-left">
                         <option value="" disabled="disabled">החלף חודש</option>
                         <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                     </select>
