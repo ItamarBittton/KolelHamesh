@@ -111,7 +111,7 @@ function newRecomend(req, res) {
     // try and save object in database, and send result to client.
     var id = req.body.data.editId,
         newRecomend = {
-            user_update: sql.v(req.currentUser.colel_id),
+            user_update: sql.v(req.currentUser.id),
             type: id ? 'עדכון' : 'הוספה',
             requested_date: new Date().toDateString(),
             approved_date: null,
