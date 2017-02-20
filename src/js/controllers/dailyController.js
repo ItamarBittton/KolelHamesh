@@ -32,9 +32,9 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
     Data.get('prevDates').then(function (data) {
         $scope.prevDates = data.prevDates;
     })
-
-    $scope.changeMonth = function (a) {
-        $scope.viewDate = JSON.parse(a);
+    
+    $scope.changeMonth = function (currentMonth) {
+        $scope.viewDate = JSON.parse(currentMonth);
     }
 
     $scope.save = function (valid) {
