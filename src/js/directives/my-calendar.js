@@ -9,7 +9,7 @@ angular
                            <div class="square" id="{{day.key}}"
                                 ng-repeat='day in month'
                                 ng-click="chooseDay(day)">
-                               <div class="date">{{day.val}}<span class="gerg">{{day.gerg.getDate() && day.gerg.getDate() + "/"}}{{day.gerg.getMonth() && day.gerg.getMonth() + 1}}</span></div>
+                               <div class="date">{{day.val}}<span ng-if="day.gerg" class="gerg">{{day.gerg.getDate() + "/"}}{{day.gerg.getMonth() + 1 == 0 ? 1 : day.gerg.getMonth() + 1}}</span></div>
                            </div>
                        </div>`,
             link: function (scope, element) {
@@ -50,6 +50,7 @@ angular
                             currDay++;
                         }
                     }
+                    console.log(scope.month);
                 });
             }
         }

@@ -197,54 +197,11 @@ function getDailyReport(req, res) {
                     res.send({
                         dailyRep,
                         dropList,
-                        tempStudents: 3
+                        tempStudents: 0
                     });
                 });
             });
     }
-
-
-    // var AllDaily = db.GETALL('daily');
-    // var AllStudents = db.GETALL('students');
-    // var rightDaily = [];
-    // var bool = true;
-
-    // for (var i = 0; i < AllStudents.length; i++) {
-    //     for (var j = 0; j < AllDaily.length; j++) {
-    //         if (new Date(req.body.date).getMonth() === AllDaily[j].date.getMonth() &&
-    //             new Date(req.body.date).getDate() === AllDaily[j].date.getDate()) {
-    //             if (AllDaily[j].studID === AllStudents[i].id && AllStudents[i].UserID === req.cookies.UserID) {
-    //                 rightDaily.push({
-    //                     id: AllStudents[i].id,
-    //                     first: AllStudents[i].firstName,
-    //                     last: AllStudents[i].lastName,
-    //                     phone: AllStudents[i].phone,
-    //                     val: AllDaily[j].late ? AllDaily[j].late : null
-    //                 });
-    //                 bool = false;
-    //             }
-    //         }
-    //     }
-    //     if (bool) {
-    //         rightDaily.push({
-    //             id: AllStudents[i].id,
-    //             first: AllStudents[i].firstName,
-    //             last: AllStudents[i].lastName,
-    //             phone: AllStudents[i].phone,
-    //             val: null
-    //         });
-
-    //     }
-    //     bool = true;
-    // }
-    // res.send({
-    //     dailyRep: rightDaily,
-    //     dropList: {
-    //         title: ['נוכחות'],
-    //         options: [db.GETALL('presenceStatus')]
-    //     },
-    //     tempStudents: 3
-    // });
 };
 
 function updateDailyReport(req, res) {
@@ -298,38 +255,7 @@ function getScores(req, res) {
             })
 
         })
-
-    // var students = db.GETALL('students');
-    // var studentList = [];
-    // students.map((val) => (studentList.push({
-    //     id: val.id,
-    //     first: val.firstName,
-    //     last: val.lastName,
-    //     phone: val.phone,
-    //     oral: null,
-    //     write: null
-    // })));
-    // res.send({
-    //     studentList: studentList,
-    //     dropList: {
-    //         title: ['מבחן בכתב', 'מבחן בעל פה'],
-    //         options: [{
-    //             name: 'לא עבר',
-    //             value: 0
-    //         },
-    //         {
-    //             name: 'עבר',
-    //             value: 100
-    //         }
-    //         ]
-    //     }
-    // })
 }
-
-// function sliceArr(val) {
-//     var
-//     return
-// }
 
 function putScores(req, res) {
 
@@ -409,15 +335,15 @@ function getPreviousDate(req, res) {
     } else {
         var date = new Date().getDate();
         var canGetPrevDate = false;
-        if(date <= 3 || canGetPrevDate){
+        if (date <= 3 || canGetPrevDate) {
             sql.q(`select year(t1.date) as year, month(t1.date) as month 
                 from tb_daily t1 
                 where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32
                 group by year(t1.date), month(t1.date)`, function (data) {
-             res.send({ prevDates: data.results })
-         })
+                    res.send({ prevDates: data.results })
+                })
         } else {
-            res.send({  })
+            res.send({})
         }
     }
 }
