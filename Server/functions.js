@@ -64,7 +64,7 @@ function newStudent(req, res) {
     // INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
     var i = `${sql.i('tb_recomend', req.body.data)}`
     sql.q(`${sql.v(i)}`, function (data) {
-        console.log(data);
+        res.send({ success: 'האברך נוסף בהצלחה' })
     })
 
     // })
@@ -83,6 +83,26 @@ function newStudent(req, res) {
 
 function editStudent(req, res) {
     // Save object in database.
+    var student = req.body.students;
+    sql.q(`${sql.i('tb_daily', student)} 
+    ON DUPLICATE KEY UPDATE supported_id=VALUES(supported_id),
+                            first_name=VALUES(first_name),
+                            last_name=VALUES(last_name),
+                            phone=VALUES(phone),
+                            street=VALUES(street),
+                            house=VALUES(house),
+                            city=VALUES(city),
+                            bank=VALUES(bank),
+                            branch=VALUES(branch),
+                            account=VALUES(account),
+                            account_name=VALUES(account_name),
+                            colel_id=VALUES(${req.currentUser.colel_id})`, function (data) {
+            res.send({
+                success: 'הנתונים עודכנו בהצלחה'
+            });
+    })
+     (id,supported_id,first_name,last_name,phone,street,house,city,bank,branch,account,account_name,colel_id)
+
     db.UPD('students', req.body.student, req.body.id);
 
     res.send({
@@ -329,7 +349,12 @@ function deleteColel(req, res) {
 
 function getPreviousDate(req, res) {
     if (req.currentUser.permission === 'Admin') {
-        sql.q(`select year(t1.date) as year, month(t1.date) as month from tb_daily t1 group by year(t1.date), month(t1.date)`, function (data) {
+        sql.q(`select year(t1.date) as year, month(t1.date) as month 
+               from tb_daily t1 
+               where t1.student_id in (select t2.id 
+                                       from tb_student t2 
+                                       where t2.colel_id = ${req.currentUser.colel_id})
+               group by year(t1.date), month(t1.date)`, function (data) {
             res.send({ prevDates: data.results })
         })
     } else {
@@ -338,7 +363,11 @@ function getPreviousDate(req, res) {
         if (date <= 3 || canGetPrevDate) {
             sql.q(`select year(t1.date) as year, month(t1.date) as month 
                 from tb_daily t1 
-                where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32
+                where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and
+                      TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32 and
+                      t1.student_id in (select t2.id 
+                                        from tb_student t2 
+                                        where t2.colel_id = ${req.currentUser.colel_id})
                 group by year(t1.date), month(t1.date)`, function (data) {
                     res.send({ prevDates: data.results })
                 })
