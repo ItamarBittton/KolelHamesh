@@ -100,8 +100,8 @@ function editStudent(req, res) {
             res.send({
                 success: 'הנתונים עודכנו בהצלחה'
             });
-    })
-     (id,supported_id,first_name,last_name,phone,street,house,city,bank,branch,account,account_name,colel_id)
+        })
+        (id, supported_id, first_name, last_name, phone, street, house, city, bank, branch, account, account_name, colel_id)
 
     db.UPD('students', req.body.student, req.body.id);
 
@@ -129,31 +129,35 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    var id = req.body.data.editId,
-        newRecomend = {
-            user_update: sql.v(req.currentUser.id),
-            type: id ? 'עדכון' : 'הוספה',
-            requested_date: new Date().toDateString(),
-            approved_date: null,
-            status: null,
-            table_name: req.body.table,
-            data: sql.v(JSON.stringify(req.body.data))
-        }
-
-    sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
-        console.log(data);
-    })
-
-    if (db.ADD('recomends', newRecomend)) {
-        res.send({
-            success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-            data: db.GET(req.body.table, req.cookies.UserID)
-        });
+    if (req.currentUser.permission === 'Admin') {
+        res.redirect('/students');
     } else {
-        res.send({
-            error: 'הבקשה כבר נשלחה בעבר'
-        });
-    };
+        var id = req.body.data.editId,
+            newRecomend = {
+                user_update: sql.v(req.currentUser.id),
+                type: id ? 'עדכון' : 'הוספה',
+                requested_date: new Date().toDateString(),
+                approved_date: null,
+                status: null,
+                table_name: req.body.table,
+                data: sql.v(JSON.stringify(req.body.data))
+            }
+
+        sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
+            console.log(data);
+        })
+
+        if (db.ADD('recomends', newRecomend)) {
+            res.send({
+                success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+                data: db.GET(req.body.table, req.cookies.UserID)
+            });
+        } else {
+            res.send({
+                error: 'הבקשה כבר נשלחה בעבר'
+            });
+        };
+    }
 };
 
 function approveRecomend(req, res) {
@@ -355,8 +359,8 @@ function getPreviousDate(req, res) {
                                        from tb_student t2 
                                        where t2.colel_id = ${req.currentUser.colel_id})
                group by year(t1.date), month(t1.date)`, function (data) {
-            res.send({ prevDates: data.results })
-        })
+                res.send({ prevDates: data.results })
+            })
     } else {
         var date = new Date().getDate();
         var canGetPrevDate = false;
