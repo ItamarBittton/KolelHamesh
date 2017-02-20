@@ -61,8 +61,10 @@ angular.module('RDash')
             });
         }
 
-        Data.get('colelList').then(function (data) {
-            $scope.currColel = data.colel_id;
-            $scope.colelList = data.colelList;
-        })
+        if ($scope.role == 'Admin') {
+            Data.get('colelList').then(function (data) {
+                $scope.currColel = data.colel_id;
+                $scope.colelList = data.colelList;
+            })
+        }    
     });
