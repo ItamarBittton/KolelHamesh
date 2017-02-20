@@ -73,7 +73,7 @@ app.get('/colels', f.requireRole([Admin]), f.getColel);
 app.put('/colels', f.requireRole([Admin]), f.editColel);
 
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
-app.post('/recomends', f.requireRole([User]), f.newRecomend);
+app.post('/recomends', f.requireRole([Admin, User]), f.newRecomend);
 app.post('/approve', f.requireRole([Admin]), f.approveRecomend);
 app.post('/deny', f.requireRole([Admin]), f.denyRecomend);
 

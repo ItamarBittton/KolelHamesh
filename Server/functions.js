@@ -64,7 +64,7 @@ function newStudent(req, res) {
     // INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
     var i = `${sql.i('tb_recomend', req.body.data)}`
     sql.q(`${sql.v(i)}`, function (data) {
-        console.log(data);
+        res.send({ success: 'האברך נוסף בהצלחה' })
     })
 
     // })
@@ -83,6 +83,26 @@ function newStudent(req, res) {
 
 function editStudent(req, res) {
     // Save object in database.
+    var student = req.body.data;
+    sql.q(`${sql.i('tb_student', student)} 
+    ON DUPLICATE KEY UPDATE supported_id=VALUES(supported_id),
+                            first_name=VALUES(first_name),
+                            last_name=VALUES(last_name),
+                            phone=VALUES(phone),
+                            street=VALUES(street),
+                            house=VALUES(house),
+                            city=VALUES(city),
+                            bank=VALUES(bank),
+                            branch=VALUES(branch),
+                            account=VALUES(account),
+                            account_name=VALUES(account_name),
+                            colel_id=VALUES(${req.currentUser.colel_id})`, function (data) {
+            res.send({
+                success: 'הנתונים עודכנו בהצלחה'
+            });
+        })
+        (id, supported_id, first_name, last_name, phone, street, house, city, bank, branch, account, account_name, colel_id)
+
     db.UPD('students', req.body.student, req.body.id);
 
     res.send({
@@ -109,31 +129,33 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    var id = req.body.data.editId,
-        newRecomend = {
-            user_update: sql.v(req.currentUser.id),
-            type: id ? 'עדכון' : 'הוספה',
-            requested_date: new Date().toDateString(),
-            approved_date: null,
-            status: null,
-            table_name: req.body.table,
-            data: sql.v(JSON.stringify(req.body.data))
-        }
+    
+        var id = req.body.data.editId,
+            newRecomend = {
+                user_update: sql.v(req.currentUser.id),
+                type: id ? 'עדכון' : 'הוספה',
+                requested_date: new Date().toDateString(),
+                approved_date: null,
+                status: null,
+                table_name: req.body.table,
+                data: sql.v(JSON.stringify(req.body.data))
+            }
 
-    sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
-        console.log(data);
-    })
+        sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
+            console.log(data);
+        })
 
-    if (db.ADD('recomends', newRecomend)) {
-        res.send({
-            success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-            data: db.GET(req.body.table, req.cookies.UserID)
-        });
-    } else {
-        res.send({
-            error: 'הבקשה כבר נשלחה בעבר'
-        });
-    };
+        if (db.ADD('recomends', newRecomend)) {
+            res.send({
+                success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+                data: db.GET(req.body.table, req.cookies.UserID)
+            });
+        } else {
+            res.send({
+                error: 'הבקשה כבר נשלחה בעבר'
+            });
+        };
+    
 };
 
 function approveRecomend(req, res) {
@@ -307,8 +329,6 @@ function getColel(req, res) {
     );
 };
 
-[{ start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }, { start: '20:00', end: '21:30' }]
-
 function editColel(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
         res.send({ success: 'הפעולה בוצעה בהצלחה' })
@@ -329,16 +349,25 @@ function deleteColel(req, res) {
 
 function getPreviousDate(req, res) {
     if (req.currentUser.permission === 'Admin') {
-        sql.q(`select year(t1.date) as year, month(t1.date) as month from tb_daily t1 group by year(t1.date), month(t1.date)`, function (data) {
-            res.send({ prevDates: data.results })
-        })
+        sql.q(`select year(t1.date) as year, month(t1.date) as month 
+               from tb_daily t1 
+               where t1.student_id in (select t2.id 
+                                       from tb_student t2 
+                                       where t2.colel_id = ${req.currentUser.colel_id})
+               group by year(t1.date), month(t1.date)`, function (data) {
+                res.send({ prevDates: data.results })
+            })
     } else {
         var date = new Date().getDate();
         var canGetPrevDate = false;
         if (date <= 3 || canGetPrevDate) {
             sql.q(`select year(t1.date) as year, month(t1.date) as month 
                 from tb_daily t1 
-                where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32
+                where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and
+                      TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32 and
+                      t1.student_id in (select t2.id 
+                                        from tb_student t2 
+                                        where t2.colel_id = ${req.currentUser.colel_id})
                 group by year(t1.date), month(t1.date)`, function (data) {
                     res.send({ prevDates: data.results })
                 })
