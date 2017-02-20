@@ -1,5 +1,9 @@
 angular.module('RDash')
     .controller('settingsController', function ($scope, Data, $state, $cookies, Notification) {
+        if ($cookies.get('link') === 'Admin') {
+            $state.go('recomends');
+        }
+        
         $scope.data = {
             shulName: 'בית כנסת חב"ד',
             street: "רבי עקיבא",

@@ -4,8 +4,7 @@
             <form name="dailyForm" novalidate>
                 <rd-widget-header icon="icon-note" title="דוח נוכחות">
                     <span class="action action-ok" ng-click="save(dailyForm.$valid)" ng-class="{'disabled': dailyForm.$invalid}"></span>
-                    <span class="action action-error" ng-click="close()"></span> 
-                    <span>{{date.toLocaleDateString('en-GB')}}</span>  
+                    <span class="action action-error" ng-click="close()"></span>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
                     <student-list students="students" drop-list="dropList"></student-list>

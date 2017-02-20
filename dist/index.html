@@ -46,10 +46,21 @@
         <span ng-if="role === 'Admin'">
         <li class="sidebar-title"><span>תפריט מנהל רשת</span></li>
         <li class="sidebar-list">
+          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a ui-sref="colels" ui-sref-active="active">כוללים<span class="menu-icon icon-cup"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#">דוחות<span class="menu-icon icon-map"></span></a>
+        </li>
+        <li class="sidebar-title"></li>
+        <li class="sidebar-title"><span>צפה כ:</span></li>
+        <li class="sidebar-list">
           <select 
             ng-model="currColel"
             ng-options="colel.id as colel.name for colel in colelList" 
-            class="form-control" 
+            class="form-control colelSelect" 
             ng-change="changedColel(e)">
           </select>
         </li>
@@ -59,21 +70,10 @@
         <li class="sidebar-list">
           <a ui-sref="scores" ui-sref-active="active">ציונים <span class="menu-icon icon-layers"></span></a>
         </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a ui-sref="colels" ui-sref-active="active">כוללים<span class="menu-icon icon-cup"></span></a>
-        </li>
         <li class="sidebar-list">
           <a ui-sref="students" ui-sref-active="active">אברכים<span class="menu-icon icon-user"></span></a>
         </li>
         <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a href="#">דוחות<span class="menu-icon icon-map"></span></a>
-        </li>
         <li class="sidebar-list">
           <a href="#">הגדרות<span class="menu-icon icon-settings"></span></a>
         </li>

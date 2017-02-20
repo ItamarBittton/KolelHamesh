@@ -2,6 +2,7 @@ angular.module('RDash')
     .controller('colelController', function ($scope, Data, $rootScope) {
         Data.get('colels').then(function (data) {
             $scope.colels = data.colels;
+            $scope.colels.forEach(x => x.schedule = JSON.parse(x.schedule));
         })
 
         $scope.colel = {};

@@ -69,15 +69,9 @@ app.post('/students', f.requireRole([Admin]), f.newStudent);
 app.put('/students', f.requireRole([Admin]), f.editStudent);
 app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
-        // f.getUser(credentials, function (user) {
-        //     if (role.indexOf(user.permission) != -1) {
-        //         currentUser = user;
-        //         req.currentUser = user;
-        //         next();
-        //     } else {
-        //         res.sendStatus(403);
-        //     }
-        // });
+app.get('/colels', f.requireRole([Admin]), f.getColel);
+app.put('/colels', f.requireRole([Admin]), f.editColel);
+
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([User]), f.newRecomend);
 app.post('/approve', f.requireRole([Admin]), f.approveRecomend);

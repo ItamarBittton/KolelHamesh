@@ -6,15 +6,27 @@ angular
                 show: "&"
             },
             template: `<div class="board">
-                           <div class="square" ng-repeat='day in month' ng-click="show({date : day.gerg, hebDate: day})">
+                           <div class="square" id="{{day.key}}"
+                                ng-repeat='day in month'
+                                ng-click="chooseDay(day)">
                                <div class="date">{{day.val}}<span class="gerg">{{day.gerg.getDate() && day.gerg.getDate() + "/"}}{{day.gerg.getMonth() && day.gerg.getMonth() + 1}}</span></div>
                            </div>
                        </div>`,
-            link: function (scope) {
+            link: function (scope, element) {
                 var month = scope.viewDate.month - 1,
                     year = scope.viewDate.year,
                     range = new Date(year, scope.viewDate.month, 0).getDate(),
                     start = new Date(year, month, 1).getDay();
+
+                scope.selected = false;
+
+                scope.chooseDay = function (day) {
+                    var elementsSelected = document.querySelector(".selected")
+                    if (elementsSelected) elementsSelected.classList.remove("selected");
+                    document.getElementById(day.key).className += ' selected';
+                    day.selected = true;
+                    scope.show({ date: day.gerg, hebDate: day });
+                }
 
                 scope.month = [];
                 var currDay = 0;

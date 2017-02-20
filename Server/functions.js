@@ -369,6 +369,39 @@ function updColelId(req, res) {
     })
 };
 
+function getColel(req, res) {
+    sql.q(`SELECT t1.*, t2.password
+        FROM tb_colel t1
+        LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')`,
+        function (data) {
+            res.send({
+                colels: data.results
+            });
+        }
+    );
+};
+
+[{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'},{start: '20:00',end: '21:30'}]
+
+function editColel(req, res) {
+    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
+        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+    })
+};
+
+function newColel(req, res) {
+    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
+        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+    })
+};
+
+function deleteColel(req, res) {
+    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
+        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+    })
+};
+
+
 module.exports = {
     requireRole: requireRole,
     getUser: getUser,
@@ -377,6 +410,12 @@ module.exports = {
     newStudent: newStudent,
     editStudent: editStudent,
     deleteStudent: deleteStudent,
+    
+    getColel: getColel,
+    editColel: editColel,
+    newColel: newColel,
+    deleteColel: deleteColel,
+
     getRecomends: getRecomends,
     newRecomend: newRecomend,
     approveRecomend: approveRecomend,

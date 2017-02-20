@@ -1,90 +1,109 @@
 <div class="row">
-  <div class="col-lg-4">
-    <rd-widget ng-if="display">
-      <form name="colelForm" novalidate>
-        <rd-widget-header icon="icon-note" title="פרטי הכולל">
-          <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
-          <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
-        </rd-widget-header>
-        <rd-widget-body classes="xlarge no-padding">
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
-            <label class="col-md-4 control-label">שם הכולל</label>
-            <div class="col-md-8">
-              <input name="name" type="text" ng-model="colel.name" class="form-control" ng-minlength="3" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.address.$dirty) && colelForm.address.$invalid }">
-            <label class="col-md-4 control-label">כתובת</label>
-            <div class="col-md-8">
-              <input name="address" type="text" ng-model="colel.address" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
-            <label class="col-md-4 control-label">שעות פעילות</label>
-            <div class="col-md-8">
-              <input name="hours" type="text" ng-model="colel.hours" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
-            <label class="col-md-4 control-label">שם האחראי</label>
-            <div class="col-md-8">
-              <input name="hours" type="text" ng-model="colel.hours" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.phone.$dirty) && colelForm.phone.$invalid }">
-            <label class="col-md-4 control-label">טלפון</label>
-            <div class="col-md-8">
-              <input name="phone" type="text" ng-model="colel.phone" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.mailAddress.$dirty) && colelForm.mailAddress.$invalid }">
-            <label class="col-md-4 control-label">כתובת דואר</label>
-            <div class="col-md-8">
-              <input name="mailAddress" type="text" ng-model="colel.mailAddress" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.password.$dirty) && colelForm.password.$invalid }">
-            <label class="col-md-4 control-label">סיסמא</label>
-            <div class="col-md-8">
-              <input name="password" type="text" ng-model="colel.password" class="form-control" required>
-            </div>
-          </div>
-        </rd-widget-body>
-      </form>
-    </rd-widget>
-  </div>
+    <div class="col-lg-4">
+        <rd-widget ng-if="display">
+            <form name="colelForm" novalidate>
+                <rd-widget-header icon="icon-note" title="פרטי הכולל">
+                    <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+                    <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+                </rd-widget-header>
+                <rd-widget-body classes="xlarge no-padding">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
+                        <label class="col-md-4 control-label">שם הכולל</label>
+                        <div class="col-md-8">
+                            <input name="name" type="text" ng-model="colel.name" class="form-control" ng-minlength="3"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.address.$dirty) && colelForm.address.$invalid }">
+                        <label class="col-md-4 control-label">כתובת</label>
+                        <div class="col-md-8">
+                            <input name="address" type="text" ng-model="colel.address" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
+                        <label class="col-md-4 control-label">שם האחראי</label>
+                        <div class="col-md-8">
+                            <input name="hours" type="text" ng-model="colel.manager_name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.phone.$dirty) && colelForm.phone.$invalid }">
+                        <label class="col-md-4 control-label">טלפון</label>
+                        <div class="col-md-8">
+                            <input name="phone" type="text" ng-model="colel.phone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.mailAddress.$dirty) && colelForm.mailAddress.$invalid }">
+                        <label class="col-md-4 control-label">כתובת דואר</label>
+                        <div class="col-md-8">
+                            <input name="mailAddress" type="text" ng-model="colel.mail_address" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.password.$dirty) && colelForm.password.$invalid }">
+                        <label class="col-md-4 control-label">סיסמא</label>
+                        <div class="col-md-8">
+                            <input name="password" type="input" ng-model="colel.password" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
+                        <details>
+                            <summary>
+                                <label class="col-md-4 control-label">שעות פעילות</label>
+                            </summary>
+                            <span class="clearfix"></span>
+                            <p ng-repeat="(key, value) in colel.schedule" class="container-fluid">
+                                <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
+                                <input type="text" ng-model="colel.schedule[key].start" class="col-lg-4 form-control">
+                                <input type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
+                            </p>
+                        </details>
+                    </div>
+                </rd-widget-body>
+            </form>
+        </rd-widget>
+    </div>
 
-  <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
-    <rd-widget>
-      <rd-widget-header icon="icon-people" title="רשימת כוללים (לחץ על כולל על מנת לערוך אותו)">
-        <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף כולל</button>
-      </rd-widget-header>
-      <rd-widget-body classes="xlarge no-padding">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <td>שם הכולל</td>
-              <td>כתובת</td>
-              <td>שעות פעילות</td>
-              <td>שם האחראי</td>
-              <td>טלפון</td>
-              <td>כתובת דואר</td>
-              <td>סיסמא</td>
-            </thead>
-            <tbody>
-              <tr ng-repeat="colel in colels track by $index">
-                <td ng-click="edit($index)">{{ colel.name }}</td>
-                <td ng-click="edit($index)">{{ colel.address }}</td>
-                <td ng-click="edit($index)">{{ colel.hours }}</td>
-                <td ng-click="edit($index)">{{ colel.manager }}</td>
-                <td ng-click="edit($index)">{{ colel.phone }}</td>
-                <td ng-click="edit($index)">{{ colel.mailAddress }}</td>
-                <td ng-click="edit($index)">{{ colel.password }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </rd-widget-body>
-    </rd-widget>
-  </div>
+    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-people" title="רשימת כוללים (לחץ על כולל על מנת לערוך אותו)">
+                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף כולל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="xlarge no-padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <td>שם הכולל</td>
+                            <td>כתובת</td>
+                            <td width="180px">שעות פעילות</td>
+                            <td>שם האחראי</td>
+                            <td>טלפון</td>
+                            <td>כתובת דואר</td>
+                            <td>סיסמא</td>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="colel in colels track by $index">
+                                <td ng-click="edit($index)">{{ colel.name }}</td>
+                                <td ng-click="edit($index)">{{ colel.address }}</td>
+                                <td>
+                                    <details>
+                                        <summary>לחץ כדי להציג</summary>
+                                        <span class="clearfix"></span>
+                                        <p ng-repeat="(key, value) in colel.schedule">
+                                            <label class="control-label">
+                                                {{ $root.t[key] || key }}: 
+                                                <span class="pull-left">{{ colel.schedule[key].start }} - {{ colel.schedule[key].end }}</span>
+                                            </label>
+                                        </p>
+                                    </details>
+                                </td>
+                                <td ng-click="edit($index)">{{ colel.manager_name }}</td>
+                                <td ng-click="edit($index)">{{ colel.phone }}</td>
+                                <td ng-click="edit($index)">{{ colel.mail_address }}</td>
+                                <td ng-click="edit($index)">********</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
 </div>
