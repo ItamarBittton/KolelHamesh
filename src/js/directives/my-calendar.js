@@ -7,7 +7,7 @@ angular
             },
             template: `<div class="board">
                            <div class="square" ng-repeat='day in month' ng-click="show({date : day.gerg, hebDate: day})">
-                               <div class="date">{{day.val}}<span class="gerg">{{day.gerg.getDate()}}</span></div>
+                               <div class="date">{{day.val}}<span class="gerg">{{day.gerg.getDate() && day.gerg.getDate() + "/"}}{{day.gerg.getMonth() && day.gerg.getMonth() + 1}}</span></div>
                            </div>
                        </div>`,
             link: function (scope) {
