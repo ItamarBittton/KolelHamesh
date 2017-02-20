@@ -3,31 +3,35 @@
         <rd-widget>
             <form name="scoreForm" novalidate>
                 <rd-widget-header icon="icon-note" title="ציונים">
-                    <button ng-click="save()" class="btn btn-sm btn-info pull-left">שמור</button>
+                    <button ng-click="save()" class="btn btn-info pull-left">שמור</button>
+                    <select style="margin: 0 15px; width: 120px" ng-model="current"
+                        ng-change="changeMonth(current)" class="form-control pull-left">
+                        <option value="" disabled>החלף חודש</option>
+                        <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
+                    </select>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
                     <div>
-		<table class="table">
-			  <thead>
-				<td>שם פרטי</td>
-				<td>שם משפחה</td>
-				<td ng-repeat="til in title">{{til.name}}</td>
-			  </thead>
-			  <tbody>
-				<tr ng-repeat="student in students">
-					<td >{{student.first_name}}</td>
-					<td >{{student.last_name}}</td>
-                    <td><input type="number" ng-model="student.write" class="form-control" min="0" max="100"></td>
-					<td >
-						<select 
-								ng-model="student.oral" 
-								ng-options="def.value as def.name for def in options" class="form-control">
-						</select>
-					</td>
-				</tr>
-			  </tbody>
-			  </table>
-		</div>
+                        <table class="table">
+                            <thead>
+                                <td>שם פרטי</td>
+                                <td>שם משפחה</td>
+                                <td ng-repeat="til in title">{{til.name}}</td>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="student in students">
+                                    <td>{{student.first_name}}</td>
+                                    <td>{{student.last_name}}</td>
+                                    <td><input type="number" ng-model="student.write" class="form-control"
+                                            min="0" max="100"></td>
+                                    <td>
+                                        <select ng-model="student.oral" ng-options="def.value as def.name for def in options" class="form-control">
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </rd-widget-body>
             </form>
         </rd-widget>
