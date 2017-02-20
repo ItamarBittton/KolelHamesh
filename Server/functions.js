@@ -61,18 +61,24 @@ function newStudent(req, res) {
     //        VALUES ('204305660', '', 'שלום', 'אופן', '770555215', 'החרובים', '8', 'מכבים', '05', '552', '152455', 'שלום אופן', '13');`,
     //     function (data) { 
 
+    // INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
+    var i = `${sql.i('tb_recomend', req.body.data)}`
+    sql.q(`${sql.v(i)}`, function (data) {
+        console.log(data);
+    })
+
     // })
     // try and save object in database, and send result to client.
-    if (db.ADD('students', req.body.student)) {
-        res.send({
-            success: 'האברך נוסף בהצלחה',
-            students: db.GET('students', req.cookies.UserID)
-        });
-    } else {
-        res.send({
-            error: 'המשתמש כבר קיים'
-        });
-    };
+    // if (db.ADD('students', req.body.student)) {
+    //     res.send({
+    //         success: 'האברך נוסף בהצלחה',
+    //         students: db.GET('students', req.cookies.UserID)
+    //     });
+    // } else {
+    //     res.send({
+    //         error: 'המשתמש כבר קיים'
+    //     });
+    // };
 };
 
 function editStudent(req, res) {
@@ -103,18 +109,20 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    var id = req.body.editId,
+    var id = req.body.data.editId,
         newRecomend = {
-            id: db.COUNT('recomends'),
-            UserID: req.cookies.UserID,
-            editId: req.body.editId,
-            Type: id ? 'עדכון' : 'הוספה',
-            Requested: new Date(),
-            Approved: undefined,
-            TableName: req.body.table,
-            Data: req.body.data
+            user_update: sql.v(req.currentUser.colel_id),
+            type: id ? 'עדכון' : 'הוספה',
+            requested_date: new Date().toDateString(),
+            approved_date: null,
+            status: null,
+            table_name: req.body.table,
+            data: sql.v(JSON.stringify(req.body.data))
         }
-    newRecomend.Data.UserID = newRecomend.UserID;
+        
+    sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
+        console.log(data);
+    })
 
     if (db.ADD('recomends', newRecomend)) {
         res.send({
@@ -186,7 +194,11 @@ function getDailyReport(req, res) {
                 dailyRep = data.results;
                 sql.q(`select * from tbk_presence_status`, function (data) {
                     dropList.options = data.results;
-                    res.send({ dailyRep, dropList, tempStudents: 3 });
+                    res.send({
+                        dailyRep,
+                        dropList,
+                        tempStudents: 3
+                    });
                 });
             });
     }
@@ -240,8 +252,10 @@ function updateDailyReport(req, res) {
     req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
     sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-            res.send({ success: 'הדוח עודכן בהצלחה' });
-        })
+        res.send({
+            success: 'הדוח עודכן בהצלחה'
+        });
+    })
 
 };
 
@@ -251,7 +265,9 @@ function isOnlyDaily(req, res) {
             where t1.id = ${sql.v(req.currentUser.colel_id)}`,
         function (d) {
             var data = d.results[0].is_only_daily;
-            res.send({ data });
+            res.send({
+                data
+            });
         });
 }
 
@@ -265,13 +281,23 @@ function getScores(req, res) {
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
-            scores = data.results;
-            sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
-                var test_type = data.results;
-                res.send({ scores, test_type, options: [{ value: 0, name: 'לא עבר' }, { value: 100, name: 'עבר' }] });
-            })
-
+        scores = data.results;
+        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+            var test_type = data.results;
+            res.send({
+                scores,
+                test_type,
+                options: [{
+                    value: 0,
+                    name: 'לא עבר'
+                }, {
+                    value: 100,
+                    name: 'עבר'
+                }]
+            });
         })
+
+    })
 
     // var students = db.GETALL('students');
     // var studentList = [];
@@ -310,21 +336,24 @@ function putScores(req, res) {
     var arr = [];
     var year = req.body.date.split('-')[0];
     var month = req.body.date.split('-')[1];
+
     function sliceArr(val) {
         if (val.oral !== null) {
-            arr.push([ sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1 ]);
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1]);
         }
         if (val.write !== null) {
-            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2 ]);
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2]);
         }
 
     }
-    
+
     req.body.score.map(val => (sliceArr(val)));
 
     sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
-    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function(data){
-        res.send({ success: 'הציונים הוזנו בהצלחה' });
+    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function (data) {
+        res.send({
+            success: 'הציונים הוזנו בהצלחה'
+        });
     })
 }
 

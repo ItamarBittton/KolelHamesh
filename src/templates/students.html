@@ -10,13 +10,13 @@
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.firstName.$dirty) && studentForm.firstName.$invalid }">
             <label class="col-md-4 control-label">שם פרטי</label>
             <div class="col-md-8">
-              <input name="firstName" type="text" ng-model="student.firstName" class="form-control" ng-minlength="3" required>
+              <input name="firstName" type="text" ng-model="student.first_name" class="form-control" ng-minlength="3" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.lastName.$dirty) && studentForm.lastName.$invalid }">
             <label class="col-md-4 control-label">שם משפחה</label>
             <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="student.lastName" class="form-control" ng-minlength="3" required>
+              <input name="lastName" type="text" ng-model="student.last_name" class="form-control" ng-minlength="3" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.phone.$dirty) && studentForm.phone.$invalid }">
@@ -70,7 +70,7 @@
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.accountName.$dirty) && studentForm.accountName.$invalid }">
             <label class="col-md-4 control-label">על שם</label>
             <div class="col-md-8">
-              <input name="accountName" type="text" ng-model="student.accountName" class="form-control" required>
+              <input name="accountName" type="text" ng-model="student.account_name" class="form-control" required>
             </div>
           </div>
         </rd-widget-body>
@@ -108,9 +108,9 @@
             </thead>
             <tbody>
               <tr ng-repeat="student in students track by $index">
-                <td ng-click="edit($index)" ng-if="role !== 'User'">{{ student.UserID }}</td>
-                <td ng-click="edit($index)">{{ student.firstName }}</td>
-                <td ng-click="edit($index)">{{ student.lastName }}</td>
+                <td ng-click="edit($index)" ng-if="role !== 'User'">{{ student.colel_id }}</td>
+                <td ng-click="edit($index)">{{ student.first_name }}</td>
+                <td ng-click="edit($index)">{{ student.last_name }}</td>
                 <td ng-click="edit($index)">{{ student.phone }}</td>
                 <td ng-click="edit($index)" class="lborder">{{ student.id }}</td>
                 <td ng-click="edit($index)">{{ student.street }}</td>
@@ -119,7 +119,7 @@
                 <td ng-click="edit($index)">{{ student.bank }}</td>
                 <td ng-click="edit($index)">{{ student.branch }}</td>
                 <td ng-click="edit($index)">{{ student.account }}</td>
-                <td ng-click="edit($index)">{{ student.accountName }}</td>
+                <td ng-click="edit($index)">{{ student.account_name }}</td>
               </tr>
             </tbody>
           </table>
