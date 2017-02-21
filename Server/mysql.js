@@ -30,6 +30,18 @@ var tableStruct = {
         'status',
         'table_name',
         'data',
+    ],
+    tb_colel: [
+        'id',
+        'name',
+        'address',
+        'mail_address',
+        'phone',
+        'manager_name',
+        'is_only_daily',
+        'is_prev_month',
+        'schedule',
+        'note'
     ]
 }
 

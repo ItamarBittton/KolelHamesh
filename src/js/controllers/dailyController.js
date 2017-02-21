@@ -1,4 +1,4 @@
-angular.module('RDash').controller("dailyController", function ($scope, Data) {
+angular.module('RDash').controller("dailyController", function ($scope, Data, $filter) {
     $scope.disable = false;
     $scope.dropList = [];
     $scope.isOnlyDaily = false;
@@ -10,10 +10,16 @@ angular.module('RDash').controller("dailyController", function ($scope, Data) {
             
             Data.get('daily/' + $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
+                data.dropList.options = $filter('orderBy')(data.dropList.options, 'value');
                 $scope.dropList = data.dropList;
                 $scope.tempStudents = data.tempStudents;
             })
         }
+    }
+
+    $scope.changeAll = function (value, valid) {
+        $scope.students.forEach(x => x.presence = value);
+        $scope.save(valid);
     }
 
     $scope.students = [];
