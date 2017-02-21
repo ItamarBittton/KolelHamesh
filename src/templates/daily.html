@@ -7,7 +7,6 @@
                     <span class="action action-error" ng-click="close()"></span>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
-                    <student-list students="students" drop-list="dropList"></student-list>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">לומדים נוספים:</label>
                         <div class="col-md-8">
@@ -22,6 +21,7 @@
                             </select>
                         </div>
                     </div>
+                    <student-list students="students" drop-list="dropList"></student-list>
                 </rd-widget-body>
             </form>
         </rd-widget>

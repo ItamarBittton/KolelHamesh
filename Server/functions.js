@@ -64,7 +64,9 @@ function newStudent(req, res) {
     // INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
     var i = `${sql.i('tb_recomend', req.body.data)}`
     sql.q(`${sql.v(i)}`, function (data) {
-        res.send({ success: 'האברך נוסף בהצלחה' })
+        res.send({
+            success: 'האברך נוסף בהצלחה'
+        })
     })
 
     // })
@@ -129,33 +131,33 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-    
-        var id = req.body.data.editId,
-            newRecomend = {
-                user_update: sql.v(req.currentUser.id),
-                type: id ? 'עדכון' : 'הוספה',
-                requested_date: new Date().toDateString(),
-                approved_date: null,
-                status: null,
-                table_name: req.body.table,
-                data: sql.v(JSON.stringify(req.body.data))
-            }
 
-        sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
-            console.log(data);
-        })
+    var id = req.body.data.editId,
+        newRecomend = {
+            user_update: sql.v(req.currentUser.id),
+            type: id ? 'עדכון' : 'הוספה',
+            requested_date: new Date().toDateString(),
+            approved_date: null,
+            status: null,
+            table_name: req.body.table,
+            data: sql.v(JSON.stringify(req.body.data))
+        }
 
-        if (db.ADD('recomends', newRecomend)) {
-            res.send({
-                success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-                data: db.GET(req.body.table, req.cookies.UserID)
-            });
-        } else {
-            res.send({
-                error: 'הבקשה כבר נשלחה בעבר'
-            });
-        };
-    
+    sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
+        console.log(data);
+    })
+
+    if (db.ADD('recomends', newRecomend)) {
+        res.send({
+            success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+            data: db.GET(req.body.table, req.cookies.UserID)
+        });
+    } else {
+        res.send({
+            error: 'הבקשה כבר נשלחה בעבר'
+        });
+    };
+
 };
 
 function approveRecomend(req, res) {
@@ -231,10 +233,10 @@ function updateDailyReport(req, res) {
     req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
     sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-            res.send({
-                success: 'הדוח עודכן בהצלחה'
-            });
-        })
+        res.send({
+            success: 'הדוח עודכן בהצלחה'
+        });
+    })
 
 };
 
@@ -254,29 +256,30 @@ function getScores(req, res) {
     var scores = [];
     var year = sql.v(req.params.date.split('-')[0]);
     var month = sql.v(req.params.date.split('-')[1]);
-    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write'
+    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.score as 'comment'
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
+    left outer join tb_score t4 on (t1.id = t4.student_id and t4.year = ${year} and t4.month = ${month} and t4.test_type = 3)
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
-            scores = data.results;
-            sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
-                var test_type = data.results;
-                res.send({
-                    scores,
-                    test_type,
-                    options: [{
-                        value: 0,
-                        name: 'לא עבר'
-                    }, {
-                        value: 100,
-                        name: 'עבר'
-                    }]
-                });
-            })
-
+        scores = data.results;
+        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+            var test_type = data.results;
+            res.send({
+                scores,
+                test_type,
+                options: [{
+                    value: 0,
+                    name: 'לא עבר'
+                }, {
+                    value: 100,
+                    name: 'עבר'
+                }]
+            });
         })
+
+    })
 }
 
 function putScores(req, res) {
@@ -292,28 +295,37 @@ function putScores(req, res) {
         if (val.write !== null) {
             arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2]);
         }
+        if (val.comment !== null) {
+            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.comment), 3]);
+        }
 
     }
 
     req.body.score.map(val => (sliceArr(val)));
-
-    sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`(${val})`))}
+    // arr.map((val, idx) => (`(${val})`))
+    sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`('${val.join("','")}')`))}
     ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function (data) {
-            res.send({
-                success: 'הציונים הוזנו בהצלחה'
-            });
-        })
+        res.send({
+            success: 'הציונים הוזנו בהצלחה'
+        });
+    })
 
 }
+
 function getColelList(req, res) {
     sql.q(`select t1.id, t1.name from tb_colel t1`, function (data) {
-        res.send({ colelList: data.results, colel_id: req.currentUser.colel_id });
+        res.send({
+            colelList: data.results,
+            colel_id: req.currentUser.colel_id
+        });
     });
 }
 
 function updColelId(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+        res.send({
+            success: 'הפעולה בוצעה בהצלחה'
+        })
     })
 };
 
@@ -331,19 +343,25 @@ function getColel(req, res) {
 
 function editColel(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+        res.send({
+            success: 'הפעולה בוצעה בהצלחה'
+        })
     })
 };
 
 function newColel(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+        res.send({
+            success: 'הפעולה בוצעה בהצלחה'
+        })
     })
 };
 
 function deleteColel(req, res) {
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({ success: 'הפעולה בוצעה בהצלחה' })
+        res.send({
+            success: 'הפעולה בוצעה בהצלחה'
+        })
     })
 };
 
@@ -355,8 +373,10 @@ function getPreviousDate(req, res) {
                                        from tb_student t2 
                                        where t2.colel_id = ${req.currentUser.colel_id})
                group by year(t1.date), month(t1.date)`, function (data) {
-                res.send({ prevDates: data.results })
+            res.send({
+                prevDates: data.results
             })
+        })
     } else {
         var date = new Date().getDate();
         var canGetPrevDate = false;
@@ -369,8 +389,10 @@ function getPreviousDate(req, res) {
                                         from tb_student t2 
                                         where t2.colel_id = ${req.currentUser.colel_id})
                 group by year(t1.date), month(t1.date)`, function (data) {
-                    res.send({ prevDates: data.results })
+                res.send({
+                    prevDates: data.results
                 })
+            })
         } else {
             res.send({})
         }
