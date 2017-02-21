@@ -59,6 +59,20 @@
                             <input name="note" type="text" ng-model="colel.note" class="form-control" required>
                         </div>
                     </div>
+                    <div class="form-group form-md-line-input">
+                        <div class="material-switch col-md-4">
+                            <input id="is_only_daily" ng-model="colel.is_only_daily" type="checkbox">
+                            <label for="is_only_daily" class="label-danger"></label>
+                        </div>
+                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל גישה ללוח שנה</label>
+                    </div>
+                    <div class="form-group form-md-line-input">
+                        <div class="material-switch col-md-4">
+                            <input id="is_prev_month" ng-model="colel.is_prev_month" type="checkbox">
+                            <label for="is_prev_month" class="label-success"></label>
+                        </div>
+                        <label class="col-md-8 control-label" style="margin-bottom: 20px">אשר צפייה בחודש הקודם</label>
+                    </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
                         <details>
                             <summary>
@@ -106,7 +120,9 @@
                                             <label class="control-label">
                                                 {{ $root.t[key] || key }}:
                                             </label>
-                                            <span class="pull-left">{{ colel.schedule[key].start }} - {{ colel.schedule[key].end }}</span>
+                                            <span class="pull-left">{{ colel.schedule[key].start }} - {{ colel.schedule[key].end
+                                                }}
+                                            </span>
                                         </p>
                                     </details>
                                 </td>

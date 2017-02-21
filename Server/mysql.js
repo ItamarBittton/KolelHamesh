@@ -35,7 +35,7 @@ var tableStruct = {
 
 function validate(string) {
     var r = `/('(''|[^'])*')|(;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/g)`;
-    return string.toString().replace(r, "");
+    return string ? string.toString().replace(r, "") : '';
 }
 
 function query(string, callback) {
