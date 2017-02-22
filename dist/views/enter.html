@@ -138,9 +138,7 @@
                         .done(function (data) {
                             document.cookie = 'token=' + data.token + ";";
                             document.cookie = 'link=' + data.link + ";";
-                            document.cookie = 'UserID=' + data.UserID + ";";
-                            document.cookie = 'alert=' + JSON.stringify(data.alert) +
-                                ";";
+                            document.cookie = 'alert=' + data.alert + ";";
                             console.log(data);
                             window.location.href += data.link;
                         })

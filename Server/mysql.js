@@ -52,12 +52,12 @@ function validate(string) {
 
 function query(string, callback) {
     pool.getConnection(function (err, connection) {
-        if (err) throw err;
+        if (err) console.error(err);
 
         connection.query(string, function (error, results, fields) {
             connection.release();
 
-            if (error) throw error;
+            if (error) console.error(error);
 
             callback({
                 results,
@@ -79,8 +79,30 @@ function insert(table, object) {
     return request;
 }
 
+function insertArray(table, array, duplicate) {
+    var keys = Object.keys(array[0]).map(x=>validate(x));
+    array.map(x=>Object.values(x).map(y=>validate(y)));
+
+    var request = [
+        'INSERT INTO',
+        table,
+        '(',
+        keys.join(', '),
+        ') VALUES ',
+        array.map(val => `('` + Object.values(val).join("', '") + "') ")
+    ];
+
+	if (duplicate) {
+    request.push('ON DUPLICATE KEY UPDATE',
+        array.map((x,i)=> keys[i] + '=VALUES(' + keys[i] + ')'))
+    }
+
+    return request.join(' ');
+}
+
 module.exports = {
     v: validate,
     q: query,
-    i: insert
+    i: insert,
+    ia: insertArray
 };

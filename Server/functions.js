@@ -7,7 +7,7 @@ function requireRole(role) {
         var credentials = req.cookies.token ? req.cookies : req.body;
 
         getUser(credentials, function (user) {
-            if (role.indexOf(user && user.permission) != -1) {
+            if (role.includes(user && user.permission)) {
                 req.currentUser = user;
                 next();
             } else {
@@ -18,11 +18,11 @@ function requireRole(role) {
 }
 
 function getUser(credentials, callback) {
-    sql.q(`SELECT *
-           FROM tb_user
-           WHERE token = ${sql.v(credentials.token || '0')} OR
-                 (user_name = '${sql.v(credentials.username || '0')}' AND
-                  password = '${sql.v(credentials.password || '0')}')`,
+    sql.q(`SELECT t1.*, t2.note
+           FROM tb_user t1 left outer join tb_user t2 on (t1.colel_id = t2.id)
+           WHERE t1.token = ${sql.v(credentials.token || '0')} OR
+                 (t1.user_name = '${sql.v(credentials.username || '0')}' AND
+                  t1.password = '${sql.v(credentials.password || '0')}')`,
         function (data) {
             callback(data.results[0]);
         }
@@ -33,14 +33,7 @@ function sendCookies(req, res) {
     res.send({
         token: req.currentUser.token,
         link: req.currentUser.permission,
-        UserID: req.currentUser.id,
-        alert: [{
-            type: 'success',
-            msg: 'Another alert!'
-        }, {
-            type: 'warning',
-            msg: 'Another alert!'
-        }]
+        alert: [req.currentUser.note]
     });
 };
 
@@ -233,10 +226,10 @@ function updateDailyReport(req, res) {
     req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
     sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
     ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-        res.send({
-            success: 'הדוח עודכן בהצלחה'
-        });
-    })
+            res.send({
+                success: 'הדוח עודכן בהצלחה'
+            });
+        })
 
 };
 
@@ -256,59 +249,86 @@ function getScores(req, res) {
     var scores = [];
     var year = sql.v(req.params.date.split('-')[0]);
     var month = sql.v(req.params.date.split('-')[1]);
-    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.score as 'comment'
+    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
-    left outer join tb_score t4 on (t1.id = t4.student_id and t4.year = ${year} and t4.month = ${month} and t4.test_type = 3)
+    left outer join tb_comment t4 on (t1.id = t4.student_id and t4.year = ${year} and t4.month = ${month})
     where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
 
-        scores = data.results;
-        sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
-            var test_type = data.results;
-            res.send({
-                scores,
-                test_type,
-                options: [{
-                    value: 0,
-                    name: 'לא עבר'
-                }, {
-                    value: 100,
-                    name: 'עבר'
-                }]
-            });
-        })
+            scores = data.results;
+            sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
+                var test_type = data.results;
+                res.send({
+                    scores,
+                    test_type,
+                    options: [{
+                        value: 0,
+                        name: 'לא עבר'
+                    }, {
+                        value: 100,
+                        name: 'עבר'
+                    }]
+                });
+            })
 
-    })
+        })
 }
 
 function putScores(req, res) {
 
     var arr = [];
+    var commentArr = [];
+
     var year = req.body.date.split('-')[0];
     var month = req.body.date.split('-')[1];
 
+
     function sliceArr(val) {
         if (val.oral !== null) {
-            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.oral), 1]);
+            arr.push({
+                student_id: val.id, 
+                year: year, 
+                month: month, 
+                score: val.oral, 
+                test_type: 1
+            });
         }
         if (val.write !== null) {
-            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.write), 2]);
+            arr.push({
+                student_id: val.id, 
+                year: year, 
+                month: month, 
+                score: val.write,
+                test_type: 2
+            });
         }
-        if (val.comment !== null) {
-            arr.push([sql.v(val.id), sql.v(year), sql.v(month), sql.v(val.comment), 3]);
-        }
-
     }
 
     req.body.score.map(val => (sliceArr(val)));
-    // arr.map((val, idx) => (`(${val})`))
-    sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`('${val.join("','")}')`))}
-    ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type)`, function (data) {
+
+    var query = sql.ia('tb_score', arr, true);
+
+    sql.q(query, function (data) {
         res.send({
             success: 'הציונים הוזנו בהצלחה'
         });
-    })
+    });
+
+
+    // // arr.map((val, idx) => (`(${val})`))
+    // sql.q(`insert into tb_score (student_id, year, month, score, test_type) VALUES ${arr.map((val, idx) => (`('${val.join("','")}')`))}
+    // ON DUPLICATE KEY UPDATE score=VALUES(score), test_type=VALUES(test_type);${sql.i('tb_comment', val.comment ? {} : 
+    //         {
+    //             'student_id': sql.v(req.body.score.id),
+    //             'year': sql.v(req.body.scoreyear),
+    //             'month': sql.v(req.body.scoremonth),
+    //             'comment': sql.v(req.body.scorevalcomment)
+    //         })}`, function (data) {
+    //         res.send({
+    //             success: 'הציונים הוזנו בהצלחה'
+    //         });
+    //     })
 
 }
 
@@ -373,10 +393,10 @@ function getPreviousDate(req, res) {
                                        from tb_student t2 
                                        where t2.colel_id = ${req.currentUser.colel_id})
                group by year(t1.date), month(t1.date)`, function (data) {
-            res.send({
-                prevDates: data.results
+                res.send({
+                    prevDates: data.results
+                })
             })
-        })
     } else {
         var date = new Date().getDate();
         var canGetPrevDate = false;
@@ -389,10 +409,10 @@ function getPreviousDate(req, res) {
                                         from tb_student t2 
                                         where t2.colel_id = ${req.currentUser.colel_id})
                 group by year(t1.date), month(t1.date)`, function (data) {
-                res.send({
-                    prevDates: data.results
+                    res.send({
+                        prevDates: data.results
+                    })
                 })
-            })
         } else {
             res.send({})
         }
