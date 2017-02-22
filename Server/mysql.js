@@ -52,7 +52,9 @@ function validate(string) {
 
 function query(string, callback) {
     pool.getConnection(function (err, connection) {
-        if (err) console.error(err);
+        connection.on('error', function (err) {
+            console.log(err.code); // 'ER_BAD_DB_ERROR' 
+        });
 
         connection.query(string, function (error, results, fields) {
             connection.release();
@@ -80,8 +82,8 @@ function insert(table, object) {
 }
 
 function insertArray(table, array, duplicate) {
-    var keys = Object.keys(array[0]).map(x=>validate(x));
-    array.map(x=>Object.values(x).map(y=>validate(y)));
+    var keys = Object.keys(array[0]).map(x => validate(x));
+    array.map(x => Object.values(x).map(y => validate(y)));
 
     var request = [
         'INSERT INTO',
@@ -92,9 +94,9 @@ function insertArray(table, array, duplicate) {
         array.map(val => `('` + Object.values(val).join("', '") + "') ")
     ];
 
-	if (duplicate) {
-    request.push('ON DUPLICATE KEY UPDATE',
-        array.map((x,i)=> keys[i] + '=VALUES(' + keys[i] + ')'))
+    if (duplicate) {
+        request.push('ON DUPLICATE KEY UPDATE',
+            array.map((x, i) => keys[i] + '=VALUES(' + keys[i] + ')'))
     }
 
     return request.join(' ');
