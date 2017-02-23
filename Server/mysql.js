@@ -56,11 +56,10 @@ function query(string, callback) {
             console.log(err.code); // 'ER_BAD_DB_ERROR' 
         });
 
-        connection.query(string, function (error, results, fields) {
+        connection.query(string, function (error, results = [], fields = []) {
             connection.release();
 
             if (error) console.error(error);
-
             callback({
                 results,
                 fields

@@ -24,7 +24,7 @@ function getUser(credentials, callback) {
                  (t1.user_name = '${sql.v(credentials.username || '0')}' AND
                   t1.password = '${sql.v(credentials.password || '0')}')`,
         function (data) {
-            callback(data.results && data.results[0]);
+            callback(data.results[0]);
         }
     );
 };
