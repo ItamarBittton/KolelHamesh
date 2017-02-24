@@ -21,8 +21,8 @@ angular.module('RDash')
                 $scope.formErrors = true;
             } else if (valid) {
                 $scope.student.schedule = JSON.stringify($scope.student.schedule);
-                Data.post('recomends', { data: $scope.student, table: 'students' }).then(function (result) {
-                    $scope.students = result.data;
+                Data.post('recomends', { data: $scope.student, table: 'student' }).then(function (result) {
+                    
                 });
 
                 $scope.close();

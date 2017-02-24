@@ -124,32 +124,52 @@ function getRecomends(req, res) {
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
-
-    var id = req.body.data.editId,
-        newRecomend = {
+    var recomend = req.body.data;
+    if (req.body.table === 'student' || req.body.table === 'colel'){
+        var date = new Date();
+        var table = sql.v(req.body.table);
+        var newRecomend = {
             user_update: sql.v(req.currentUser.id),
-            type: id ? 'עדכון' : 'הוספה',
-            requested_date: new Date().toDateString(),
+            requested_date: `${date.getFullYear()}-${date.getMonth() + 1 === 0 ? 1 : date.getMonth() + 1}-${date.getDate()} `,
             approved_date: null,
             status: null,
-            table_name: req.body.table,
-            data: sql.v(JSON.stringify(req.body.data))
+            table_name: `tb_${table}`,
+            data: sql.v(JSON.stringify(recomend))
         }
-
-    sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
-        console.log(data);
-    })
-
-    if (db.ADD('recomends', newRecomend)) {
-        res.send({
-            success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
-            data: db.GET(req.body.table, req.cookies.UserID)
-        });
+        sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function(data){
+            if(data.error){
+                res.send({
+                    error: 'אין אפשרות להוסיף את ההמלצה'
+                })
+            } else {
+                res.send({
+                    success: 'ההמלצה הועברה בהצלחה להמשך תהליך האישור'
+                })
+            }
+        })
     } else {
         res.send({
-            error: 'הבקשה כבר נשלחה בעבר'
-        });
-    };
+            error: 'אין אפשרות להוסיף את הבקשה'
+        })
+    }
+    
+    
+        
+
+    // sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
+    //     console.log(data);
+    // })
+
+    // if (db.ADD('recomends', newRecomend)) {
+    //     res.send({
+    //         success: 'ה' + newRecomend.Type + ' בוצעה בהצלחה ומחכה לעדכון מנהל מערכת',
+    //         data: db.GET(req.body.table, req.cookies.UserID)
+    //     });
+    // } else {
+    //     res.send({
+    //         error: 'הבקשה כבר נשלחה בעבר'
+    //     });
+    // };
 
 };
 
@@ -248,7 +268,7 @@ function isOnlyDaily(req, res) {
 function getScores(req, res) {
     var scores = [];
     var year = sql.v(req.params.date.split('-')[0]);
-    var month = sql.v(req.params.date.split('-')[1]);
+    var month = sql.v(req.params.date.split('-')[2]);
     sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)

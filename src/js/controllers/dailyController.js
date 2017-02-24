@@ -46,7 +46,8 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.presence !== null));
         var UPDStud = $scope.tempStudents;
-        var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')
+        var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
+        document.querySelector(".selected").classList.remove("selected");
         
         Data.put('daily', {
             daily: UPDaily,
@@ -63,5 +64,6 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         $scope.students = undefined;
         $scope.definition = undefined;
         $scope.disable = false;
+        document.querySelector(".selected").classList.remove("selected");
     }
 });

@@ -52,15 +52,14 @@ function validate(string) {
 
 function query(string, callback) {
     pool.getConnection(function (err, connection) {
-        connection.on('error', function (err) {
-            console.log(err.code); // 'ER_BAD_DB_ERROR' 
-        });
+        if(err) console.error(err);
 
         connection.query(string, function (error, results = [], fields = []) {
             connection.release();
 
             if (error) console.error(error);
             callback({
+                error,
                 results,
                 fields
             });
@@ -95,7 +94,7 @@ function insertArray(table, array, duplicate) {
 
     if (duplicate) {
         request.push('ON DUPLICATE KEY UPDATE',
-            array.map((x, i) => keys[i] + '=VALUES(' + keys[i] + ')'))
+            keys.map((x, i) => x + '=VALUES(' + x + ')'))
     }
 
     return request.join(' ');
