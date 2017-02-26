@@ -38,9 +38,8 @@ angular.module('RDash')
         }
 
         $scope.action = function (index, action) {
-            Data.post(action, { editId: $scope.editId, data: $scope.recomends[index] }).then(function (data) {
-                if (data.recomends) $scope.recomends = data.recomends;
-                $scope.editId = undefined;
+            Data.post(action, { recomend_id: $scope.recomend_id, data: $scope.recomends[index] }).then(function (data) {
+                if (data.status) $scope.recomends[index].status = data.status;
             });
         };
     });

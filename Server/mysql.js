@@ -89,7 +89,7 @@ function insertArray(table, array, duplicate) {
         '(',
         keys.join(', '),
         ') VALUES ',
-        array.map(val => `('` + Object.values(val).join("', '") + "') ")
+        array.map(val => `( ${Object.values(val).map(v => v ? "'" + v + "'" : 'null').join(", ")})`)
     ];
 
     if (duplicate) {

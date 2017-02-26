@@ -117,7 +117,8 @@ function deleteStudent(req, res) {
 };
 
 function getRecomends(req, res) {
-    sql.q(`select t3.id as "colel_id",
+    sql.q(`select t1.id as "recomend_id",
+            t3.id as "colel_id",
             t3.name,
             t1.type,
             case t1.table_name 
@@ -135,40 +136,40 @@ function getRecomends(req, res) {
      from tb_recomend t1 
           left outer join tb_user t2 on (t1.user_update = t2.id) 
           left outer join tb_colel t3 on (t2.colel_id = t3.id)
-     where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id`, function(data){
-         if(data.error){
-            res.send({
+     where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id`, function (data) {
+            if (data.error) {
+                res.send({
                     error: 'לא ניתן להציג נתונים'
-            });
-         } else {
-             for(var i = 0; i < data.results.length; i++){
-                data.results[i].data = JSON.parse(data.results[i].data);
+                });
+            } else {
+                for (var i = 0; i < data.results.length; i++) {
+                    data.results[i].data = JSON.parse(data.results[i].data);
+                }
+                res.send({
+                    recomends: data.results
+                });
             }
-             res.send({
-                 recomends: data.results
-             });
-         }
-     });
-    
+        });
+
 };
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
     var recomend = req.body.data;
-    if (req.body.table === 'student' || req.body.table === 'colel'){
+    if (req.body.table === 'student' || req.body.table === 'colel') {
         var date = new Date();
         var table = sql.v(req.body.table);
         var newRecomend = {
             user_update: sql.v(req.currentUser.id),
-            requested_date: `${date.getFullYear()}-${date.getMonth() + 1 === 0 ? 1 : date.getMonth() + 1}-${date.getDate()} `,
+            requested_date: `${new Date(new Date().getTime()).toLocaleString()} `,
             approved_date: null,
             type: sql.v(req.body.type),
             status: null,
             table_name: `tb_${table}`,
             data: sql.v(JSON.stringify(recomend))
         }
-        sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function(data){
-            if(data.error){
+        sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function (data) {
+            if (data.error) {
                 res.send({
                     error: 'אין אפשרות להוסיף את ההמלצה'
                 })
@@ -183,9 +184,9 @@ function newRecomend(req, res) {
             error: 'אין אפשרות להוסיף את הבקשה'
         })
     }
-    
-    
-        
+
+
+
 
     // sql.q(`${sql.i('tb_recomend', newRecomend)}`, function (data) {
     //     console.log(data);
@@ -206,38 +207,130 @@ function newRecomend(req, res) {
 
 function approveRecomend(req, res) {
     // Update recomendation to Approved and add date.
-    var d = req.body.data;
-    var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
-    newRecomend.status = 'אושר';
-    newRecomend.Approved = new Date();
 
-    var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'
-    // Post data to relevant table.
-    if (db[method](d.TableName, d.Data, d.Data.id)) {
-        db.UPD('recomends', newRecomend, d.id);
-        res.send({
-            success: 'הבקשה אושרה בהצלחה',
-            recomends: db.GET('recomends', req.cookies.UserID)
-        });
-    } else {
-        res.send({
-            error: 'האברך כבר קיים במערכת'
-        });
-    };
+    var recomend_id = sql.v(req.body.data.recomend_id);
+    var recomend;
+
+    sql.q(`select * from tb_recomend t1 where t1.id = ${recomend_id}`, function (data) {
+        if (data.error) {
+            res.send({
+                error: 'אירעה שגיאה'
+            })
+        } else {
+            if (data.results.length === 1) {
+                recomend = data.results[0];
+                var date = new Date();
+                sql.q(`UPDATE tb_recomend 
+                       SET approved_date = '${new Date(new Date().getTime()).toLocaleString()}', 
+                           status = 1
+                       WHERE id = ${recomend_id}`, function (data) {
+                        if (data.error) {
+                            res.send({
+                                error: 'אירעה שגיאה בעת עדכון ההמלצה'
+                            });
+                        } else {
+                            if (recomend.type !== 'מחיקה') {
+                                sql.q(sql.ia(recomend.table_name, [JSON.parse(recomend.data)], true), function (data) {
+                                    if (data.error) {
+                                        res.send({
+                                            error: 'אירעה שגיאה בעת הוספת הנתונים החדשים'
+                                        });
+                                    } else {
+                                        res.send({
+                                            status: 'אושר',
+                                            success: 'הנתונים עודכנו בהצלחה!'
+                                        });
+                                    }
+                                });
+                            } else {
+                                recomend.data = JSON.parse(recomend.data);
+                                sql.q(`delete from ${recomend.table_name} where id = ${recomend.data.id}`, function (data) {
+                                    if (data.error) {
+                                        res.send({
+                                            error: 'אירעה שגיאה בעת מחיקת הנתונים'
+                                        });
+                                    } else {
+                                        res.send({
+                                            status: 'אושר',
+                                            success: 'הנתונים נמחקו בהצלחה!'
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    })
+            } else {
+                res.send({
+                    error: 'בקשה לא מזוהה'
+                })
+            }
+        }
+    });
+
+    // var d = req.body.data;
+    // var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
+    // newRecomend.status = 'אושר';
+    // newRecomend.Approved = new Date();
+
+    // var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'
+    // // Post data to relevant table.
+    // if (db[method](d.TableName, d.Data, d.Data.id)) {
+    //     db.UPD('recomends', newRecomend, d.id);
+    //     res.send({
+    //         success: 'הבקשה אושרה בהצלחה',
+    //         recomends: db.GET('recomends', req.cookies.UserID)
+    //     });
+    // } else {
+    //     res.send({
+    //         error: 'האברך כבר קיים במערכת'
+    //     });
+    // };
 };
 
 function denyRecomend(req, res) {
     // Update recomendation to Approved and add date.
-    var d = req.body.data;
-    var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
-    newRecomend.status = 'נדחה';
-    newRecomend.Approved = new Date();
-    db.UPD('recomends', newRecomend, d.id);
+    var recomend_id = sql.v(req.body.data.recomend_id);
+    var recomend;
 
-    res.send({
-        success: 'הבקשה נדחתה בהצלחה',
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
+    sql.q(`select * from tb_recomend t1 where t1.id = ${recomend_id}`, function (data) {
+        if (data.error) {
+            res.send({
+                error: 'אירעה שגיאה'
+            })
+        } else {
+            if (data.results.length === 1) {
+                recomend = data.results[0];
+                var date = new Date();
+                sql.q(`UPDATE tb_recomend 
+                       SET approved_date = '${date.getFullYear()}-${date.getMonth() + 1 === 0 ? 1 : date.getMonth() + 1}-${date.getDate()}', 
+                           status = 0
+                       WHERE id = ${recomend_id}`, function (data) {
+                        if (data.error) {
+                            res.send({
+                                error: 'אירעה שגיאה בעת עדכון ההמלצה'
+                            });
+                        } else {
+                            res.send({
+                                status: 'נדחה',
+                                success: 'הבקשה בוטלה בהצלחה!'
+                            })
+                        }
+                    })
+            }
+        }
+    })
+    //     sql.q(sql.ia())
+
+    //     var d = req.body.data;
+    // var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
+    // newRecomend.status = 'נדחה';
+    // newRecomend.Approved = new Date();
+    // db.UPD('recomends', newRecomend, d.id);
+
+    // res.send({
+    //     success: 'הבקשה נדחתה בהצלחה',
+    //     recomends: db.GET('recomends', req.cookies.UserID)
+    // });
 };
 
 
@@ -338,18 +431,18 @@ function putScores(req, res) {
     function sliceArr(val) {
         if (val.oral !== null) {
             arr.push({
-                student_id: val.id, 
-                year: year, 
-                month: month, 
-                score: val.oral, 
+                student_id: val.id,
+                year: year,
+                month: month,
+                score: val.oral,
                 test_type: 1
             });
         }
         if (val.write !== null) {
             arr.push({
-                student_id: val.id, 
-                year: year, 
-                month: month, 
+                student_id: val.id,
+                year: year,
+                month: month,
                 score: val.write,
                 test_type: 2
             });

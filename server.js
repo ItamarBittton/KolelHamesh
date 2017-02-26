@@ -58,7 +58,7 @@ app.get('/' + Admin, f.requireRole([Admin]), sendHomePage);
 app.get('/' + User, f.requireRole([User]), sendHomePage);
 
 function sendHomePage(req, res) {
-    console.log(User);
+    console.log(req.currentUser.user_name);
     res.sendFile(__dirname + '/dist/index.html');
 };
 

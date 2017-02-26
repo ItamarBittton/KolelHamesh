@@ -18,7 +18,7 @@ angular.module('RDash')
 
         $scope.save = function (valid) {
             var type = '';
-            $scope.students.map(val => val.id === $scope.student.id ? type = 'עריכה' : type = 'הוספה')
+            $scope.students.map(val => val.id !== $scope.student.id ? type = 'עריכה' : type = 'הוספה')
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
