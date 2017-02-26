@@ -302,7 +302,7 @@ function denyRecomend(req, res) {
                 recomend = data.results[0];
                 var date = new Date();
                 sql.q(`UPDATE tb_recomend 
-                       SET approved_date = '${date.getFullYear()}-${date.getMonth() + 1 === 0 ? 1 : date.getMonth() + 1}-${date.getDate()}', 
+                       SET approved_date = '${new Date(new Date().getTime()).toLocaleString()}', 
                            status = 0
                        WHERE id = ${recomend_id}`, function (data) {
                         if (data.error) {
