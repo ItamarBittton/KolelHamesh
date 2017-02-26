@@ -49,11 +49,11 @@ angular.module('RDash')
                 // });
 
                 // if (!angular.equals({}, changedData)) {
-                Data.post('recomends', {
-                    data: $scope.data,
-                    table: 'colels',
-                    editId: true
-                })
+                // Data.post('recomends', {
+                //     data: $scope.data,
+                //     table: 'colels',
+                //     editId: true
+                // })
                 // };
 
                 $state.go('students');

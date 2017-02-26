@@ -13,15 +13,30 @@ angular.module('RDash')
         $scope.edit = function (id) {
             $scope.display = true;
             $scope.student = angular.copy($scope.students[id]);
-            $scope.student.editId = id.toString();
+            // $scope.student.editId = id.toString();
         }
 
         $scope.save = function (valid) {
+            var type = '';
+            $scope.students.map(val => val.id === $scope.student.id ? type = 'עריכה' : type = 'הוספה')
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
                 $scope.student.schedule = JSON.stringify($scope.student.schedule);
-                Data.post('recomends', { data: $scope.student, table: 'student' }).then(function (result) {
+                Data.post('recomends', { data: $scope.student, table: 'student', type: type}).then(function (result) {
+                    
+                });
+
+                $scope.close();
+            }
+        }
+
+        $scope.deleteStud = function (valid) {
+            if (!valid) {
+                $scope.formErrors = true;
+            } else if (valid) {
+                $scope.student.schedule = JSON.stringify($scope.student.schedule);
+                Data.post('recomends', { data: $scope.student, table: 'student', type: 'מחיקה'}).then(function (result) {
                     
                 });
 

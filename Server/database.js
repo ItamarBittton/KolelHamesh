@@ -151,7 +151,7 @@ var DAL = {
 
 var get = function (table, UserID) {
     return DAL[table].filter(function (value) {
-        return (value.UserID === UserID || UserID === "0");
+        return (value.UserID == UserID || UserID === "0");
     });
 }
 

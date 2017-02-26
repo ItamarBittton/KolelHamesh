@@ -7,34 +7,34 @@
                     <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.UserID.$dirty) && recomendForm.UserID.$invalid }">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.name.$dirty) && recomendForm.name.$invalid }">
                         <label class="col-md-4 control-label">כולל מבקש</label>
                         <div class="col-md-8">
-                            <input name="UserID" type="text" ng-model="recomends.UserID" class="form-control" ng-minlength="3" required>
+                            <input name="UserID" type="text" ng-model="recomends.name" class="form-control" ng-minlength="3" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Type.$dirty) && recomendForm.Type.$invalid }">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.type.$dirty) && recomendForm.type.$invalid }">
                         <label class="col-md-4 control-label">סוג בקשה</label>
                         <div class="col-md-8">
-                            <input name="Type" type="text" ng-model="recomends.Type" class="form-control" ng-minlength="3" required>
+                            <input name="Type" type="text" ng-model="recomends.type" class="form-control" ng-minlength="3" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Requested.$dirty) && recomendForm.Requested.$invalid }">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.requested_date.$dirty) && recomendForm.requested_date.$invalid }">
                         <label class="col-md-4 control-label">תאריך בקשה</label>
                         <div class="col-md-8">
-                            <input name="Requested" type="text" ng-model="recomends.Requested" class="form-control" required>
+                            <input name="RequestedDate" type="text" ng-model="recomends.requested_date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.Approved.$dirty) && recomendForm.Approved.$invalid }">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.approved_date.$dirty) && recomendForm.approved_date.$invalid }">
                         <label class="col-md-4 control-label">סטטוס</label>
                         <div class="col-md-8">
-                            <input name="Approved" type="text" ng-model="recomends.Approved" class="form-control" required>
+                            <input name="ApprovedDate" type="text" ng-model="recomends.approved_date" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.TableName.$dirty) && recomendForm.TableName.$invalid }">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.req_type.$dirty) && recomendForm.req_type.$invalid }">
                         <label class="col-md-4 control-label">סוג הבקשה</label>
                         <div class="col-md-8">
-                            <input name="TableName" type="text" ng-model="recomends.TableName" class="form-control" required>
+                            <input name="TableName" type="text" ng-model="recomends.req_type" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.data.$dirty) && recomendForm.data.$invalid }">
@@ -64,29 +64,28 @@
                             <td width="10%">סטטוס</td>
                             <td width="15%">תאריך אישור</td>
                             <td width="25%">פרטי הבקשה</td>
-                            <td width="5%" ng-if="role !== 'User'">פעולות</td>
+                            <td width="5%" ng-if="role === 'Admin'">פעולות</td>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="recomend in recomends track by $index" ng-class="{'archive': recomend.status}">
-                                <td>{{ recomend.UserID }}</td>
-                                <td>{{ recomend.Type }}</td>
-                                <td>{{ $root.t[recomend.TableName] }}</td>
-                                <td>{{ recomend.Requested | date:"MM/dd/yyyy',' h:mma" }}</td>
-                                <td>{{ recomend.status || 'ממתין...' }}</td>
-                                <td>{{ recomend.Approved | date:"MM/dd/yyyy',' h:mma" }}</td>
+                            <tr ng-repeat="recomend in recomends track by $index" ng-class="{'archive': recomend.status !== 'ממתין...'}">
+                                <td>{{ recomend.name }}</td>
+                                <td>{{ recomend.type }}</td>
+                                <td>{{ recomend.req_type }}</td>
+                                <td>{{ recomend.requested_date | date:"MM/dd/yyyy',' h:mma" }}</td>
+                                <td>{{ recomend.status }}</td>
+                                <td>{{ recomend.approved_date | date:"MM/dd/yyyy',' h:mma" }}</td>
                                 <td>
                                     <details>
-                                        <summary>{{ recomend.Data.firstName + ' ' + recomend.Data.lastName
-                                            }}
+                                        <summary>{{ recomend.data.first_name + ' ' + recomend.data.last_name }}
                                         </summary>
-                                        <p ng-repeat="(key, value) in recomend.Data" ng-if="key !== 'UserID'">
-                                            <label class="col-lg-4 control-label">{{ $root.t[key] }}:</label>
-                                            <input ng-readonly="recomend.status || key === 'id'" type="text" ng-model="recomend.Data[key]" class="col-lg-7 form-control">
+                                        <p ng-repeat="(key, value) in recomend.data track by $index">
+                                            <label class="col-lg-4 control-label">label:</label>
+                                            <input type="text" ng-model="recomend.data[key]" class="col-lg-7 form-control">
                                         </p>
                                     </details>
                                 </td>
-                                <td ng-if="role !== 'User'">
-                                    <div ng-if="!recomend.status">
+                                <td ng-if="role === 'Admin'">
+                                    <div ng-if="recomend.status === 'ממתין...'">
                                         <span class="action action-ok" ng-click="action($index, 'approve')"></span>
                                         <span class="action action-error" ng-click="action($index, 'deny')"></span>
                                     </div>

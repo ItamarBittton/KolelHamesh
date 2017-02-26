@@ -117,9 +117,39 @@ function deleteStudent(req, res) {
 };
 
 function getRecomends(req, res) {
-    res.send({
-        recomends: db.GET('recomends', req.cookies.UserID)
-    });
+    sql.q(`select t3.id as "colel_id",
+            t3.name,
+            t1.type,
+            case t1.table_name 
+                when 'tb_colel' then "כולל" 
+                else "אברך" 
+                end as "req_type", 
+            t1.requested_date,
+            case t1.status
+                when 1 then "אושר"
+                when 0 then "נדחה" 
+                else "ממתין..."
+                end as "status",
+            t1.approved_date,
+            t1.data
+     from tb_recomend t1 
+          left outer join tb_user t2 on (t1.user_update = t2.id) 
+          left outer join tb_colel t3 on (t2.colel_id = t3.id)
+     where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id`, function(data){
+         if(data.error){
+            res.send({
+                    error: 'לא ניתן להציג נתונים'
+            });
+         } else {
+             for(var i = 0; i < data.results.length; i++){
+                data.results[i].data = JSON.parse(data.results[i].data);
+            }
+             res.send({
+                 recomends: data.results
+             });
+         }
+     });
+    
 };
 
 function newRecomend(req, res) {
@@ -132,6 +162,7 @@ function newRecomend(req, res) {
             user_update: sql.v(req.currentUser.id),
             requested_date: `${date.getFullYear()}-${date.getMonth() + 1 === 0 ? 1 : date.getMonth() + 1}-${date.getDate()} `,
             approved_date: null,
+            type: sql.v(req.body.type),
             status: null,
             table_name: `tb_${table}`,
             data: sql.v(JSON.stringify(recomend))
@@ -268,7 +299,7 @@ function isOnlyDaily(req, res) {
 function getScores(req, res) {
     var scores = [];
     var year = sql.v(req.params.date.split('-')[0]);
-    var month = sql.v(req.params.date.split('-')[2]);
+    var month = sql.v(req.params.date.split('-')[1]);
     sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
