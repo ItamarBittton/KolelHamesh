@@ -26,7 +26,7 @@ function requireRole(role) {
 }
 
 function getUser(credentials, callback) {
-    sql.q(`SELECT t1.*, t2.note
+    sql.q(`SELECT t1.*, t2.note, t2.is_prev_month, t2.is_only_daily
            FROM tb_user t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
            WHERE t1.token = ${sql.v(credentials.token || '0')} OR
                  (t1.user_name = ${sql.v(credentials.username || '0')} AND
@@ -361,8 +361,8 @@ function getDailyReport(req, res) {
 
     if ((req.currentUser.permission === 'Admin') ||
         (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
-        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3)
-        //||      (req.currentUser.permission === 'User' && data.results[0] === true && req.params.date.split('-')[2] == new Date().getDate())
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate())
     ) {
 
         var dailyRep = [];
@@ -385,18 +385,40 @@ function getDailyReport(req, res) {
                     });
                 });
             });
+    } else {
+        res.send({
+            error: 'אין אפשרות לצפות בנתונים בתאריך הנל'
+        })
     }
 };
 
 function updateDailyReport(req, res) {
-    var convertObjtoArr = [];
-    req.body.daily.map((val, idx) => (convertObjtoArr.push([sql.v(val.id), "'" + sql.v(req.body.date) + "'", sql.v(val.presence)])));
-    sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
-    ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-            res.send({
-                success: 'הדוח עודכן בהצלחה'
-            });
+    if ((req.currentUser.permission === 'Admin') ||
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate())) {
+        var convertObjtoArr = [];
+        req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
+        sql.q(sql.ia('tb_daily', convertObjtoArr, true), function (data) {
+            if (data.error) {
+                res.send({
+                    error: 'אירעה שגיאה בעת עדכון הנתונים'
+                });
+            } else {
+                res.send({
+                    success: 'הנתונים עודכנו בהצלחה!'
+                })
+            }
+        });
+    } else {
+        res.send({
+            error: 'אין אפשרות להוסיף נתונים בתאריך הנל'
         })
+    }
+    // sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
+    // ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
+
+    // })
 
 };
 
@@ -500,6 +522,7 @@ function putScores(req, res) {
 }
 
 function getColelList(req, res) {
+
     sql.q(`select t1.id, t1.name from tb_colel t1`, function (data) {
         res.send({
             colelList: data.results,
@@ -644,8 +667,7 @@ function getPreviousDate(req, res) {
             })
     } else {
         var date = new Date().getDate();
-        var canGetPrevDate = false;
-        if (date <= 3 || canGetPrevDate) {
+        if (date <= 3 || req.currentUser.is_prev_month == true) {
             sql.q(`select year(t1.date) as year, month(t1.date) as month 
                 from tb_daily t1 
                 where TIMESTAMPDIFF(month,t1.date,CURDATE()) between 0 and 1 and
