@@ -49,6 +49,22 @@ function getStudents(req, res) {
     );
 };
 
+function getColelSettings(req, res){
+    sql.q(`select t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
+           from tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
+           where t1.id = ${req.currentUser.id}`, function(data){
+               if(data.error){
+                   res.send({
+                       error: 'לא ניתן להציג נתונים'
+                   })
+               } else {
+                   res.send({
+                       data: data.results[0]
+                   })
+               }
+    })
+}
+
 function newStudent(req, res) {
     // sql.q(`INSERT INTO `tb_student` (`id`, `supported_id`, `first_name`, `last_name`, `phone`, `street`, `house`, `city`, `bank`, `branch`, `account`, `account_name`, `colel_id`)
     //        VALUES ('204305660', '', 'שלום', 'אופן', '770555215', 'החרובים', '8', 'מכבים', '05', '552', '152455', 'שלום אופן', '13');`,
@@ -567,10 +583,13 @@ module.exports = {
     requireRole: requireRole,
     getUser: getUser,
     sendCookies: sendCookies,
+
     getStudents: getStudents,
     newStudent: newStudent,
     editStudent: editStudent,
     deleteStudent: deleteStudent,
+
+    getColelSettings: getColelSettings,
 
     getColel: getColel,
     editColel: editColel,
