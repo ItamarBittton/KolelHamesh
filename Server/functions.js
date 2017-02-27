@@ -2,11 +2,11 @@ var db = require('./database.js'),
     sql = require('./mysql.js'),
     helper = require('./helper');
 
-var rand = function() {
+var rand = function () {
     return Math.random().toString(36).substr(2); // remove `0.`
 };
 
-var token = function() {
+var token = function () {
     return rand() + rand(); // to make it longer
 };
 
@@ -57,20 +57,20 @@ function getStudents(req, res) {
     );
 };
 
-function getColelSettings(req, res){
+function getColelSettings(req, res) {
     sql.q(`select t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
            from tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
-           where t1.id = ${req.currentUser.id}`, function(data){
-               if(data.error){
-                   res.send({
-                       error: 'לא ניתן להציג נתונים'
-                   })
-               } else {
-                   res.send({
-                       data: data.results[0]
-                   })
-               }
-    })
+           where t1.id = ${req.currentUser.id}`, function (data) {
+            if (data.error) {
+                res.send({
+                    error: 'לא ניתן להציג נתונים'
+                })
+            } else {
+                res.send({
+                    data: data.results[0]
+                })
+            }
+        })
 }
 
 function newStudent(req, res) {
@@ -158,8 +158,7 @@ function getRecomends(req, res) {
             t1.approved_date,
             t1.data
      from tb_recomend t1 
-          left outer join tb_user t2 on (t1.user_update = t2.id) 
-          left outer join tb_colel t3 on (t2.colel_id = t3.id)
+          left outer join tb_colel t3 on (t1.colel_update = t3.id)
      where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id`, function (data) {
             if (data.error) {
                 res.send({
@@ -184,7 +183,7 @@ function newRecomend(req, res) {
         var date = new Date();
         var table = req.body.table;
         var newRecomend = {
-            user_update: req.currentUser.id,
+            colel_update: req.currentUser.colel_id,
             requested_date: `${new Date(new Date().getTime()).toLocaleString()} `,
             approved_date: null,
             type: req.body.type,
@@ -373,8 +372,8 @@ function getDailyReport(req, res) {
         }
         sql.q(`select t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence
                        from tb_student t1 
-                       left outer join tb_daily t2 on (t2.student_id = t1.id and t2.date = '${sql.v(req.params.date)}') 
-                       where t1.colel_id = ${sql.v(req.currentUser.colel_id)}`,
+                       left outer join tb_daily t2 on (t2.student_id = t1.id and t2.date = ${sql.v(req.params.date)}) 
+                       where t1.colel_id = ${req.currentUser.colel_id}`,
             function (data) {
                 dailyRep = data.results;
                 sql.q(`select * from tbk_presence_status`, function (data) {
@@ -540,25 +539,35 @@ function editColel(req, res) {
 function newColel(req, res) {
     var tempObject = req.body.colel;
 
-    var newColel = {
-        
+    var newColel = [{
+        name: tempObject.name,
+        address: tempObject.address,
+        mail_address: tempObject.mail_address,
+        phone: tempObject.phone,
+        manager_name: tempObject.manager_name,
+        is_only_daily: tempObject.is_only_daily ? true : false,
+        is_prev_month: tempObject.is_prev_month ? true : false,
+        schedule: tempObject.schedule
+    }]
 
-    }
-
-    var newUser = {
-        user_name: tempObject.name,
-        token: token(),
-        password: tempObject.password,
-        permission: 'User',
-        colel_id: data.results.insertId
-    }
-    sql.q(sql.ia('tb_colel', [currColel]), function(data){
-        if (data.error){
+    sql.q(sql.ia('tb_colel', newColel), function (data) {
+        if (data.error) {
             res.send({
                 error: 'אירעה שגיאה בעת הוספת הנתונים'
             })
         } else {
-            
+            var v = [{
+                user_name: tempObject.name,
+                token: token(),
+                password: tempObject.password,
+                permission: 'User',
+                colel_id: data.results.insertId
+            }]
+            sql.q(sql.ia('tb_user', newColel), function(data){
+                if(data.error){
+
+                }
+            })
         }
     })
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {

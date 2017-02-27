@@ -36,6 +36,7 @@ angular.module('RDash')
             $scope.data = data.data;
             copy = JSON.parse(JSON.stringify(data.data));
             $scope.data.schedule = JSON.parse($scope.data.schedule);
+            copy.schedule = JSON.parse(copy.schedule)
         })
 
         $scope.submitData = function (changed) {

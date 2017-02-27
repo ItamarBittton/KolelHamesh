@@ -10,7 +10,13 @@ angular.module('RDash')
 
         $scope.add = function () {
             $scope.display = true;
-            $scope.colel = {};
+            $scope.colel = {
+                schedule: JSON.parse(JSON.stringify($scope.colels[0].schedule)),
+            };
+            $scope.colel.schedule.map(function(val){
+                val.start = '00:00';
+                val.end = '00:00';
+            })
             $scope.newColel = true;
         };
 
