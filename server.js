@@ -72,7 +72,8 @@ app.put('/students', f.requireRole([Admin]), f.editStudent);
 app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
 app.get('/colels', f.requireRole([Admin]), f.getColel);
-app.put('/colels', f.requireRole([Admin]), f.editColel);
+app.put('/colels', f.requireRole([Admin]), f.newColel);
+app.post('/colels', f.requireRole([Admin]), f.editColel);
 
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([Admin, User]), f.newRecomend);

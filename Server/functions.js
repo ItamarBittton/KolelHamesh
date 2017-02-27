@@ -2,6 +2,14 @@ var db = require('./database.js'),
     sql = require('./mysql.js'),
     helper = require('./helper');
 
+var rand = function() {
+    return Math.random().toString(36).substr(2); // remove `0.`
+};
+
+var token = function() {
+    return rand() + rand(); // to make it longer
+};
+
 function requireRole(role) {
     return function (req, res, next) {
         var credentials = req.cookies.token ? req.cookies : req.body;
@@ -530,6 +538,29 @@ function editColel(req, res) {
 };
 
 function newColel(req, res) {
+    var tempObject = req.body.colel;
+
+    var newColel = {
+        
+
+    }
+
+    var newUser = {
+        user_name: tempObject.name,
+        token: token(),
+        password: tempObject.password,
+        permission: 'User',
+        colel_id: data.result.insertId
+    }
+    sql.q(sql.ia('tb_colel', [currColel]), function(data){
+        if (data.error){
+            res.send({
+                error: 'אירעה שגיאה בעת הוספת הנתונים'
+            })
+        } else {
+            
+        }
+    })
     sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
         res.send({
             success: 'הפעולה בוצעה בהצלחה'

@@ -6,15 +6,18 @@ angular.module('RDash')
         })
         
         $scope.colel = {};
+        $scope.newColel = false;
 
         $scope.add = function () {
             $scope.display = true;
+            $scope.colel = {};
+            $scope.newColel = true;
         };
 
         $scope.edit = function (id) {
+            $scope.newColel = false;
             $scope.display = true;
             $scope.colel = angular.copy($scope.colels[id]);
-            $scope.editId = id.toString();
             $scope.colel.note = JSON.parse($scope.colel.note);
         }
 
@@ -22,11 +25,11 @@ angular.module('RDash')
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
-                var method = $scope.editId ? 'put' : 'post';
+                var method = $scope.newColel ? 'put' : 'post';
                 $scope.colel.schedule = JSON.stringify($scope.colel.schedule);
-                $scope.colel.note = JSON.stringify($scope.colel.note)
+                $scope.colel.note = JSON.stringify($scope.colel.note);
 
-                Data[method]('colels', { id: $scope.editId, student: $scope.colel }).then(function (result) {
+                Data[method]('colels', { colel: $scope.colel }).then(function (result) {
                     $scope.colels = data.colels;
                 });
 
