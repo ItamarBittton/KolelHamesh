@@ -521,18 +521,57 @@ function getColel(req, res) {
         FROM tb_colel t1
         LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')`,
         function (data) {
-            res.send({
-                colels: data.results
-            });
+            if (req.is_hufna) {
+                res.send({
+                    success: 'השינויים בוצעו בהצלחה!',
+                    colels: data.results
+                });
+            } else {
+                res.send({
+                    colels: data.results
+                });
+            }
         }
     );
 };
 
 function editColel(req, res) {
-    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({
-            success: 'הפעולה בוצעה בהצלחה'
-        })
+    var tempObject = req.body.colel;
+
+    var existsColel = [{
+        id: tempObject.id,
+        name: tempObject.name,
+        address: tempObject.address,
+        mail_address: tempObject.mail_address,
+        phone: tempObject.phone,
+        manager_name: tempObject.manager_name,
+        is_only_daily: tempObject.is_only_daily ? true : false,
+        is_prev_month: tempObject.is_prev_month ? true : false,
+        schedule: tempObject.schedule,
+        note: tempObject.note
+    }]
+
+    sql.q(sql.ia('tb_colel', existsColel, true), function (data) {
+        if (data.error) {
+            res.send({
+                error: 'אירעה שגיאה בעת הוספת הנתונים'
+            })
+        } else {
+            sql.q(`update tb_user 
+                   set password = ${sql.v(tempObject.password)},
+                       user_name = ${sql.v(tempObject.name)}
+                   where colel_id = ${sql.v(tempObject.id)} and
+                         NOT permission = 'Admin'`, function (data) {
+                    if (data.error) {
+                        res.send({
+                            error: 'אירעה שגיאה בעת הוספת הנתונים'
+                        })
+                    } else {
+                        req.is_hufna = true;
+                        getColel(req, res);
+                    }
+                })
+        }
     })
 };
 
@@ -547,34 +586,40 @@ function newColel(req, res) {
         manager_name: tempObject.manager_name,
         is_only_daily: tempObject.is_only_daily ? true : false,
         is_prev_month: tempObject.is_prev_month ? true : false,
-        schedule: tempObject.schedule
+        schedule: tempObject.schedule,
+        note: tempObject.note
     }]
 
-    sql.q(sql.ia('tb_colel', newColel), function (data) {
+    sql.q(sql.ia('tb_colel', newColel, false), function (data) {
         if (data.error) {
             res.send({
                 error: 'אירעה שגיאה בעת הוספת הנתונים'
             })
         } else {
-            var v = [{
+            var newUser = [{
                 user_name: tempObject.name,
                 token: token(),
                 password: tempObject.password,
                 permission: 'User',
                 colel_id: data.results.insertId
             }]
-            sql.q(sql.ia('tb_user', newColel), function(data){
-                if(data.error){
-
+            sql.q(sql.ia('tb_user', newUser, false), function (data) {
+                if (data.error) {
+                    res.send({
+                        error: 'אירעה שגיאה בעת הוספת הנתונים'
+                    })
+                } else {
+                    req.is_hufna = true;
+                    getColel(req, res);
                 }
             })
         }
     })
-    sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
-        res.send({
-            success: 'הפעולה בוצעה בהצלחה'
-        })
-    })
+    // sql.q(`update tb_user set colel_id = ${sql.v(req.body.currColel)} where id = ${req.currentUser.id}`, function (data) {
+    //     res.send({
+    //         success: 'הפעולה בוצעה בהצלחה'
+    //     })
+    // })
 };
 
 function deleteColel(req, res) {
