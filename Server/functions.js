@@ -182,15 +182,15 @@ function newRecomend(req, res) {
     var recomend = req.body.data;
     if (req.body.table === 'student' || req.body.table === 'colel') {
         var date = new Date();
-        var table = sql.v(req.body.table);
+        var table = req.body.table;
         var newRecomend = {
-            user_update: sql.v(req.currentUser.id),
+            user_update: req.currentUser.id,
             requested_date: `${new Date(new Date().getTime()).toLocaleString()} `,
             approved_date: null,
-            type: sql.v(req.body.type),
+            type: req.body.type,
             status: null,
             table_name: `tb_${table}`,
-            data: sql.v(JSON.stringify(recomend))
+            data: JSON.stringify(recomend)
         }
         sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function (data) {
             if (data.error) {
