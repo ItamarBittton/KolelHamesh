@@ -21,8 +21,8 @@ function getUser(credentials, callback) {
     sql.q(`SELECT t1.*, t2.note
            FROM tb_user t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
            WHERE t1.token = ${sql.v(credentials.token || '0')} OR
-                 (t1.user_name = '${sql.v(credentials.username || '0')}' AND
-                  t1.password = '${sql.v(credentials.password || '0')}')`,
+                 (t1.user_name = ${sql.v(credentials.username || '0')} AND
+                  t1.password = ${sql.v(credentials.password || '0')})`,
         function (data) {
             callback(data.results[0]);
         }
