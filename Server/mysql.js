@@ -81,21 +81,26 @@ function insert(table, object) {
 }
 
 function insertArray(table, array, duplicate) {
-    var keys = Object.keys(array[0]).map(x => validate(x));
-    array.map(x => Object.values(x).map(y => validate(y)));
+    // Validate Keys and Values.
+    var keys = validate(Object.keys(array[0])),
+        splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),    
+        values = array.map(value => validate(Object.values(value)));
 
+    // Build request string.
     var request = [
         'INSERT INTO',
         table,
         '(',
-        keys.join(', '),
+        splitKeys,
         ') VALUES ',
-        array.map(val => `( ${Object.values(val).map(v => v ? "'" + v + "'" : 'null').join(", ")})`)
+        values.map(value => '(' + value + ')')
+        // array.map(val => `( ${Object.values(val).map(v => v ? "'" + v + "'" : 'null').join(", ")})`)
     ];
 
+    // Upsert.
     if (duplicate) {
         request.push('ON DUPLICATE KEY UPDATE',
-            keys.map((x, i) => x + '=VALUES(' + x + ')'))
+            splitKeys.map((x, i) => x + '=VALUES(' + x + ')'))
     }
 
     return request.join(' ');
