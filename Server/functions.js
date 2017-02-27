@@ -550,7 +550,7 @@ function newColel(req, res) {
         token: token(),
         password: tempObject.password,
         permission: 'User',
-        colel_id: data.result.insertId
+        colel_id: data.results.insertId
     }
     sql.q(sql.ia('tb_colel', [currColel]), function(data){
         if (data.error){
