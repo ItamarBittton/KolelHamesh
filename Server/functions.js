@@ -46,9 +46,10 @@ function sendCookies(req, res) {
 };
 
 function getStudents(req, res) {
-    sql.q(`SELECT *
-        FROM tb_student
-        WHERE COLEL_ID = ${sql.v(req.currentUser.colel_id)};`,
+    sql.q(`SELECT t1.*, t2.name
+        FROM tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
+        WHERE t1.colel_id = ${sql.v(req.currentUser.colel_id)}
+        ORDER BY t1.last_name, t1.first_name;`,
         function (data) {
             res.send({
                 students: data.results

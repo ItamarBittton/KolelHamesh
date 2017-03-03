@@ -64,7 +64,7 @@ function sendHomePage(req, res) {
 
 app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 
-app.get('/colelSettings', f.requireRole([User]), f.getColelSettings)
+app.get('/colelSettings', f.requireRole([Admin, User]), f.getColelSettings)
 
 app.get('/students', f.requireRole([Admin, User]), f.getStudents);
 app.post('/students', f.requireRole([Admin]), f.newStudent);

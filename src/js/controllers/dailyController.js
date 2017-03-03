@@ -19,7 +19,6 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
     $scope.changeAll = function (value, valid) {
         $scope.students.forEach(x => x.presence = value);
-        $scope.save(valid);
     }
 
     $scope.students = [];
