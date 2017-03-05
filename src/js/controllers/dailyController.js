@@ -10,8 +10,9 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
             
             Data.get('daily/' + $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
-                data.dropList.options = $filter('orderBy')(data.dropList.options, 'value');
+                
                 $scope.dropList = data.dropList;
+                
                 $scope.tempStudents = data.tempStudents;
             })
         }
@@ -27,9 +28,10 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         month: new Date().getMonth() + 1
     }
 
-    Data.get('isOnlyDaily').then(function (data) {
+    Data.get('getProhibitions').then(function (data) {
         if (data.data) {
-            $scope.isOnlyDaily = data.data;
+            $scope.isOnlyDaily = data.is_only_daily;
+            $scope.isOneTimeAllow = data.is_one_time_allow;
             $scope.show(new Date());
         }
     });

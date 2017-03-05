@@ -73,6 +73,13 @@
                         </div>
                         <label class="col-md-8 control-label" style="margin-bottom: 20px">אשר עדכון לחודש הקודם</label>
                     </div>
+                    <div class="form-group form-md-line-input">
+                        <div class="material-switch col-md-4">
+                            <input id="is_one_time_allow" ng-model="colel.is_one_time_allow" type="checkbox">
+                            <label for="is_one_time_allow" class="label-danger"></label>
+                        </div>
+                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל עדכון מרובה</label>
+                    </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
                         <details>
                             <summary>

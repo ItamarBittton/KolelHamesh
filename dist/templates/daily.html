@@ -13,7 +13,7 @@
                             <input type="number" ng-model="tempStudents" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input">
+                    <div class="form-group form-md-line-input" ng-if="isOneTimeAllow">
                         <label class="col-md-4 control-label">סמן כולם כ:</label>
                         <div class="col-md-8">
                             <select ng-model="changeAllValue" ng-change="changeAll(changeAllValue, dailyForm.$valid)" class="form-control">

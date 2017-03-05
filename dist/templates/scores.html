@@ -16,15 +16,21 @@
                                 <td>שם פרטי</td>
                                 <td>שם משפחה</td>
                                 <td ng-repeat="til in title">{{til.name}}</td>
+                                <td>הערות</td>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="student in students">
                                     <td>{{student.first_name}}</td>
                                     <td>{{student.last_name}}</td>
-                                    <td><input type="number" ng-model="student.write" class="form-control" min="0" max="100"></td>
                                     <td>
                                         <select ng-model="student.oral" ng-options="def.value as def.name for def in options" class="form-control">
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" ng-model="student.write" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="student.comment" class="form-control">
                                     </td>
                                 </tr>
                             </tbody>

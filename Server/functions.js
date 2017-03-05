@@ -254,7 +254,7 @@ function approveRecomend(req, res) {
                             });
                         } else {
                             if (recomend.type !== 'מחיקה') {
-                                sql.q(sql.ia(recomend.table_name, [JSON.parse(recomend.data)], true), function (data) {
+                                sql.q(sql.ia(recomend.table_name, [JSON.parse(recomend.data)], recomend.type === 'הוספה' ? false : true), function (data) {
                                     if (data.error) {
                                         res.send({
                                             error: 'אירעה שגיאה בעת הוספת הנתונים החדשים'
@@ -377,7 +377,7 @@ function getDailyReport(req, res) {
                        where t1.colel_id = ${req.currentUser.colel_id}`,
             function (data) {
                 dailyRep = data.results;
-                sql.q(`select * from tbk_presence_status`, function (data) {
+                sql.q(`select t1.id, t1.key, t1.name, t1.value from tbk_presence_status t1 order by t1.id`, function (data) {
                     dropList.options = data.results;
                     res.send({
                         dailyRep,
@@ -424,13 +424,14 @@ function updateDailyReport(req, res) {
 };
 
 function isOnlyDaily(req, res) {
-    sql.q(`select t1.is_only_daily 
+    sql.q(`select t1.is_only_daily, t1.is_one_time_allow
             from tb_colel t1 
             where t1.id = ${sql.v(req.currentUser.colel_id)}`,
         function (d) {
             var data = d.results[0].is_only_daily;
             res.send({
-                data
+                is_only_daily: data.is_only_daily,
+                is_one_time_allow: data.is_one_time_allow
             });
         });
 }
@@ -439,7 +440,7 @@ function getScores(req, res) {
     var scores = [];
     var year = sql.v(req.params.date.split('-')[0]);
     var month = sql.v(req.params.date.split('-')[1]);
-    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment
+    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment as 'comment'
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
@@ -469,7 +470,6 @@ function putScores(req, res) {
 
     var arr = [];
     var commentArr = [];
-
     var year = req.body.date.split('-')[0];
     var month = req.body.date.split('-')[1];
 
@@ -493,6 +493,14 @@ function putScores(req, res) {
                 test_type: 2
             });
         }
+        if (val.comment) {
+            commentArr.push({
+                student_id: val.id,
+                year: year,
+                month: month,
+                comment: val.comment
+            })
+        }
     }
 
     req.body.score.map(val => (sliceArr(val)));
@@ -500,9 +508,23 @@ function putScores(req, res) {
     var query = sql.ia('tb_score', arr, true);
 
     sql.q(query, function (data) {
-        res.send({
-            success: 'הציונים הוזנו בהצלחה'
-        });
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בשמירת הציונים'
+            })
+        } else {
+            sql.q(sql.ia('tb_comment', commentArr, true), function (data) {
+                if (data.error) {
+                    res.send({
+                        error: 'היתה בעיה בשמירת ההערה'
+                    })
+                } else {
+                    res.send({
+                        success: 'הציונים הוזנו בהצלחה'
+                    });
+                }
+            })
+        }
     });
 
 
@@ -571,6 +593,7 @@ function editColel(req, res) {
         manager_name: tempObject.manager_name,
         is_only_daily: tempObject.is_only_daily ? true : false,
         is_prev_month: tempObject.is_prev_month ? true : false,
+        is_one_time_allow: tempObject.is_one_time_allow ? true : false,
         schedule: tempObject.schedule,
         note: tempObject.note
     }]
@@ -610,6 +633,7 @@ function newColel(req, res) {
         manager_name: tempObject.manager_name,
         is_only_daily: tempObject.is_only_daily ? true : false,
         is_prev_month: tempObject.is_prev_month ? true : false,
+        is_one_time_allow: tempObject.is_one_time_allow ? true : false,
         schedule: tempObject.schedule,
         note: tempObject.note
     }]
