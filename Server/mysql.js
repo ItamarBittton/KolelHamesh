@@ -84,7 +84,7 @@ function insertArray(table, array, duplicate) {
     // Validate Keys and Values.
     var keys = validate(Object.keys(array[0])),
         splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),    
-        values = array.map(value => validate(Object.values(value)));
+        values = array.map(value => validate(Object.keys(value).map(v => value[v])));
 
     // Build request string.
     var request = [
