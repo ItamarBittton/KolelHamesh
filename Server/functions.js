@@ -161,7 +161,8 @@ function getRecomends(req, res) {
             t1.data
      from tb_recomend t1 
           left outer join tb_colel t3 on (t1.colel_update = t3.id)
-     where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id`, function (data) {
+     where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id
+     order by t1.requested_date desc`, function (data) {
             if (data.error) {
                 res.send({
                     error: 'לא ניתן להציג נתונים'
