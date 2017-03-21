@@ -79,9 +79,9 @@
                                 <td>{{ recomend.approved_date | date:"MM/dd/yyyy',' h:mma" }}</td>
                                 <td>
                                     <details>
-                                        <summary>{{ recomend.data.first_name + ' ' + recomend.data.last_name }}
+                                        <summary>{{ recomend.data.first_name + ' ' + recomend.data.last_name }} {{ recomend.data.manager_name }}
                                         </summary>
-                                        <p ng-repeat="(key, value) in recomend.data track by $index">
+                                        <p ng-repeat="(key, value) in recomend.data | inputfilter track by $index">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
                                             <input type="text" ng-model="recomend.data[key]" class="col-lg-7 form-control">
                                         </p>
