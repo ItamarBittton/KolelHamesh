@@ -7,19 +7,19 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         if (date) {
             $scope.date = date;
             $scope.disable = true;
-            
+
             Data.get('daily/' + $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
-                
+
                 $scope.dropList = data.dropList;
-                
+
                 $scope.tempStudents = data.tempStudents;
             })
         }
     }
 
     $scope.changeAll = function (value, valid) {
-        $scope.students.forEach(x => x.presence = value);
+        $scope.students.forEach(x => x.presence = parseInt(value));
     }
 
     $scope.students = [];
@@ -29,17 +29,19 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     }
 
     Data.get('getProhibitions').then(function (data) {
-        if (data.data) {
+        if (data) {
             $scope.isOnlyDaily = data.is_only_daily;
-            $scope.isOneTimeAllow = data.is_one_time_allow;
-            $scope.show(new Date());
+            $scope.isOneTimeAllow = $scope.isOnlyDaily ? false : data.is_one_time_allow;
+            if ($scope.isOnlyDaily) {
+                $scope.show(new Date());
+            }
         }
     });
 
     Data.get('prevDates').then(function (data) {
         $scope.prevDates = data.prevDates;
     })
-    
+
     $scope.changeMonth = function (currentMonth) {
         $scope.viewDate = JSON.parse(currentMonth);
     }
@@ -49,7 +51,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         var UPDStud = $scope.tempStudents;
         var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
         document.querySelector(".selected").classList.remove("selected");
-        
+
         Data.put('daily', {
             daily: UPDaily,
             oneTimeStud: UPDStud,

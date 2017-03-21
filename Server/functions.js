@@ -60,7 +60,7 @@ function getStudents(req, res) {
 };
 
 function getColelSettings(req, res) {
-    sql.q(`select t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
+    sql.q(`select t2.id, t2.name, t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
            from tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
            where t1.id = ${req.currentUser.id}`, function (data) {
             if (data.error) {
@@ -162,7 +162,7 @@ function getRecomends(req, res) {
      from tb_recomend t1 
           left outer join tb_colel t3 on (t1.colel_update = t3.id)
      where '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id
-     order by t1.requested_date desc`, function (data) {
+     order by t1.status, t1.requested_date, t1.approved_date desc`, function (data) {
             if (data.error) {
                 res.send({
                     error: 'לא ניתן להציג נתונים'
@@ -245,7 +245,7 @@ function approveRecomend(req, res) {
         } else {
             if (data.results.length === 1) {
                 recomend = data.results[0];
-                var date = new Date();
+                //var date = new Date();
                 sql.q(`UPDATE tb_recomend 
                        SET approved_date = '${new Date(new Date().getTime()).toLocaleString()}', 
                            status = 1
@@ -430,7 +430,7 @@ function isOnlyDaily(req, res) {
             from tb_colel t1 
             where t1.id = ${sql.v(req.currentUser.colel_id)}`,
         function (d) {
-            var data = d.results[0].is_only_daily;
+            var data = d.results[0];
             res.send({
                 is_only_daily: data.is_only_daily,
                 is_one_time_allow: data.is_one_time_allow
