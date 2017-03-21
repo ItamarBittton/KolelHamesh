@@ -9,6 +9,8 @@ angular.module('RDash')
          */
         var mobileView = 992;
         var watch = false;
+        
+        $scope.userName = $cookies.get('user') || 'משתמש'
 
         $scope.getWidth = function () {
             return window.innerWidth;

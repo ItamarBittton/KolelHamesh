@@ -41,7 +41,8 @@ function sendCookies(req, res) {
     res.send({
         token: req.currentUser.token,
         link: req.currentUser.permission,
-        alert: [req.currentUser.note]
+        alert: [req.currentUser.note],
+        user: req.currentUser.user_name
     });
 };
 

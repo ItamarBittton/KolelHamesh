@@ -82,7 +82,7 @@
   min-width: 130px;
 }
 .row.header .user > .item {
-  width: 65px;
+  min-width: 65px;
   height: 60px;
   float: left;
   display: inline-block;
@@ -94,8 +94,10 @@
   display: block;
 }
 .row.header .user > .item i {
+  color: #919191;
   font-size: 20px;
   line-height: 55px;
+  font-style: normal;
 }
 .row.header .user > .item img {
   width: 40px;
