@@ -26,7 +26,7 @@ function requireRole(role) {
 }
 
 function getUser(credentials, callback) {
-    sql.q(`SELECT t1.*, t2.note, t2.is_prev_month, t2.is_only_daily
+    sql.q(`SELECT t1.*, t2.note, t2.is_prev_month, t2.is_only_daily, t2.group_type
            FROM tb_user t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
            WHERE t1.token = ${sql.v(credentials.token || '0')} OR
                  (t1.user_name = ${sql.v(credentials.username || '0')} AND
@@ -379,7 +379,7 @@ function getDailyReport(req, res) {
                        where t1.colel_id = ${req.currentUser.colel_id}`,
             function (data) {
                 dailyRep = data.results;
-                sql.q(`select t1.id, t1.key, t1.name, t1.value from tbk_presence_status t1 order by t1.id`, function (data) {
+                sql.q(`select t1.id, t1.key, t1.name, t1.value from tbk_presence_status t1 where t1.group_type = ${req.currentUser.group_type} order by t1.id`, function (data) {
                     dropList.options = data.results;
                     res.send({
                         dailyRep,
@@ -397,9 +397,9 @@ function getDailyReport(req, res) {
 
 function updateDailyReport(req, res) {
     if ((req.currentUser.permission === 'Admin') ||
-        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
-        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate())) {
+        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() + 1 && req.currentUser.is_only_daily != true) ||
+        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily == true && req.body.date.split('-')[2] == new Date().getDate())) {
         var convertObjtoArr = [];
         req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
         sql.q(sql.ia('tb_daily', convertObjtoArr, true), function (data) {
@@ -440,8 +440,8 @@ function isOnlyDaily(req, res) {
 
 function getScores(req, res) {
     var scores = [];
-    var year = sql.v(req.params.date.split('-')[0]);
-    var month = sql.v(req.params.date.split('-')[1]);
+    var year = parseInt(sql.v(parseInt(req.params.date.split('-')[0])));
+    var month = parseInt(sql.v(parseInt(req.params.date.split('-')[1])));
     sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment as 'comment'
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
@@ -565,7 +565,18 @@ function updColelId(req, res) {
 };
 
 function getColel(req, res) {
-    sql.q(`SELECT t1.*, t2.password
+    sql.q(`SELECT t1.id,
+                  t1.name,
+                  t1.address, 
+                  t1.mail_address, 
+                  t1.phone, 
+                  t1.manager_name, 
+                  t1.is_only_daily, 
+                  t1.is_one_time_allow, 
+                  t1.is_prev_month, 
+                  t1.schedule, 
+                  t1.note, 
+                  t2.password
         FROM tb_colel t1
         LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')`,
         function (data) {
@@ -597,7 +608,8 @@ function editColel(req, res) {
         is_prev_month: tempObject.is_prev_month ? true : false,
         is_one_time_allow: tempObject.is_one_time_allow ? true : false,
         schedule: tempObject.schedule,
-        note: tempObject.note
+        note: tempObject.note,
+        group_type: 1
     }]
 
     sql.q(sql.ia('tb_colel', existsColel, true), function (data) {
@@ -637,7 +649,8 @@ function newColel(req, res) {
         is_prev_month: tempObject.is_prev_month ? true : false,
         is_one_time_allow: tempObject.is_one_time_allow ? true : false,
         schedule: tempObject.schedule,
-        note: tempObject.note
+        note: tempObject.note,
+        group_type: 1
     }]
 
     sql.q(sql.ia('tb_colel', newColel, false), function (data) {

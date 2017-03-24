@@ -1,7 +1,7 @@
 angular.module('RDash').controller("dailyController", function ($scope, Data, $filter) {
     $scope.disable = false;
     $scope.dropList = [];
-    $scope.isOnlyDaily = false;
+    $scope.isOnlyDaily = true;
 
     $scope.show = function (date) {
         if (date) {
@@ -36,11 +36,12 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
                 $scope.show(new Date());
             }
         }
+        Data.get('prevDates').then(function (data) {
+            $scope.prevDates = data.prevDates;
+        })
     });
 
-    Data.get('prevDates').then(function (data) {
-        $scope.prevDates = data.prevDates;
-    })
+
 
     $scope.changeMonth = function (currentMonth) {
         $scope.viewDate = JSON.parse(currentMonth);
@@ -50,7 +51,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         var UPDaily = $scope.students.filter((val) => (val.presence !== null));
         var UPDStud = $scope.tempStudents;
         var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
-        document.querySelector(".selected").classList.remove("selected");
+        //document.querySelector(".selected").classList.remove("selected");
 
         Data.put('daily', {
             daily: UPDaily,
@@ -59,8 +60,9 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         }).then(function (date) {
 
         });
-
-        $scope.close();
+        if ($scope.is_only_daily) {
+            $scope.close();
+        }
     }
 
     $scope.close = function () {
