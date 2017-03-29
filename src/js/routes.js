@@ -51,6 +51,11 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/scores',
                 templateUrl: 'templates/scores.html',
                 controller: 'scoresController'
+            })
+            .state('reports', {
+                url: '/reports',
+                templateUrl: 'templates/reports.html',
+                controller: 'reportsController'
             });
     }
 ]);

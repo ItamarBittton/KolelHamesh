@@ -726,6 +726,38 @@ function getPreviousDate(req, res) {
     }
 }
 
+function getDefinitions(req, res){
+    
+    var definitions = [],
+        test_type = [];
+
+    sql.q(`select t1.key, t1.name, t1.value
+           from tbk_settings t1`, function(data){
+               if(data.error){
+                   res.send({
+                       error: 'אין אפשרות להציג את הנתונים',
+                   })
+               } else {
+                    definitions = data.results;
+                    sql.q(`select t1.id, t1.name, t1.min_score, t1.value
+                           from tbk_test_types t1`, function(data){
+                               if(data.error){
+                                   res.send({
+                                       error: "לא ניתן להציג נתונים"
+                                   })
+                               } else {
+                                   test_type = data.results;
+                                   res.send({
+                                       definitions : definitions,
+                                       test_type: test_type,
+                                       titles: ['הגדרות חישובים', 'מבחנים']
+                                   })
+                               }
+                           })
+               }
+           })
+}
+
 module.exports = {
     requireRole: requireRole,
     getUser: getUser,
@@ -756,4 +788,6 @@ module.exports = {
     getColelList: getColelList,
     updColelId: updColelId,
     getPreviousDate: getPreviousDate,
+
+    getDefinitions: getDefinitions
 }

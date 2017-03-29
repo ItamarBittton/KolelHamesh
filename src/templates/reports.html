@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col-lg-5">
+        <rd-widget>
+            <rd-widget-header icon="icon-note" title="הגדרות חישוב">
+                <button ng-click="save()" class="btn btn-sm btn-info pull-left">שמור</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="medium">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <td>שם הגדרה</td>
+                            <td>ערך</td>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="def in definitions">
+                                <td>
+                                    <label class="col-md-12 reportsForm-label">{{def.name}}</label>
+                                </td>
+                                <td>
+                                    <input name="name" type="number" ng-model="def.value" class="form-reportsForm">
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+            <rd-widget-header icon="icon-layers" title="הגדרות מבחנים">
+                <button ng-click="save('test')" class="btn btn-sm btn-info pull-left">שמור</button>
+                <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+            </rd-widget-header>
+            <rd-widget-body classes="medium">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <td>שם מבחן</td>
+                            <td>ציון מינימום</td>
+                            <td>ערך</td>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="test in test_type">
+                                <td>
+                                    <label class="col-md-12 reportsForm-label">{{test.name}}</label>
+                                </td>
+                                <td>
+                                    <input name="name" type="number" ng-model="test.value" class="form-reportsForm">
+                                </td>
+                                <td>
+                                    <input name="name" type="number" ng-model="test.min_score" class="form-reportsForm">
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>

@@ -94,6 +94,7 @@ app.put('/updColel', f.requireRole([Admin]), f.updColelId);
 
 app.get('/prevDates', f.requireRole([Admin, User]), f.getPreviousDate);
 
+app.get('/definitions', f.requireRole([Admin]), f.getDefinitions);
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {
