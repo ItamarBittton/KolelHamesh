@@ -90,8 +90,8 @@
                             <span class="clearfix"></span>
                             <p ng-repeat="(key, value) in colel.schedule track by $index" class="container-fluid">
                                 <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                <input type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
                                 <input type="text" ng-model="colel.schedule[key].start" class="col-lg-4 form-control">
+                                <input type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
                             </p>
                         </details>
                     </div>
@@ -129,8 +129,7 @@
                                             <label class="control-label">
                                                 {{ $root.t[key] || key }}:
                                             </label>
-                                            <span class="pull-left">{{ colel.schedule[key].end }} - {{ colel.schedule[key].start
-                                                }}
+                                            <span class="pull-left">{{ colel.schedule[key].end }} - {{ colel.schedule[key].start }}
                                             </span>
                                         </p>
                                     </details>

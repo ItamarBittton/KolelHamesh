@@ -67,9 +67,9 @@ app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 app.get('/colelSettings', f.requireRole([Admin, User]), f.getColelSettings)
 
 app.get('/students', f.requireRole([Admin, User]), f.getStudents);
-app.post('/students', f.requireRole([Admin]), f.newStudent);
-app.put('/students', f.requireRole([Admin]), f.editStudent);
-app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
+// app.post('/students', f.requireRole([Admin]), f.newStudent);
+// app.put('/students', f.requireRole([Admin]), f.editStudent);
+// app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
 app.get('/colels', f.requireRole([Admin]), f.getColel);
 app.put('/colels', f.requireRole([Admin]), f.newColel);
@@ -95,6 +95,9 @@ app.put('/updColel', f.requireRole([Admin]), f.updColelId);
 app.get('/prevDates', f.requireRole([Admin, User]), f.getPreviousDate);
 
 app.get('/definitions', f.requireRole([Admin]), f.getDefinitions);
+app.put('/definitions', f.requireRole([Admin]), f.updDefinitions)
+
+
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {

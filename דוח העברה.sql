@@ -17,24 +17,31 @@ select t6.name,
 	   then 100
 	   else 0 as "מבחן בכתב"
 from tb_students t1 
-					join (select t2.student_id, sum(t2.student_id) as "present"
+					left outer join (select t2.student_id, count(t2.student_id) as "present"
 						  from tb_daily t2
-						  where t2.presence > 0 and month(t2.date) = current month
+						  where t2.presence = 0 and month(t2.date) = ${month}
 						  group by t2.student_id) t2 on (t1.student_id = t2.student_id)
-					join (select t2.student_id, sum(t2.student_id) as "late"
+
+					left outer join (select t2.student_id, sum(t2.presence) as "late"
 						  from tb_daily t2
-						  where t2.presence > 0 and month(t2.date) = current month
+						  where t2.presence > 0 and month(t2.date) = ${month}
 						  group by t2.student_id) t3 on (t1.student_id = t3.student_id)
-				    join (select t2.student_id, count(t2.student_id) as "missed"
+
+				    left outer join (select t2.student_id, count(t2.student_id) as "missed"
 						  from tb_daily t2
-						  where t2.presence = -1 and month(t2.date) = current month
+						  where t2.presence = -1 and month(t2.date) = ${month}
 						  group by t2.student_id) t4 on (t1.student_id = t4.student_id)
-				    join (select t2.student_id, count(t2.student_id) as "appMissed"
+
+				    left outer join (select t2.student_id, count(t2.student_id) as "appMissed"
 						  from tb_daily t2
-						  where t2.presence = -2 and month(t2.date) = current month
+						  where t2.presence = -2 and month(t2.date) = ${month}
 						  group by t2.student_id) t5 on (t1.student_id = t5.student_id)
-				    join (select t2.student_id, t2.write_test, t2.oral_test
-						  from tb_score t2
-						  where month(t2.date) = current month) t6 on (t1.student_id = t6.student_id)
+
+				    left outer join (select t2.student_id, t2.write_test, t2.oral_test, t3.tb_comment
+						  from tb_score t2, tb_comment t3
+						  where month(t2.date) = ${month} and t2.student_id = t3.student_id)
+						   t6 on (t1.student_id = t6.student_id)
+
 					left outer join tb_colel t7 on (t1.colel_id = t7.id)
+					left outer join (select t2.)
 order by t7.name

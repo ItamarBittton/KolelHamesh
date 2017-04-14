@@ -75,72 +75,73 @@ function getColelSettings(req, res) {
         })
 }
 
-function newStudent(req, res) {
-    // sql.q(`INSERT INTO `tb_student` (`id`, `supported_id`, `first_name`, `last_name`, `phone`, `street`, `house`, `city`, `bank`, `branch`, `account`, `account_name`, `colel_id`)
-    //        VALUES ('204305660', '', 'שלום', 'אופן', '770555215', 'החרובים', '8', 'מכבים', '05', '552', '152455', 'שלום אופן', '13');`,
-    //     function (data) { 
+// function newStudent(req, res) {
+//     sql.q(`INSERT INTO `tb_student` (`id`, `supported_id`, `first_name`, `last_name`, `phone`, `street`, `house`, `city`, `bank`, `branch`, `account`, `account_name`, `colel_id`)
+//            VALUES ('204305660', '', 'שלום', 'אופן', '770555215', 'החרובים', '8', 'מכבים', '05', '552', '152455', 'שלום אופן', '13');`,
+//         function (data) { 
 
-    // INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
-    var i = `${sql.i('tb_recomend', req.body.data)}`
-    sql.q(`${sql.v(i)}`, function (data) {
-        res.send({
-            success: 'האברך נוסף בהצלחה'
-        })
-    })
+//     INSERT INTO `tb_recomend` (`user_update`, `type`, `requested_date`, `approved_date`, `status`, `table_name`, `data`) VALUES ('13', 'הוספה', '2017-02-01 00:00:00', NULL, NULL, 'Students', '{"first_name":"יוסי"}')
+//     var i = `${sql.i('tb_recomend', req.body.data)}`
+//     sql.q(`${sql.v(i)}`, function (data) {
+//         res.send({
+//             success: 'האברך נוסף בהצלחה'
+//         })
+//     })
 
-    // })
-    // try and save object in database, and send result to client.
-    // if (db.ADD('students', req.body.student)) {
-    //     res.send({
-    //         success: 'האברך נוסף בהצלחה',
-    //         students: db.GET('students', req.cookies.UserID)
-    //     });
-    // } else {
-    //     res.send({
-    //         error: 'המשתמש כבר קיים'
-    //     });
-    // };
-};
+//     // })
+//     // try and save object in database, and send result to client.
+//     // if (db.ADD('students', req.body.student)) {
+//     //     res.send({
+//     //         success: 'האברך נוסף בהצלחה',
+//     //         students: db.GET('students', req.cookies.UserID)
+//     //     });
+//     // } else {
+//     //     res.send({
+//     //         error: 'המשתמש כבר קיים'
+//     //     });
+//     // };
+// };
 
-function editStudent(req, res) {
-    // Save object in database.
-    var student = req.body.data;
-    sql.q(`${sql.i('tb_student', student)} 
-    ON DUPLICATE KEY UPDATE supported_id=VALUES(supported_id),
-                            first_name=VALUES(first_name),
-                            last_name=VALUES(last_name),
-                            phone=VALUES(phone),
-                            street=VALUES(street),
-                            house=VALUES(house),
-                            city=VALUES(city),
-                            bank=VALUES(bank),
-                            branch=VALUES(branch),
-                            account=VALUES(account),
-                            account_name=VALUES(account_name),
-                            colel_id=VALUES(${req.currentUser.colel_id})`, function (data) {
-            res.send({
-                success: 'הנתונים עודכנו בהצלחה'
-            });
-        })
-        (id, supported_id, first_name, last_name, phone, street, house, city, bank, branch, account, account_name, colel_id)
+// function editStudent(req, res) {
+//     // Save object in database.
+//     var student = req.body.data;
+//     sql.q(`${sql.i('tb_student', student)} 
+//     ON DUPLICATE KEY UPDATE supported_id=VALUES(supported_id),
+//                             first_name=VALUES(first_name),
+//                             last_name=VALUES(last_name),
+//                             phone=VALUES(phone),
+//                             street=VALUES(street),
+//                             house=VALUES(house),
+//                             city=VALUES(city),
+//                             bank=VALUES(bank),
+//                             branch=VALUES(branch),
+//                             account=VALUES(account),
+//                             account_name=VALUES(account_name),
+//                             colel_id=VALUES(${req.currentUser.colel_id})`, function (data) {
+//             res.send({
+//                 success: 'הנתונים עודכנו בהצלחה'
+//             });
+//         })
+//         (id, supported_id, first_name, last_name, phone, street, house, city, bank, branch, account, account_name, colel_id)
 
-    db.UPD('students', req.body.student, req.body.id);
+//     db.UPD('students', req.body.student, req.body.id);
 
-    res.send({
-        success: 'האברך עודכן בהצלחה',
-        students: db.GET('students', req.cookies.UserID)
-    });
-};
+//     res.send({
+//         success: 'האברך עודכן בהצלחה',
+//         students: db.GET('students', req.cookies.UserID)
+//     });
+// };
 
-function deleteStudent(req, res) {
-    // Save object in database.
-    db.SUB('students', req.body.id);
+// function deleteStudent(req, res) {
+//     // Save object in database.
+//     db.SUB('students', req.body.id);
 
-    res.send({
-        success: 'האברך נמחק בהצלחה',
-        students: db.GET('students', req.cookies.UserID)
-    });
-};
+//     res.send({
+//         success: 'האברך נמחק בהצלחה',
+//         students: db.GET('students', req.cookies.UserID)
+//     });
+// };
+
 
 function getRecomends(req, res) {
     sql.q(`select t1.id as "recomend_id",
@@ -578,7 +579,8 @@ function getColel(req, res) {
                   t1.note, 
                   t2.password
         FROM tb_colel t1
-        LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')`,
+        LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')
+        ORDER BY t1.id, t1.name`,
         function (data) {
             if (req.is_hufna) {
                 res.send({
@@ -726,37 +728,66 @@ function getPreviousDate(req, res) {
     }
 }
 
-function getDefinitions(req, res){
-    
+function getDefinitions(req, res) {
+
     var definitions = [],
         test_type = [];
 
-    sql.q(`select t1.key, t1.name, t1.value
-           from tbk_settings t1`, function(data){
-               if(data.error){
-                   res.send({
-                       error: 'אין אפשרות להציג את הנתונים',
-                   })
-               } else {
-                    definitions = data.results;
-                    sql.q(`select t1.id, t1.name, t1.min_score, t1.value
-                           from tbk_test_types t1`, function(data){
-                               if(data.error){
-                                   res.send({
-                                       error: "לא ניתן להציג נתונים"
+    sql.q(`select t1.key, t1.name, t1.value, t1.group_type
+           from tbk_settings t1`, function (data) {
+            if (data.error) {
+                res.send({
+                    error: 'אין אפשרות להציג את הנתונים',
+                })
+            } else {
+                definitions = data.results;
+                sql.q(`select t1.id, t1.name, t1.min_score, t1.value
+                           from tbk_test_types t1`, function (data) {
+                        if (data.error) {
+                            res.send({
+                                error: "לא ניתן להציג נתונים"
+                            })
+                        } else {
+                            test_types = data.results;
+                            sql.q(`select t1.id, t1.name
+                                          from tb_report t1`,
+                                function (data) {
+                                    res.send({
+                                       definitions,
+                                       test_types,
+                                       titles: ['הגדרות חישובים', 'מבחנים'],
+                                       reports: data.results
                                    })
-                               } else {
-                                   test_type = data.results;
-                                   res.send({
-                                       definitions : definitions,
-                                       test_type: test_type,
-                                       titles: ['הגדרות חישובים', 'מבחנים']
-                                   })
-                               }
-                           })
-               }
-           })
+                                })
+
+                        }
+                    })
+            }
+        })
 }
+
+function updDefinitions(req, res) {
+    var table_name = req.body.table_name;
+
+    if (table_name === 'settings' || table_name === 'test_types') {
+        table_name = 'tbk_' + table_name;
+        var object = req.body.object;
+
+        sql.q(sql.ia(table_name, object, true), function (results) {
+            if (results.error) {
+                res.send({
+                    error: 'אין אפשרות לעדכן את ההגדרות'
+                })
+            } else {
+                res.send({
+                    success: 'ההגדרות עודכנו בהצלחה!'
+                })
+            }
+        });
+    }
+}
+
+
 
 module.exports = {
     requireRole: requireRole,
@@ -764,9 +795,9 @@ module.exports = {
     sendCookies: sendCookies,
 
     getStudents: getStudents,
-    newStudent: newStudent,
-    editStudent: editStudent,
-    deleteStudent: deleteStudent,
+    // newStudent: newStudent,
+    // editStudent: editStudent,
+    // deleteStudent: deleteStudent,
 
     getColelSettings: getColelSettings,
 
@@ -789,5 +820,6 @@ module.exports = {
     updColelId: updColelId,
     getPreviousDate: getPreviousDate,
 
-    getDefinitions: getDefinitions
+    getDefinitions: getDefinitions,
+    updDefinitions: updDefinitions
 }

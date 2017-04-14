@@ -1,5 +1,6 @@
-angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notification', 'ui.mask'])
-    .config(function (NotificationProvider) {
+angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notification', 'ui.mask', 'ngSanitize', 'ngCsv'])
+    .config(function (NotificationProvider){//, $qProvider) {
+        //$qProvider.errorOnUnhandledRejections(false);
         NotificationProvider.setOptions({
             startTop: 20,
             startRight: 10,
@@ -8,4 +9,4 @@ angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notificat
             positionX: 'left',
             positionY: 'bottom'
         });
-    });;
+    });
