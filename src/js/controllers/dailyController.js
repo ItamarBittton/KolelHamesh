@@ -31,14 +31,14 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     Data.get('getProhibitions').then(function (data) {
         if (data) {
             $scope.isOnlyDaily = data.is_only_daily;
-            $scope.isOneTimeAllow = $scope.isOnlyDaily ? false : data.is_one_time_allow;
+            $scope.isOneTimeAllow = data.is_one_time_allow;
             if ($scope.isOnlyDaily) {
                 $scope.show(new Date());
             }
+            Data.get('prevDates').then(function (data) {
+                $scope.prevDates = data.prevDates;
+            })
         }
-        Data.get('prevDates').then(function (data) {
-            $scope.prevDates = data.prevDates;
-        })
     });
 
 

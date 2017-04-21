@@ -24,6 +24,9 @@ angular.module('RDash')
             $scope.newColel = false;
             $scope.display = true;
             $scope.colel = angular.copy($scope.colels[id]);
+            $scope.colel.is_only_daily = $scope.colel.is_only_daily ? true : false;
+            $scope.colel.is_prev_month = $scope.colel.is_prev_month ? true : false;
+            $scope.colel.is_one_time_allow = $scope.colel.is_one_time_allow ? true : false;
             $scope.colel.note = JSON.parse($scope.colel.note);
         }
 

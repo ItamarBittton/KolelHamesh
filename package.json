@@ -25,6 +25,7 @@
     "mysql": "^2.13.0"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
     "gulp-clean": "^0.3.1"
   },
   "description": "[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/rdash/rdash-angular?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)",

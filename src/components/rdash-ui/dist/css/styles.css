@@ -160,7 +160,22 @@ details[open] summary {
     background: inherit;
     left: 20px;
 }
-
-/*.widget {
-    height: 0px
+.md-switch:last-of-type{
+    margin: 5px !important;
+}
+.md-switch{
+    margin: 5px !important;
+}
+/*.md-ink-ripple{
+    background-color: red !important;
+}
+.md-red>.md-bar{
+    background-color: red !important;
+    opacity: 0.5 !important;
+}
+.md-green{
+    background-color: green;
 }*/
+.md-label{
+    margin-right: 33.3333% !important;
+}

@@ -10,8 +10,7 @@
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
                         <label class="col-md-4 control-label">שם הכולל</label>
                         <div class="col-md-8">
-                            <input name="name" type="text" ng-model="colel.name" class="form-control" ng-minlength="3"
-                                required>
+                            <input name="name" type="text" ng-model="colel.name" class="form-control" ng-minlength="3" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.address.$dirty) && colelForm.address.$invalid }">
@@ -44,7 +43,7 @@
                             <input name="password" type="input" ng-model="colel.password" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.noteType.$dirty) && colelForm.noteType.$invalid }">
+                    <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">צבע ההודעה</label>
                         <div class="col-md-8">
                             <select ng-model="colel.note.type" name="noteType" class="form-control">
@@ -54,33 +53,48 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.noteMsg.$dirty) && colelForm.noteMsg.$invalid }">
+                    <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">הודעה</label>
                         <div class="col-md-8">
-                            <input name="noteMsg" type="text" ng-model="colel.note.msg" class="form-control" required>
+                            <input name="noteMsg" type="text" ng-model="colel.note.msg" class="form-control">
                         </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <div class="material-switch col-md-4">
+                        <!--<div class="material-switch col-md-4">
                             <input id="is_only_daily" ng-true-value="'colel.is_only_daily'" ng-model="colel.is_only_daily" type="checkbox" />
                             <label for="is_only_daily" class="label-danger"></label>
                         </div>
-                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל גישה ללוח שנה</label>
+                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל גישה ללוח שנה</label>-->
+                        <div class="col-md-12">
+                            <md-switch class="md-warn" ng-model="colel.is_only_daily" aria-label="הגבל גישה ללוח שנה">
+                                הגבל גישה ללוח שנה 
+                            </md-switch>
+                        </div>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <div class="material-switch col-md-4">
+                        <!--<div class="material-switch col-md-4">
                             <input id="is_prev_month" ng-true-value="'colel.is_prev_month'" ng-model="colel.is_prev_month" type="checkbox" />
                             <label for="is_prev_month" class="label-success"></label>
+                        </div>-->
+                        <div class="col-md-12">
+                            <md-switch ng-model="colel.is_prev_month" class="md-primary" md-no-ink aria-label="הגבל גישה ללוח שנה">
+                               אשר עדכון לחודש הקודם
+                            </md-switch>
                         </div>
-                        <label class="col-md-8 control-label" style="margin-bottom: 20px">אשר עדכון לחודש הקודם</label>
                     </div>
                     <div class="form-group form-md-line-input">
-                        <div class="material-switch col-md-4">
-                            <input id="is_one_time_allow" ng-true-value="'colel.is_one_time_allow'" ng-model="colel.is_one_time_allow" type="checkbox" />
+                        <!--<div class="material-switch col-md-4">
+                            <input id="is_one_time_allow" ng-true-value="'colel.is_one_time_allow'" ng-model="colel.is_one_time_allow" type="checkbox"
+                            />
                             <label for="is_one_time_allow" class="label-danger"></label>
-                            
+
                         </div>
-                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל עדכון מרובה</label>
+                        <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל עדכון מרובה</label>-->
+                        <div class="col-md-12 md-red">
+                            <md-switch class="md-warn" ng-model="colel.is_one_time_allow" aria-label="הגבל גישה ללוח שנה">
+                               הגבל עדכון מרובה
+                            </md-switch>
+                        </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
                         <details>

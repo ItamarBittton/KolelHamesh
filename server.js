@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.get('/', function (req, res) {
-    console.log('enter');
+    console.log('enter', new Date());
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
 
@@ -58,7 +58,7 @@ app.get('/' + Admin, f.requireRole([Admin]), sendHomePage);
 app.get('/' + User, f.requireRole([User]), sendHomePage);
 
 function sendHomePage(req, res) {
-    console.log(req.currentUser.user_name);
+    console.log(req.currentUser.user_name, new Date());
     res.sendFile(__dirname + '/dist/index.html');
 };
 
@@ -101,5 +101,5 @@ app.put('/definitions', f.requireRole([Admin]), f.updDefinitions)
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {
-    console.log('Our app is running on http://localhost:' + port);
+    console.log('The Five Center is running on http://localhost:' + port);
 });
