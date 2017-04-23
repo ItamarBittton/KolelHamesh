@@ -16,17 +16,21 @@ angular.module('RDash')
             // $scope.student.editId = id.toString();
         }
 
-        $scope.save = function (valid) {
+        $scope.save = function (valid, toDelete) {
             var type = '';
             var students = JSON.parse(JSON.stringify($scope.students));
-            $scope.students.map(val => {val.id !== $scope.student.id ? type = 'עריכה' : type = 'הוספה';})
+            if (toDelete) {
+                type = 'מחיקה'
+            } else {
+                $scope.students.map(val => { val.id !== $scope.student.id ? type = 'עריכה' : type = 'הוספה'; })
+            }
             delete $scope.student.name;
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
                 $scope.student.schedule = JSON.stringify($scope.student.schedule);
-                Data.post('recomends', { data: $scope.student, table: 'student', type: type}).then(function (result) {
-                    
+                Data.post('recomends', { data: $scope.student, table: 'student', type: type }).then(function (result) {
+
                 });
 
                 $scope.close();
@@ -38,8 +42,8 @@ angular.module('RDash')
                 $scope.formErrors = true;
             } else if (valid) {
                 $scope.student.schedule = JSON.stringify($scope.student.schedule);
-                Data.post('recomends', { data: $scope.student, table: 'student', type: 'מחיקה'}).then(function (result) {
-                    
+                Data.post('recomends', { data: $scope.student, table: 'student', type: 'מחיקה' }).then(function (result) {
+
                 });
 
                 $scope.close();

@@ -3,7 +3,8 @@
     <rd-widget ng-if="display">
       <form name="studentForm" novalidate>
         <rd-widget-header icon="icon-note" title="פרטי האברך">
-          <button ng-click="save(studentForm.$valid)" ng-class="{'disabled': studentForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+          <button ng-click="save(studentForm.$valid, false)" ng-class="{'disabled': studentForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+          <button ng-click="save(studentForm.$valid, true)" ng-class="{'disabled': studentForm.$invalid}" class="btn btn-sm btn-danger pull-left">מחק</button>
           <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
         </rd-widget-header>
         <rd-widget-body classes="xlarge no-padding">

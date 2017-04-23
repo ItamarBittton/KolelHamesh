@@ -2,7 +2,7 @@ angular.module('RDash')
     .controller('recomendController', function ($scope, Data, $rootScope) {
         Data.get('recomends').then(function (data) {
             $scope.recomends = data.recomends;
-            
+
         })
 
         $scope.recomend = {};
@@ -21,9 +21,12 @@ angular.module('RDash')
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
-                var method = $scope.editId ? 'put' : 'post';
-
-                Data[method]('recomends', { id: $scope.editId, student: $scope.recomend }).then(function (result) {
+                // var method = $scope.editId ? 'put' : 'post';
+                // if (toDelete) {
+                //     method = 'delete';
+                // }
+                // var method = toDelete ? 'delete' : 'post';
+                Data.post('recomends', { student: $scope.recomend }).then(function (result) {
                     $scope.recomends = data.recomends;
                 });
 
