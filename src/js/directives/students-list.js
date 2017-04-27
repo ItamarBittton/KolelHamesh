@@ -8,15 +8,15 @@ angular
 			template: `<div>
 		<table class="table">
 			  <thead>
-				<td>שם פרטי</td>
 				<td>שם משפחה</td>
+				<td>שם פרטי</td>
 				<td>טלפון</td>
 				<td ng-repeat="title in dropList.title">{{title}}</td>
 			  </thead>
 			  <tbody>
 				<tr ng-repeat="student in students">
-					<td >{{student.first_name}}</td>
 					<td >{{student.last_name}}</td>
+					<td >{{student.first_name}}</td>
 					<td >{{student.phone}}</td>
 					<td >
 						<select 

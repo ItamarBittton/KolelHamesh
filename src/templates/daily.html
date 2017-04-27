@@ -2,7 +2,7 @@
     <div class="col-lg-4">
         <rd-widget ng-if="disable">
             <form name="dailyForm" novalidate>
-                <rd-widget-header icon="icon-note" title="דוח נוכחות">
+                <rd-widget-header icon="icon-note" title="{{date.toLocaleDateString()}} דוח נוכחות">
                     <span class="action action-ok" ng-click="save(dailyForm.$valid)" ng-class="{'disabled': dailyForm.$invalid}"></span>
                     <span class="action action-error" ng-click="close()"></span>
                 </rd-widget-header>
@@ -10,7 +10,7 @@
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">לומדים נוספים:</label>
                         <div class="col-md-8">
-                            <input type="number" ng-model="tempStudents" class="form-control" required>
+                            <input type="number" ng-model="tempStudents.amount" ng-value="tempStudents.amount" class="form-control">
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-if="!isOneTimeAllow">

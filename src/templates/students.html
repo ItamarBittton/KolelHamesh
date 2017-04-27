@@ -95,8 +95,8 @@
             </thead>
             <thead>
               <td ng-if="role !== 'User'">שם הכולל</td>
-              <td>שם פרטי</td>
               <td>שם משפחה</td>
+              <td>שם פרטי</td>
               <td>טלפון</td>
               <td class="lborder">זהות</td>
               <td>רחוב</td>
@@ -110,8 +110,8 @@
             <tbody>
               <tr ng-repeat="student in students track by $index">
                 <td ng-click="edit($index)" ng-if="role !== 'User'">{{ student.name }}</td>
-                <td ng-click="edit($index)">{{ student.first_name }}</td>
                 <td ng-click="edit($index)">{{ student.last_name }}</td>
+                <td ng-click="edit($index)">{{ student.first_name }}</td>
                 <td ng-click="edit($index)">{{ student.phone }}</td>
                 <td ng-click="edit($index)" class="lborder">{{ student.id }}</td>
                 <td ng-click="edit($index)">{{ student.street }}</td>

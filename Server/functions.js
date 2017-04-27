@@ -10,6 +10,16 @@ var token = function () {
     return rand() + rand(); // to make it longer
 };
 
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
+
 function requireRole(role) {
     return function (req, res, next) {
         var credentials = req.cookies.token ? req.cookies : req.body;
@@ -188,7 +198,7 @@ function newRecomend(req, res) {
         var table = req.body.table;
         var newRecomend = {
             colel_update: req.currentUser.colel_id,
-            requested_date: `${new Date(new Date().getTime()).toLocaleString()} `,
+            requested_date: new Date().toMysqlFormat(),//`${new Date(new Date().getTime()).toLocaleString()} `,
             approved_date: null,
             type: req.body.type,
             status: null,
@@ -248,7 +258,7 @@ function approveRecomend(req, res) {
                 recomend = data.results[0];
                 //var date = new Date();
                 sql.q(`UPDATE tb_recomend 
-                       SET approved_date = '${new Date(new Date().getTime()).toLocaleString()}', 
+                       SET approved_date = '${new Date().toMysqlFormat()}', 
                            status = 1
                        WHERE id = ${recomend_id}`, function (data) {
                         if (data.error) {
@@ -374,20 +384,27 @@ function getDailyReport(req, res) {
             title: ['נוכחות'],
             options: []
         }
+        // Get the student list with the presence value
         sql.q(`select t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence
                        from tb_student t1 
                        left outer join tb_daily t2 on (t2.student_id = t1.id and t2.date = ${sql.v(req.params.date)}) 
-                       where t1.colel_id = ${req.currentUser.colel_id}`,
+                       where t1.colel_id = ${req.currentUser.colel_id}
+                       order by t1.last_name, t1.first_name`,
             function (data) {
                 dailyRep = data.results;
-                sql.q(`select t1.id, t1.key, t1.name, t1.value from tbk_presence_status t1 where t1.group_type = ${req.currentUser.group_type} order by t1.id`, function (data) {
-                    dropList.options = data.results;
-                    res.send({
-                        dailyRep,
-                        dropList,
-                        tempStudents: 0
+                // Get the all the options of the current colel sttings
+                sql.q(`select t1.id, t1.key, t1.name, t1.value from tbk_presence_status t1 where t1.group_type = ${req.currentUser.group_type} order by t1.id`,
+                    function (data) {
+                        dropList.options = data.results;
+                        sql.q(`select t1.amount from tb_onetime_student t1 where t1.colel_id = ${req.currentUser.colel_id} and t1.date = ${sql.v(req.params.date)}`,
+                            function (data) {
+                                res.send({
+                                    dailyRep,
+                                    dropList,
+                                    tempStudents: data.results.length != 1 ? 0 : data.results[0].amount
+                                });
+                            })
                     });
-                });
             });
     } else {
         res.send({
@@ -403,17 +420,33 @@ function updateDailyReport(req, res) {
         (req.currentUser.permission === 'User' && req.currentUser.is_only_daily == true && req.body.date.split('-')[2] == new Date().getDate())) {
         var convertObjtoArr = [];
         req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
-        sql.q(sql.ia('tb_daily', convertObjtoArr, true), function (data) {
-            if (data.error) {
-                res.send({
-                    error: 'אירעה שגיאה בעת עדכון הנתונים'
-                });
-            } else {
-                res.send({
-                    success: 'הנתונים עודכנו בהצלחה!'
-                })
-            }
-        });
+        if (convertObjtoArr.length) {
+            sql.q(sql.ia('tb_daily', convertObjtoArr, true), function (data) {
+                if (data.error) {
+                    res.send({
+                        error: 'אירעה שגיאה בעת עדכון הנתונים'
+                    });
+                } else {
+                    if (req.body.oneTimeStud) {
+                        sql.q(sql.ia('tb_onetime_student',
+                                     [{ date: req.body.date,
+                                        amount: req.body.oneTimeStud,
+                                        colel_id: req.currentUser.colel_id }],
+                                         true), function (data) {
+                            if (data.error) {
+                                res.send({
+                                    error: 'אירעה שגיאה בעת עדכון הנתונים'
+                                })
+                            } else {
+                                res.send({
+                                    success: 'הנתונים עודכנו בהצלחה!'
+                                })
+                            }
+                        })
+                    }
+                }
+            });
+        }
     } else {
         res.send({
             error: 'אין אפשרות להוסיף נתונים בתאריך הנל'
@@ -443,12 +476,14 @@ function getScores(req, res) {
     var scores = [];
     var year = parseInt(sql.v(parseInt(req.params.date.split('-')[0])));
     var month = parseInt(sql.v(parseInt(req.params.date.split('-')[1])));
-    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment as 'comment'
+    sql.q(`select t1.id, t1.first_name, t1.last_name, t2.score as 'oral', t3.score as 'write', t4.comment as 'comment', t5.exception as 'exception'
     from tb_student t1 
     left outer join tb_score t2 on (t1.id = t2.student_id and t2.year = ${year} and t2.month = ${month} and t2.test_type = 1)
     left outer join tb_score t3 on (t1.id = t3.student_id and t3.year = ${year} and t3.month = ${month} and t3.test_type = 2)
     left outer join tb_comment t4 on (t1.id = t4.student_id and t4.year = ${year} and t4.month = ${month})
-    where t1.colel_id = ${req.currentUser.colel_id}`, function (data) {
+    left outer join tb_exception t5 on (t1.id = t5.student_id and t5.year = ${year} and t5.month = ${month})
+    where t1.colel_id = ${req.currentUser.colel_id}
+    order by t1.last_name, t1.first_name`, function (data) {
 
             scores = data.results;
             sql.q(`select t1.id, t1.name from tbk_test_types t1`, function (data) {
@@ -753,11 +788,11 @@ function getDefinitions(req, res) {
                                           from tb_report t1`,
                                 function (data) {
                                     res.send({
-                                       definitions,
-                                       test_types,
-                                       titles: ['הגדרות חישובים', 'מבחנים'],
-                                       reports: data.results
-                                   })
+                                        definitions,
+                                        test_types,
+                                        titles: ['הגדרות חישובים', 'מבחנים'],
+                                        reports: data.results
+                                    })
                                 })
 
                         }

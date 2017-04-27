@@ -13,15 +13,15 @@
                     <div>
                         <table class="table">
                             <thead>
-                                <td>שם פרטי</td>
                                 <td>שם משפחה</td>
+                                <td>שם פרטי</td>
                                 <td ng-repeat="til in title">{{til.name}}</td>
                                 <td >הערות</td>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="student in students">
-                                    <td>{{student.first_name}}</td>
                                     <td>{{student.last_name}}</td>
+                                    <td>{{student.first_name}}</td>
                                     <td>
                                         <select ng-model="student.oral" ng-options="def.value as def.name for def in options" class="form-control">
                                         </select>

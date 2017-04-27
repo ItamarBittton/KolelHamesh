@@ -13,7 +13,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
                 $scope.dropList = data.dropList;
 
-                $scope.tempStudents = data.tempStudents;
+                $scope.tempStudents = {amount : data.tempStudents};
             })
         }
     }
@@ -49,7 +49,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
     $scope.save = function (valid) {
         var UPDaily = $scope.students.filter((val) => (val.presence !== null));
-        var UPDStud = $scope.tempStudents;
+        var UPDStud = $scope.tempStudents.amount;
         var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
         //document.querySelector(".selected").classList.remove("selected");
 
