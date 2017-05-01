@@ -53,7 +53,7 @@ angular.module('RDash')
 
                 if (JSON.stringify($scope.data) !== JSON.stringify(copy)) {
                     Data.post('recomends', {
-                        data: $scope.data,
+                        data: {newObj : $scope.data, oldObj: copy},
                         table: 'colel',
                         type: 'עריכה'
                     }, function (data) {

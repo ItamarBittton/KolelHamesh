@@ -11,12 +11,12 @@ var token = function () {
 };
 
 function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    if (0 <= d && d < 10) return "0" + d.toString();
+    if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
     return d.toString();
 }
 
-Date.prototype.toMysqlFormat = function() {
+Date.prototype.toMysqlFormat = function () {
     return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
@@ -266,8 +266,9 @@ function approveRecomend(req, res) {
                                 error: 'אירעה שגיאה בעת עדכון ההמלצה'
                             });
                         } else {
+                            recomend.data = JSON.parse(recomend.data);
                             if (recomend.type !== 'מחיקה') {
-                                sql.q(sql.ia(recomend.table_name, [JSON.parse(recomend.data)], recomend.type === 'הוספה' ? false : true), function (data) {
+                                sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], recomend.type === 'הוספה' ? false : true), function (data) {
                                     if (data.error) {
                                         res.send({
                                             error: 'אירעה שגיאה בעת הוספת הנתונים החדשים'
@@ -280,8 +281,7 @@ function approveRecomend(req, res) {
                                     }
                                 });
                             } else {
-                                recomend.data = JSON.parse(recomend.data);
-                                sql.q(`delete from ${recomend.table_name} where id = ${recomend.data.id}`, function (data) {
+                                sql.q(`delete from ${recomend.table_name} where id = ${recomend.data.newObj.id}`, function (data) {
                                     if (data.error) {
                                         res.send({
                                             error: 'אירעה שגיאה בעת מחיקת הנתונים'
@@ -339,7 +339,7 @@ function denyRecomend(req, res) {
                 recomend = data.results[0];
                 var date = new Date();
                 sql.q(`UPDATE tb_recomend 
-                       SET approved_date = '${new Date(new Date().getTime()).toLocaleString()}', 
+                       SET approved_date = '${new Date().toMysqlFormat()}', 
                            status = 0
                        WHERE id = ${recomend_id}`, function (data) {
                         if (data.error) {
@@ -429,20 +429,22 @@ function updateDailyReport(req, res) {
                 } else {
                     if (req.body.oneTimeStud) {
                         sql.q(sql.ia('tb_onetime_student',
-                                     [{ date: req.body.date,
-                                        amount: req.body.oneTimeStud,
-                                        colel_id: req.currentUser.colel_id }],
-                                         true), function (data) {
-                            if (data.error) {
-                                res.send({
-                                    error: 'אירעה שגיאה בעת עדכון הנתונים'
-                                })
-                            } else {
-                                res.send({
-                                    success: 'הנתונים עודכנו בהצלחה!'
-                                })
-                            }
-                        })
+                            [{
+                                date: req.body.date,
+                                amount: req.body.oneTimeStud,
+                                colel_id: req.currentUser.colel_id
+                            }],
+                            true), function (data) {
+                                if (data.error) {
+                                    res.send({
+                                        error: 'אירעה שגיאה בעת עדכון הנתונים'
+                                    })
+                                } else {
+                                    res.send({
+                                        success: 'הנתונים עודכנו בהצלחה!'
+                                    })
+                                }
+                            })
                     }
                 }
             });
@@ -551,17 +553,19 @@ function putScores(req, res) {
                 error: 'היתה בעיה בשמירת הציונים'
             })
         } else {
-            sql.q(sql.ia('tb_comment', commentArr, true), function (data) {
-                if (data.error) {
-                    res.send({
-                        error: 'היתה בעיה בשמירת ההערה'
-                    })
-                } else {
-                    res.send({
-                        success: 'הציונים הוזנו בהצלחה'
-                    });
-                }
-            })
+            if (commentArr.length) {
+                sql.q(sql.ia('tb_comment', commentArr, true), function (data) {
+                    if (data.error) {
+                        res.send({
+                            error: 'היתה בעיה בשמירת ההערה'
+                        })
+                    } else {
+                        res.send({
+                            success: 'הציונים הוזנו בהצלחה'
+                        });
+                    }
+                })
+            }
         }
     });
 

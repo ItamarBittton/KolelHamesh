@@ -2,7 +2,6 @@ angular.module('RDash')
     .controller('recomendController', function ($scope, Data, $rootScope) {
         Data.get('recomends').then(function (data) {
             $scope.recomends = data.recomends;
-
         })
 
         $scope.recomend = {};

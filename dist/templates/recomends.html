@@ -78,9 +78,9 @@
                                     <details>
                                         <summary>{{ recomend.data.first_name + ' ' + recomend.data.last_name }} {{ recomend.data.manager_name }}
                                         </summary>
-                                        <p ng-repeat="(key, value) in recomend.data | inputfilter track by $index">
+                                        <p ng-repeat="(key, value) in recomend.data.newObj | inputfilter track by $index">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                            <input type="text" ng-model="recomend.data[key]" class="col-lg-7 form-control">
+                                            <input type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (recomend.data.oldObj && JSON.stringify(recomend.data.newObj[key]) != JSON.stringify(recomend.data.oldObj[key]))}" class="col-lg-7 form-control">
                                         </p>
                                     </details>
                                 </td>

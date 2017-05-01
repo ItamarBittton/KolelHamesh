@@ -6,7 +6,7 @@ angular
                 show: "&"
             },
             template: `<div class="board">
-                           <div class="square" id="{{day.key}}"
+                           <div class="square" ng-class="{ 'selected' : (day.gerg.getDate() == currentDate.getDate() && day.gerg.getMonth() == currentDate.getMonth()) }" id="{{day.key}}"
                                 ng-repeat='day in month'
                                 ng-click="chooseDay(day)">
                                <div class="date">{{day.val}}<span ng-if="day.gerg" class="gerg">{{day.gerg.getDate() + "/"}}{{day.gerg.getMonth() + 1 == 0 ? 1 : day.gerg.getMonth() + 1}}</span></div>
@@ -20,7 +20,7 @@ angular
                         start = new Date(year, month, 1).getDay();
 
                     scope.selected = false;
-
+                    scope.currentDate = new Date();
                     scope.chooseDay = function (day) {
                         var elementsSelected = document.querySelector(".selected")
                         if (elementsSelected) elementsSelected.classList.remove("selected");

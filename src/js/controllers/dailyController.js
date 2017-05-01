@@ -1,5 +1,5 @@
 angular.module('RDash').controller("dailyController", function ($scope, Data, $filter) {
-    $scope.disable = false;
+    $scope.disable = true;
     $scope.dropList = [];
     $scope.isOnlyDaily = true;
 
@@ -13,7 +13,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
                 $scope.dropList = data.dropList;
 
-                $scope.tempStudents = {amount : data.tempStudents};
+                $scope.tempStudents = { amount: data.tempStudents };
             })
         }
     }
@@ -32,9 +32,8 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         if (data) {
             $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
             $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' ? true : data.is_one_time_allow;
-            if ($scope.isOnlyDaily) {
-                $scope.show(new Date());
-            }
+            $scope.show(new Date());
+
             Data.get('prevDates').then(function (data) {
                 $scope.prevDates = data.prevDates;
             })
