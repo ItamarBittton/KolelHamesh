@@ -5,12 +5,14 @@ angular.module('RDash')
         })
 
         $scope.student = {};
-
+        $scope.isNew = false;
         $scope.add = function () {
-            $scope.display = true;
+            $scope.isNew = $scope.display = true;
+            $scope.student = {};
         };
 
         $scope.edit = function (id) {
+            $scope.isNew = false;
             $scope.display = true;
             $scope.student = angular.copy($scope.students[id]);
             // $scope.student.editId = id.toString();
@@ -20,9 +22,11 @@ angular.module('RDash')
             var type = '';
             var students = JSON.parse(JSON.stringify($scope.students));
             if (toDelete) {
-                type = 'מחיקה'
-            } else {
-                $scope.students.map(val => { val.id !== $scope.student.id ? type = 'עריכה' : type = 'הוספה'; })
+                type = 'מחיקה';
+            } else if($scope.isNew){
+                type = 'הוספה';
+            }  else {
+                type = 'עריכה';
             }
             delete $scope.student.name;
             if (!valid) {

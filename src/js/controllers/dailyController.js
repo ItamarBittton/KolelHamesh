@@ -30,8 +30,8 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
     Data.get('getProhibitions').then(function (data) {
         if (data) {
-            $scope.isOnlyDaily = data.is_only_daily;
-            $scope.isOneTimeAllow = data.is_one_time_allow;
+            $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
+            $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' ? true : data.is_one_time_allow;
             if ($scope.isOnlyDaily) {
                 $scope.show(new Date());
             }

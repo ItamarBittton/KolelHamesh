@@ -2,18 +2,24 @@
     <div class="col-lg-4">
         <rd-widget ng-if="disable">
             <form name="dailyForm" novalidate>
-                <rd-widget-header icon="icon-note" title="{{date.toLocaleDateString()}} דוח נוכחות">
-                    <span class="action action-ok" ng-click="save(dailyForm.$valid)" ng-class="{'disabled': dailyForm.$invalid}"></span>
-                    <span class="action action-error" ng-click="close()"></span>
+                <rd-widget-header icon="icon-note" title="דוח נוכחות">
+                    <button ng-click="save(dailyForm.$valid)" ng-class="{'disabled': dailyForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
+                    <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
+                    <div class="form-group form-md-line-input">
+                        <label class="col-md-4 control-label">תאריך עדכון:</label>
+                        <div class="col-md-8">
+                            <input type="text" ng-value="date.toLocaleDateString()" class="form-control" readonly>
+                        </div>
+                    </div>
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">לומדים נוספים:</label>
                         <div class="col-md-8">
                             <input type="number" ng-model="tempStudents.amount" ng-value="tempStudents.amount" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input" ng-if="!isOneTimeAllow">
+                    <div class="form-group form-md-line-input" ng-if="isOneTimeAllow">
                         <label class="col-md-4 control-label">סמן כולם כ:</label>
                         <div class="col-md-8">
                             <select ng-model="changeAllValue" ng-change="changeAll(changeAllValue, dailyForm.$valid)" class="form-control">
@@ -30,8 +36,8 @@
     <div ng-if="!isOnlyDaily" ng-class="{'col-lg-12':!disable, 'col-md-8':disable}">
         <rd-widget>
             <rd-widget-header icon="icon-people" title="בחר תאריך על מנת לצפות ברשימת התלמידים">
-                <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth"
-                    ng-change="changeMonth(currentMonth)" class="form-control pull-left">
+                <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth" ng-change="changeMonth(currentMonth)"
+                    class="form-control pull-left">
                     <option value="" disabled>החלף חודש</option>
                     <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                 </select>
