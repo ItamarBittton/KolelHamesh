@@ -80,7 +80,7 @@
                                         </summary>
                                         <p ng-repeat="(key, value) in recomend.data.newObj | inputfilter track by $index">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                            <input type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(key, recomends.indexOf(recomend)) && recomend.data.oldObj)}" class="col-lg-7 form-control">
+                                            <input type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}" class="col-lg-7 form-control">
                                         </p>
                                     </details>
                                 </td>

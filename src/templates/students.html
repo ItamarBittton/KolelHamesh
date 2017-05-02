@@ -74,6 +74,12 @@
               <input name="accountName" type="text" ng-model="student.account_name" class="form-control" required>
             </div>
           </div>
+          <div ng-if="role !== 'User'" class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.supportedId.$dirty) && studentForm.supportedId.$invalid }">
+            <label class="col-md-4 control-label">מספר נתמך</label>
+            <div class="col-md-8">
+              <input name="accountName" type="text" ng-model="student.supported_id" class="form-control" required>
+            </div>
+          </div>
         </rd-widget-body>
       </form>
     </rd-widget>
@@ -106,6 +112,7 @@
               <td>סניף</td>
               <td>חשבון</td>
               <td>על שם</td>
+              <td ng-if="role !== 'User'">מספר נתמך</td>
             </thead>
             <tbody>
               <tr ng-repeat="student in students track by $index">
@@ -121,6 +128,7 @@
                 <td ng-click="edit($index)">{{ student.branch }}</td>
                 <td ng-click="edit($index)">{{ student.account }}</td>
                 <td ng-click="edit($index)">{{ student.account_name }}</td>
+                <td ng-if="role !== 'User'" ng-click="edit($index)">{{ student.supported_id }}</td>
               </tr>
             </tbody>
           </table>

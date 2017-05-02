@@ -39,5 +39,5 @@ angular.module('RDash').constant("translate", {
     "address": "כתובת הכולל",
     "schedule": "שעות פעילות",
     "supported_id": "מספר נתמך",
-    "colel_id": "שם הכולל"
+    "name": "שם הכולל"
 });

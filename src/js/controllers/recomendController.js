@@ -39,8 +39,8 @@ angular.module('RDash')
             $scope.display = false;
         }
 
-        $scope.whatChange = function(key, recomendKey){
-            return (JSON.stringify($scope.recomends[recomendKey].data.newObj) != JSON.stringify(newVal[key]))
+        $scope.whatChange = function(oldVal, newVal){
+             return (oldVal !== newVal)
         }
         
         $scope.action = function (index, action) {
