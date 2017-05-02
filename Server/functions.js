@@ -162,13 +162,13 @@ function getRecomends(req, res) {
                 when 'tb_colel' then "כולל" 
                 else "אברך" 
                 end as "req_type", 
-            DATE_SUB(t1.requested_date, INTERVAL 3 HOUR) as requested_date,
+            t1.requested_date,
             case t1.status
                 when 1 then "אושר"
                 when 0 then "נדחה" 
                 else "ממתין..."
                 end as "status",
-             DATE_SUB(t1.approved_date, INTERVAL 3 HOUR) as approved_date,
+             t1.approved_date,
             t1.data
      from tb_recomend t1 
           left outer join tb_colel t3 on (t1.colel_update = t3.id)
