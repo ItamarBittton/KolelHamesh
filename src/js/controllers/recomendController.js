@@ -39,6 +39,10 @@ angular.module('RDash')
             $scope.display = false;
         }
 
+        $scope.whatChange = function(key, recomendKey){
+            return (JSON.stringify($scope.recomends[recomendKey].data.newObj) != JSON.stringify(newVal[key]))
+        }
+        
         $scope.action = function (index, action) {
             Data.post(action, { recomend_id: $scope.recomend_id, data: $scope.recomends[index] }).then(function (data) {
                 if (data.status) $scope.recomends[index].status = data.status;
