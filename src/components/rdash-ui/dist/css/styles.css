@@ -179,3 +179,7 @@ details[open] summary {
 .md-label{
     margin-right: 33.3333% !important;
 }
+
+/*select.form-control{
+    white-space: nowrap;
+}*/

@@ -19,6 +19,7 @@
   <!-- endbuild -->
   <!-- SCRIPTS -->
   <!-- build:js lib/js/main.min.js -->
+  <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="components/angular/angular.min.js"></script>
   <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
@@ -29,7 +30,7 @@
   <script type="text/javascript" src="components/angular-aria/angular-aria.js"></script>
   <script type="text/javascript" src="components/angular-animate/angular-animate.js"></script>
   <script type="text/javascript" src="components/angular-material/angular-material.js"></script>
-  
+
   <!-- endbuild -->
   <!-- Custom Scripts -->
   <script type="text/javascript" src="javascript/dashboard.min.js"></script>
@@ -74,10 +75,7 @@
         </li>
         <li class="sidebar-title"></li>
         <li class="sidebar-title"><span>צפה כ:</span>
-          <select 
-            ng-model="currColel"
-            ng-options="colel.id as colel.name for colel in colelList" 
-            class="pull-left form-control colelSelect" 
+          <select ng-model="currColel" ng-options="colel.id as colel.name for colel in colelList" class="pull-left form-control colelSelect"
             ng-change="changedColel(e)">
           </select>
         </li>
