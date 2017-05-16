@@ -1,4 +1,4 @@
-angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notification', 'ui.mask', 'ngMaterial', 'ngSanitize', 'ngCsv'])
+angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notification', 'ui.mask', 'ngMaterial'])
     .config(function (NotificationProvider){//, $qProvider) {
         //$qProvider.errorOnUnhandledRejections(false);
         NotificationProvider.setOptions({

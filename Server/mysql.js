@@ -1,10 +1,11 @@
 var mysql = require('mysql'),
     pool = mysql.createPool({
-        host: process.env.host,
-        user: process.env.user,
-        password: process.env.password,
-        database: process.env.database
-    });
+         host: process.env.host,
+         user: process.env.user,
+         password: process.env.password,
+         database: process.env.database
+     }
+    );
 
 var tableStruct = {
     tb_student: [
