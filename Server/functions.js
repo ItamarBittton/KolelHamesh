@@ -284,7 +284,11 @@ function approveRecomend(req, res) {
                                     }
                                 });
                             } else {
-                                sql.q(`delete from ${recomend.table_name} where id = ${recomend.data.newObj.id}`, function (data) {
+                                sql.q(`delete 
+                                       from ${recomend.table_name} 
+                                       where id = ${recomend.data.newObj.id} and
+                                             colel_id = ${recomend.data.newObj.colel_id}`,
+                                 function (data) {
                                     if (data.error) {
                                         res.send({
                                             error: 'אירעה שגיאה בעת מחיקת הנתונים'
