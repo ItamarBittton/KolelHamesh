@@ -268,9 +268,9 @@ function approveRecomend(req, res) {
                         } else {
                             recomend.data = JSON.parse(recomend.data);
                             if (recomend.type !== 'מחיקה') {
-
-                                recomend.data.newObj.colel_id = recomend.colel_update;
-
+                                if (recomend.table_name === 'student') {
+                                    recomend.data.newObj.colel_id = recomend.colel_update;
+                                }
                                 sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], recomend.type === 'הוספה' ? false : true), function (data) {
                                     if (data.error) {
                                         res.send({
@@ -288,18 +288,18 @@ function approveRecomend(req, res) {
                                        from ${recomend.table_name} 
                                        where id = ${recomend.data.newObj.id} and
                                              colel_id = ${recomend.data.newObj.colel_id}`,
-                                 function (data) {
-                                    if (data.error) {
-                                        res.send({
-                                            error: 'אירעה שגיאה בעת מחיקת הנתונים'
-                                        });
-                                    } else {
-                                        res.send({
-                                            status: 'אושר',
-                                            success: 'הנתונים נמחקו בהצלחה!'
-                                        })
-                                    }
-                                })
+                                    function (data) {
+                                        if (data.error) {
+                                            res.send({
+                                                error: 'אירעה שגיאה בעת מחיקת הנתונים'
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'אושר',
+                                                success: 'הנתונים נמחקו בהצלחה!'
+                                            })
+                                        }
+                                    })
                             }
                         }
                     })
@@ -310,25 +310,6 @@ function approveRecomend(req, res) {
             }
         }
     });
-
-    // var d = req.body.data;
-    // var newRecomend = helper.merge(db.getByID('recomends', d.id), d)
-    // newRecomend.status = 'אושר';
-    // newRecomend.Approved = new Date();
-
-    // var method = d.Type === 'עדכון' ? 'UPD' : 'ADD'
-    // // Post data to relevant table.
-    // if (db[method](d.TableName, d.Data, d.Data.id)) {
-    //     db.UPD('recomends', newRecomend, d.id);
-    //     res.send({
-    //         success: 'הבקשה אושרה בהצלחה',
-    //         recomends: db.GET('recomends', req.cookies.UserID)
-    //     });
-    // } else {
-    //     res.send({
-    //         error: 'האברך כבר קיים במערכת'
-    //     });
-    // };
 };
 
 function denyRecomend(req, res) {
