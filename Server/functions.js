@@ -268,7 +268,7 @@ function approveRecomend(req, res) {
                         } else {
                             recomend.data = JSON.parse(recomend.data);
                             if (recomend.type !== 'מחיקה') {
-                                if (recomend.table_name === 'student') {
+                                if (recomend.table_name === 'tb_student') {
                                     recomend.data.newObj.colel_id = recomend.colel_update;
                                 }
                                 sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], recomend.type === 'הוספה' ? false : true), function (data) {
