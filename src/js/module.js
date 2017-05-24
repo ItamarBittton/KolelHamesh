@@ -1,6 +1,6 @@
 angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'ui-notification', 'ui.mask', 'ngMaterial'])
-    .config(function (NotificationProvider){//, $qProvider) {
-        //$qProvider.errorOnUnhandledRejections(false);
+    .config(function (NotificationProvider, $qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
         NotificationProvider.setOptions({
             startTop: 20,
             startRight: 10,

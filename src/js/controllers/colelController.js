@@ -11,7 +11,14 @@ angular.module('RDash')
         $scope.add = function () {
             $scope.display = true;
             $scope.colel = {
-                schedule: JSON.parse(JSON.stringify($scope.colels[0].schedule)),
+                schedule: [
+                    { "start": "00:00", "end": "00:00" },
+                    { "start": "00:00", "end": "00:00" },
+                    { "start": "00:00", "end": "00:00" },
+                    { "start": "00:00", "end": "00:00" },
+                    { "start": "00:00", "end": "00:00" },
+                    { "start": "00:00", "end": "00:00" }
+                ],
             };
             $scope.colel.schedule.map(function(val){
                 val.start = '00:00';
