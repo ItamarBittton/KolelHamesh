@@ -3,8 +3,8 @@
         <rd-widget ng-if="display">
             <form name="colelForm" novalidate>
                 <rd-widget-header icon="icon-note" title="פרטי הכולל">
-                    <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info pull-left">שמור</button>
-                    <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
+                    <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info">שמור</button>
+                    <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xlarge no-padding">
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
@@ -97,15 +97,13 @@
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
-                        <details>
-                            <summary>
-                                <label class="col-md-4 control-label">שעות פעילות</label>
-                            </summary>
-                            <span class="clearfix"></span>
+                                <label class="col-md-4 control-label">שעות פעילות:</label>
+                                <span class="clearfix"></span>
                             <p ng-repeat="(key, value) in colel.schedule track by $index" class="container-fluid">
                                 <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                <input type="text" ng-model="colel.schedule[key].start" class="col-lg-4 form-control">
-                                <input type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
+                                <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].start">
+                                <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
+                                
                             </p>
                         </details>
                     </div>
@@ -137,14 +135,13 @@
                                 <td ng-click="edit($index)">{{ colel.address }}</td>
                                 <td>
                                     <details>
-                                        <summary>לחץ כדי להציג</summary>
+                                        <summary>לחץ כדי להציג/להסתיר</summary>
                                         <span class="clearfix"></span>
                                         <p ng-repeat="(key, value) in colel.schedule track by $index">
                                             <label class="control-label">
                                                 {{ $root.t[key] || key }}:
                                             </label>
-                                            <span class="pull-left">{{ colel.schedule[key].end }} - {{ colel.schedule[key].start }}
-                                            </span>
+                                            <span style="float: left; line-height: 37px;"> {{ colel.schedule[key].end }} - {{ colel.schedule[key].start }}</span>
                                         </p>
                                     </details>
                                 </td>
