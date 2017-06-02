@@ -60,14 +60,14 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <td width="10%">שם הכולל</td>
-                            <td width="10%">פעולה</td>
-                            <td width="10%">סוג הבקשה</td>
-                            <td width="15%">תאריך בקשה</td>
+                            <td width="9%">שם הכולל</td>
+                            <td width="9%">פעולה</td>
+                            <td width="9%">סוג הבקשה</td>
+                            <td width="13%">תאריך בקשה</td>
                             <td width="10%">סטטוס</td>
-                            <td width="15%">תאריך אישור</td>
-                            <td width="25%">פרטי הבקשה</td>
-                            <td width="5%" ng-if="role === 'Admin'">פעולות</td>
+                            <td width="13%">תאריך אישור</td>
+                            <td width="30%">פרטי הבקשה</td>
+                            <td width="7%" ng-if="role === 'Admin'">פעולות</td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="recomend in recomends track by $index" ng-class="{'archive': recomend.status !== 'ממתין...'}">
@@ -79,18 +79,22 @@
                                 <td>{{ recomend.approved_date | date:"MM/dd/yyyy',' h:mma" }}</td>
                                 <td>
                                     <details>
-                                        <summary>{{ recomend.data.first_name + ' ' + recomend.data.last_name }} {{ recomend.data.manager_name }}
+                                        <summary>{{ recomend.data.newObj.first_name + ' ' + recomend.data.newObj.last_name }} {{ recomend.data.newObj.manager_name }}
                                         </summary>
                                         <p ng-repeat="(key, value) in recomend.data.newObj | inputfilter track by $index">
                                             <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                            <input type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}" class="col-lg-7 form-control">
+                                            <input class="col-lg-7 form-control" type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}">
                                         </p>
                                     </details>
                                 </td>
                                 <td ng-if="role === 'Admin'">
                                     <div ng-if="recomend.status === 'ממתין...'">
-                                        <span class="action action-ok" ng-click="action($index, 'approve')"></span>
-                                        <span class="action action-error" ng-click="action($index, 'deny')"></span>
+                                        <span class="btn btn-xs btn-danger" ng-click="action($index, 'deny')">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                        <span class="btn btn-xs btn-success" ng-click="action($index, 'approve')">
+                                            <i class="fa fa-check-square"></i>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>

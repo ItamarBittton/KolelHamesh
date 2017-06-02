@@ -1,5 +1,17 @@
+::-webkit-scrollbar-thumb {
+    background: #9fa5ab !important;
+}
+
+::-webkit-scrollbar {
+    width: 1px !important;
+}
+
 .form-control {
     margin-bottom: 15px;
+}
+
+.control-label {
+    line-height: 35px;
 }
 
 .lborder {
@@ -32,7 +44,7 @@ summary:after {
     float: left;
     font-size: 1.5em;
     font-weight: 700;
-    margin: -2px 20px;
+    margin: 0;
     padding: 1px;
     text-align: center;
     width: 20px
@@ -40,25 +52,6 @@ summary:after {
 
 details[open] summary:after {
     content: "-";
-}
-
-details[open] summary {
-    margin-bottom: 10px !important
-}
-
-.action-error:after {
-    content: "x";
-    background-color: #ff0500
-}
-
-.action {
-    width: 50%;
-    float: left
-}
-
-.action-ok:after {
-    content: "v";
-    background-color: #1bff00
 }
 
 .archive {
