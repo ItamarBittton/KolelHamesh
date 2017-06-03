@@ -1,54 +1,55 @@
 <div class="row">
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <rd-widget>
-            <rd-widget-header icon="icon-note" title="הגדרות חישוב">
-                <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info pull-left">שמור</button>
+            <rd-widget-header icon="fa-calculator" title="הגדרות חישוב">
+                <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info">שמור</button>
             </rd-widget-header>
-            <rd-widget-body classes="medium">
+            <rd-widget-body classes="medium no-padding">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" style="margin-bottom:0;">
                         <thead>
                             <td>שם הגדרה</td>
-                            <td>ערך</td>
+                            <td>ערך בשקלים</td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="def in definitions">
                                 <td>
-                                    <label class="col-md-12 reportsForm-label">{{def.name}}</label>
+                                    <label class="control-label" style="margin-bottom:0;">{{def.name}}</label>
                                 </td>
                                 <td>
-                                    <input name="name" type="number" ng-model="def.value" class="form-reportsForm">
+                                    <input name="name" type="number" ng-model="def.value" class="form-control" style="margin-bottom: 0">
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
             </rd-widget-body>
+        </rd-widget>
+        <br/>
+        <rd-widget>
             <rd-widget-header icon="icon-layers" title="הגדרות מבחנים">
                 <button ng-click="save('test_types', test_types)" class="btn btn-sm btn-info pull-left">שמור</button>
             </rd-widget-header>
-            <rd-widget-body classes="medium">
+            <rd-widget-body classes="medium no-padding">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <td>שם מבחן</td>
-                            <td>ציון מינימום</td>
-                            <td>ערך</td>
+                            <td>ציון עובר</td>
+                            <td>ערך בשקלים</td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="test in test_types">
                                 <td>
-                                    <label class="col-md-12 ">{{test.name}}</label>
+                                    <label class="control-label" style="margin-bottom:0;">{{test.name}}</label>
                                 </td>
                                 <td>
-                                    <input name="name" type="number" ng-model="test.min_score">
+                                    <input name="name" type="number" ng-model="test.min_score" class="form-control" style="margin-bottom:0;">
                                 </td>
                                 <td>
-                                    <input name="name" type="number" ng-model="test.value">
+                                    <input name="name" type="number" ng-model="test.value" class="form-control" style="margin-bottom:0;">
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -57,29 +58,39 @@
     </div>
     <div class="col-lg-6">
         <rd-widget>
-            <rd-widget-header icon="icon-note" title="מערכת דוחות">
-                <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info pull-left">שמור</button>
-            </rd-widget-header>
-            <rd-widget-body classes="medium">
+            <rd-widget-header icon="icon-note" title="מערכת דוחות"></rd-widget-header>
+            <rd-widget-body classes="medium no-padding">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" style="margin-bottom:0;">
                         <thead>
                             <td>שם דוח</td>
-                            <td>תאריך</td>
+                            <td>הונפק לאחרונה</td>
+                            <td>בחר חודש</td>
+                            <td>פעולות</td>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr ng-repeat="report in reports">
                                 <td>
-                                    <select style="margin-bottom: 0px; width: 120px" ng-model="currReport"
-                                        class="form-control pull-left">
-                                        <option ng-repeat="rep in reports" value="{{ rep.id }}">{{rep.name}}</option>
+                                    <label class="control-label" style="margin-bottom:0;">{{report.name}}</label>
+                                </td>
+                                <td>
+                                    <p class="form-control-static">{{report.last_created || 'אין דוח במערכת'}}</p>
+                                </td>
+                                <td>
+                                    <select ng-model="currentMonth" class="form-control" style="margin-bottom:0;">
+                                        <option value="">החלף חודש</option>
+                                        <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input name="name" type="number" ng-model="def.value" class="form-reportsForm">
+                                    <span class="btn btn-info" ng-click="" ng-disabled="!report.last_created">
+                                        <i class="fa fa-eye"></i>
+                                    </span>
+                                    <span class="btn btn-success" ng-click="newReport($index)">
+                                        <i class="fa fa-file-excel-o"></i>
+                                    </span>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

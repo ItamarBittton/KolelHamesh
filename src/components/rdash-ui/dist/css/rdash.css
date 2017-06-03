@@ -435,6 +435,10 @@ ul.sidebar .sidebar-list .menu-icon {
 .widget .widget-body div.alert {
   margin-bottom: 10px;
 }
+.widget .widget-body.xlarge {
+  height: 60px;
+  overflow-y: auto;
+}
 .widget .widget-body.large {
   height: 350px;
   overflow-y: auto;

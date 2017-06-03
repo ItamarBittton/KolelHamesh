@@ -7,9 +7,18 @@ angular.module('RDash').controller("reportsController", function ($scope, Data){
         $scope.reports = data.reports;
     });
 
-    $scope.save = function(table_name, object){
-        Data.put('definitions', {table_name, object}).then(function(data){
+    $scope.save = function (table_name, object) {
+        Data.put('definitions', { table_name, object });
+    };
 
-        })
+    $scope.newReport = function (index) {
+        var data = {
+            date: $scope.currentMonth,
+            type: $scope.reports[index]
+        }
+
+        Data.put('newReport', data).then(function (res) {
+            debugger;
+         });
     }
 })
