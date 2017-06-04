@@ -363,9 +363,8 @@ function getDailyReport(req, res) {
 
     if ((req.currentUser.permission === 'Admin') ||
         (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() + 1) ||
-        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate()) ||
-        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() && req.currentUser.is_prev_month)
+        (req.currentUser.permission === 'User' && req.params.date.split('-')[1] == new Date().getMonth() && (new Date().getDate() <= 3) || req.currentUser.is_prev_month) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate())
     ) {
 
         var dailyRep = [];
