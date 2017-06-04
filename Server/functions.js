@@ -405,7 +405,7 @@ function getDailyReport(req, res) {
 function updateDailyReport(req, res) {
     if ((req.currentUser.permission === 'Admin') ||
         (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() + 1 && req.currentUser.is_only_daily != true) ||
-        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() && new Date().getDate() <= 3) ||
+        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() && (new Date().getDate() <= 3 || req.currentUser.is_prev_month)) ||
         (req.currentUser.permission === 'User' && req.currentUser.is_only_daily == true && req.body.date.split('-')[2] == new Date().getDate())) {
         var convertObjtoArr = [];
         req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
