@@ -402,51 +402,47 @@ function getDailyReport(req, res) {
 };
 
 function updateDailyReport(req, res) {
-    if ((req.currentUser.permission === 'Admin') ||
-        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() + 1 && !req.currentUser.is_only_daily) ||
-        (req.currentUser.permission === 'User' && req.body.date.split('-')[1] == new Date().getMonth() && (new Date().getDate() <= 3 || req.currentUser.is_prev_month)) ||
-        (req.currentUser.permission === 'User' && req.body.date.split('-')[2] == new Date().getDate() && req.currentUser.is_only_daily)) {
+    var isAdmin = req.currentUser.permission === 'Admin',
+        isUser = req.currentUser.permission === 'User',
+        userMonth = req.body.date.split('-')[1],
+        userDay = req.body.date.split('-')[2],
+        sysMonth = new Date().getMonth() + 1,
+        sysLastMonth = new Date().getMonth(),
+        sysDay = new Date().getDate();
+
+    if ((isUser && (userMonth == sysMonth) ||
+                   (userDay == sysDay && req.currentUser.is_only_daily) ||
+                   (userMonth == sysLastMonth && (sysDay <= 3 || req.currentUser.is_prev_month))) ||
+        isAdmin) {
+
         var convertObjtoArr = [];
         req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
-        if (convertObjtoArr.length) {
-            sql.q(sql.ia('tb_daily', convertObjtoArr, true), function (data) {
+
+        if (!convertObjtoArr.length) {
+            res.send({ error: 'אין נתונים' });
+        } else {
+            var string = sql.ia('tb_daily', convertObjtoArr, true);
+
+            if (req.body.oneTimeStud) {
+
+                string += ';' + sql.ia('tb_onetime_student', [{
+                    date: req.body.date,
+                    amount: req.body.oneTimeStud,
+                    colel_id: req.currentUser.colel_id
+                }], true);
+            }
+
+            sql.q(string, function (data) {
                 if (data.error) {
-                    res.send({
-                        error: 'אירעה שגיאה בעת עדכון הנתונים'
-                    });
+                    res.send({ error: 'אירעה שגיאה בעת עדכון הנתונים' });
                 } else {
-                    if (req.body.oneTimeStud) {
-                        sql.q(sql.ia('tb_onetime_student',
-                            [{
-                                date: req.body.date,
-                                amount: req.body.oneTimeStud,
-                                colel_id: req.currentUser.colel_id
-                            }],
-                            true), function (data) {
-                                if (data.error) {
-                                    res.send({
-                                        error: 'אירעה שגיאה בעת עדכון הנתונים'
-                                    })
-                                } else {
-                                    res.send({
-                                        success: 'הנתונים עודכנו בהצלחה!'
-                                    })
-                                }
-                            })
-                    }
+                    res.send({ success: 'הנתונים עודכנו בהצלחה!' });
                 }
-            });
+            });            
         }
     } else {
-        res.send({
-            error: 'אין אפשרות להוסיף נתונים בתאריך הנל'
-        })
+        res.send({ error: 'אין לך הרשאה להוסיף נתונים בתאריך הנל' });
     }
-    // sql.q(`INSERT INTO tb_daily (student_id,date,presence) VALUES ${convertObjtoArr.map((val, idx) => (`(${val})`))}
-    // ON DUPLICATE KEY UPDATE date=VALUES(date), presence=VALUES(presence)`, function (data) {
-
-    // })
-
 };
 
 function isOnlyDaily(req, res) {
