@@ -2,6 +2,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     $scope.disable = true;
     $scope.dropList = [];
     $scope.isOnlyDaily = true;
+    $scope.status = [];
 
     $scope.show = function (date) {
         if (date) {
@@ -10,23 +11,23 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
             Data.get('daily/' + $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-')).then(function (data) {
                 $scope.students = data.dailyRep;
-
                 $scope.dropList = data.dropList;
-
                 $scope.tempStudents = { amount: data.tempStudents };
+                $scope.status = data.status;
             })
         }
     }
+
+    $scope.viewDate = {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1
+    };
 
     $scope.changeAll = function (value, valid) {
         $scope.students.forEach(x => x.presence = parseInt(value));
     }
 
     $scope.students = [];
-    $scope.viewDate = {
-        year: new Date().getFullYear(),
-        month: new Date().getMonth() + 1
-    }
 
     Data.get('getProhibitions').then(function (data) {
         if (data) {
@@ -40,31 +41,35 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         }
     });
 
-
-
     $scope.changeMonth = function (currentMonth) {
         $scope.viewDate = JSON.parse(currentMonth);
     }
 
     $scope.save = function (valid) {
-        var UPDaily = $scope.students.filter((val) => (val.presence !== null));
-        var UPDStud = $scope.tempStudents.amount;
-        var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
-        //document.querySelector(".selected").classList.remove("selected");
+        if (!valid) {
+            $scope.formErrors = true;
+        } else {
+            $scope.formErrors = undefined;
+            var UPDaily = $scope.students.filter((val) => (val.presence !== null));
+            var UPDStud = $scope.tempStudents.amount;
+            var UPDdate = $scope.date.toLocaleDateString('en-GB').split('/').reverse().join('-');
+            //document.querySelector(".selected").classList.remove("selected");
 
-        Data.put('daily', {
-            daily: UPDaily,
-            oneTimeStud: UPDStud,
-            date: UPDdate
-        }).then(function (date) {
+            Data.put('daily', {
+                daily: UPDaily,
+                oneTimeStud: UPDStud,
+                date: UPDdate
+            }).then(function (date) {
 
-        });
-        if ($scope.is_only_daily) {
-            $scope.close();
+            });
+            if ($scope.is_only_daily) {
+                $scope.close();
+            }
         }
     }
 
     $scope.close = function () {
+        $scope.formErrors = undefined;
         $scope.students = undefined;
         $scope.definition = undefined;
         $scope.disable = false;

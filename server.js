@@ -11,48 +11,15 @@ app.use('/javascript', express.static(__dirname + '/dist/js'));
 app.use('/image', express.static(__dirname + '/dist/img'));
 app.use('/lib', express.static(__dirname + '/dist/lib'));
 app.use('/templates', express.static(__dirname + '/dist/templates'));
+app.use('/files', express.static(__dirname + '/dist/files'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.get('/', function (req, res) {
-    console.log('enter', new Date());
+    console.log('enter.html:', new Date().toISOString().slice(0, 19).replace("T"," "));
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
-
-// app.get('/' + Admin, requireRole([Admin]), sendHomePage);
-// app.get('/' + User, requireRole([User]), sendHomePage);
-
-// app.post('/login', requireRole([Admin, User]), sendCookies);
-
-// app.get('/students', requireRole([Admin, User]), f.getStudents);
-// app.post('/students', requireRole([Admin]), f.newStudent);
-// app.put('/students', requireRole([Admin]), f.editStudent);
-// app.delete('/students', requireRole([Admin]), f.deleteStudent);
-
-// app.get('/recomends', requireRole([Admin, User]), f.getRecomends);
-// app.post('/recomends', requireRole([User]), f.newRecomend);
-// app.post('/approve', requireRole([Admin]), f.approveRecomend);
-// app.post('/deny', requireRole([Admin]), f.denyRecomend);
-
-// app.get('/daily/:date', requireRole([Admin, User]), f.getDailyReport);
-// //app.put('/daily', requireRole([Admin, User]), f.updateDailyReport);
-
-// app.get('/isOnlyDaily',  requireRole([Admin, User]), f.isOnlyDaily);
-
-// app.post('/scores', requireRole([Admin, User]), f.getScores);
-
-// function validate(credentials, key) {
-
-//     currentUser = Users.userList.filter(function (value) {
-//         return value.token === credentials.token;
-//     })[0];
-
-//     if (!currentUser) {
-//         currentUser = Users.userList.filter(function (value) {
-//             return (value.username === credentials.username && value.password === credentials.password);
-//         })[0];
-//     }
 
 app.get('/' + Admin, f.requireRole([Admin]), sendHomePage);
 app.get('/' + User, f.requireRole([User]), sendHomePage);
@@ -67,9 +34,6 @@ app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 app.get('/colelSettings', f.requireRole([Admin, User]), f.getColelSettings)
 
 app.get('/students', f.requireRole([Admin, User]), f.getStudents);
-// app.post('/students', f.requireRole([Admin]), f.newStudent);
-// app.put('/students', f.requireRole([Admin]), f.editStudent);
-// app.delete('/students', f.requireRole([Admin]), f.deleteStudent);
 
 app.get('/colels', f.requireRole([Admin]), f.getColel);
 app.put('/colels', f.requireRole([Admin]), f.newColel);
@@ -95,8 +59,10 @@ app.put('/updColel', f.requireRole([Admin]), f.updColelId);
 app.get('/prevDates', f.requireRole([Admin, User]), f.getPreviousDate);
 
 app.get('/definitions', f.requireRole([Admin]), f.getDefinitions);
-app.put('/definitions', f.requireRole([Admin]), f.updDefinitions)
+app.put('/definitions', f.requireRole([Admin]), f.updDefinitions);
 
+app.get('/reports', f.requireRole([Admin]), f.getReports);
+app.put('/newReport', f.requireRole([Admin]), f.newReport);
 
 var port = process.env.PORT || 8080;
 

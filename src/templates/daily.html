@@ -13,10 +13,10 @@
                             <input type="text" ng-value="date.toLocaleDateString()" class="form-control" readonly>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input">
+                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || dailyForm.$dirty) && dailyForm.$invalid }">
                         <label class="col-md-4 control-label">לומדים נוספים:</label>
                         <div class="col-md-8">
-                            <input type="number" ng-model="tempStudents.amount" ng-value="tempStudents.amount" class="form-control">
+                            <input type="number" ng-model="tempStudents.amount" ng-value="tempStudents.amount" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-if="isOneTimeAllow">
@@ -43,7 +43,7 @@
                 </select>
             </rd-widget-header>
             <rd-widget-body classes="xlarge no-padding">
-                <my-calendar view-date="viewDate" show="show(date)"></my-calendar>
+                <my-calendar view-date="viewDate" status="status" show="show(date)"></my-calendar>
             </rd-widget-body>
         </rd-widget>
     </div>

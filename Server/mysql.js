@@ -3,7 +3,8 @@ var mysql = require('mysql'),
          host: process.env.host,
          user: process.env.user,
          password: process.env.password,
-         database: process.env.database
+         database: process.env.database,
+         multipleStatements: true
      }
     );
 
@@ -50,6 +51,19 @@ function validate(string) {
     // var r = `/('(''|[^'])*')|(;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/g)`;
     // return string ? string.toString().replace(r, "") : '';
     return pool.escape(string) || '';
+}
+
+function multiQuery(object, callback) {
+    pool.getConnection(function (err, connection) {
+        if (err) console.error(err);
+
+        connection.query(Object.values(object).join(';'), function (error, results = [], fields = []) {
+            connection.release();
+            if (error) throw error;
+
+            callback({ error, results, fields });
+        });
+    });
 }
 
 function query(string, callback) {
@@ -110,6 +124,7 @@ function insertArray(table, array, duplicate) {
 
 module.exports = {
     v: validate,
+    mq: multiQuery,
     q: query,
     i: insert,
     ia: insertArray

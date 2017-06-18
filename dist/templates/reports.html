@@ -58,37 +58,69 @@
     </div>
     <div class="col-lg-6">
         <rd-widget>
-            <rd-widget-header icon="icon-note" title="מערכת דוחות"></rd-widget-header>
-            <rd-widget-body classes="medium no-padding">
+            <rd-widget-header icon="icon-note" title="הנפק דוח"></rd-widget-header>
+            <rd-widget-body classes="full no-padding">
+                <div class="row reportHeader">
+                    <div class="col-md-2">
+                        <label class="control-label">דוח כולל</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select ng-model="currColel" class="form-control" ng-change="changeColel(currColel)" ng-options="colel as colel.name for colel in colelList" style="margin-bottom:0">
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control" style="margin-bottom:0">
+                            <option value="">בחר חודש</option>
+                            <option ng-repeat="date in dates" value="{{ date }}">{{ date }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-success" ng-click="newReport(report)">
+                            <i class="fa fa-file-excel-o"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row reportHeader">
+                    <div class="col-md-2">
+                        <label class="control-label">עוד דוחות</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select ng-model="currentType" ng-change="changeType(currentType)" class="form-control" style="margin-bottom:0">
+                            <option value="">בחר דוח</option>
+                            <option ng-repeat="type in reportTypes | filter: {id : '!1'}" value="{{ type.id }}">{{type.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control" style="margin-bottom:0">
+                            <option value="">בחר חודש</option>
+                            <option ng-repeat="date in dates" value="{{ date }}">{{ date }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-success" ng-click="newReport(report)">
+                            <i class="fa fa-file-excel-o"></i>
+                        </a>
+                    </div>
+                </div>
                 <div class="table-responsive">
-                    <table class="table" style="margin-bottom:0">
+                    <table class="table table-hover table-condensed" style="margin-bottom:0">
                         <thead>
-                            <td>שם דוח</td>
-                            <td>הונפק לאחרונה</td>
-                            <td>בחר חודש</td>
-                            <td>פעולות</td>
+                            <td colspan="3" class="widget-header">
+                                <span class="pull-right">
+                                    <i class="fa fa-history"></i> היסטוריית דוחות
+                                </span>
+                                <span class="pull-left">
+                                    <button ng-click="refresh()" ng-disabled="refreshing" class="btn btn-xs btn-info">
+                                        <span class="fa fa-refresh"></span>
+                                    </button>
+                                </span>
+                            </td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="report in reports">
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">{{report.name}}</label>
-                                </td>
-                                <td>
-                                    <p class="form-control-static">{{report.last_created || 'אין דוח במערכת'}}</p>
-                                </td>
-                                <td>
-                                    <select ng-model="currentMonth" class="form-control" style="margin-bottom:0">
-                                        <option value="">החלף חודש</option>
-                                        <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <span class="btn btn-info" ng-click="" ng-disabled="!report.last_created">
-                                        <i class="fa fa-eye"></i>
-                                    </span>
-                                    <span class="btn btn-success" ng-click="newReport($index)">
-                                        <i class="fa fa-file-excel-o"></i>
-                                    </span>
+                                <td>{{ report.report }} {{ report.colel ? 'עבור כולל ' + report.colel
+                                    : '' }} נוצר לחודש {{ report.date_created }}.
+                                    <a class="btn btn-link" ng-href="{{ report.url }}" ng-if="report.url">להורדה</a>
                                 </td>
                             </tr>
                         </tbody>
