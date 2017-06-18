@@ -511,13 +511,8 @@ module.exports = {
     getPreviousDate: getPreviousDate,
 
     getDefinitions: getDefinitions,
-<<<<<<< HEAD
     updDefinitions: updDefinitions,
 
     getReports: getReports,
     newReport: newReport
 }
-=======
-    updDefinitions: updDefinitions
-}
->>>>>>> 9a6287237de9868877d96d109a30f70dc7b450a9
