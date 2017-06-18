@@ -56,8 +56,8 @@ function validate(string) {
 function multiQuery(object, callback) {
     pool.getConnection(function (err, connection) {
         if (err) console.error(err);
-
-        connection.query(Object.values(object).join(';'), function (error, results = [], fields = []) {
+        
+        connection.query(Object.keys(obj).map((k) => obj[k]).join(';'), function (error, results = [], fields = []) {
             connection.release();
             if (error) throw error;
 
