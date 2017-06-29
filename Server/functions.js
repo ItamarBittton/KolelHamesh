@@ -257,8 +257,7 @@ function getScores(req, res) {
     sql.mq([queries.getScores(req), queries.getTestTypes()], function (data) {
         res.send({
             scores: data.results[0] || [],
-            test_type: data.results[1] || [],
-            options: [{ value: 0, name: 'לא עבר' }, { value: 100, name: 'עבר' }]
+            test_type: data.results[1] || []
         });
     });
 };
@@ -271,22 +270,13 @@ function putScores(req, res) {
     var month = req.body.date.split('-')[1];
 
     function sliceArr(val) {
-        if (val.oral !== null) {
+        if (val.oral !== null || val.write !== null) {
             arr.push({
                 student_id: val.id,
                 year: year,
                 month: month,
-                score: val.oral,
-                test_type: 1
-            });
-        }
-        if (val.write !== null) {
-            arr.push({
-                student_id: val.id,
-                year: year,
-                month: month,
-                score: val.write,
-                test_type: 2
+                oral_score: val.oral,
+                write_score: val.write
             });
         }
         if (val.comment) {

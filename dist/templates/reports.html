@@ -12,14 +12,56 @@
                             <td>ערך בשקלים</td>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="def in definitions">
+                            <tr ng-repeat="def in definitions track by f(def)">
+                                </tr><tr>
                                 <td>
-                                    <label class="control-label" style="margin-bottom:0">{{def.name}}</label>
+                                    <label class="control-label" style="margin-bottom:0">סוג הקבוצה</label>
                                 </td>
                                 <td>
-                                    <input name="name" type="number" ng-model="def.value" class="form-control" style="margin-bottom: 0">
+                                    <input type="text" ng-model="def.group_type" class="form-control" style="margin-bottom: 0">
                                 </td>
-                            </tr>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">שווי איחור לכל X דקות</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="def.late" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">X דקות</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="def.per_late" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">נוכחות מינימלית</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="def.min_presence" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">שווי חיסור יומי</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="def.missed" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">גובה מלגה חודשית</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="def.monthly_payment" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -112,14 +154,14 @@
                                 <span class="pull-left">
                                     <button ng-click="refresh()" ng-disabled="refreshing" class="btn btn-xs btn-info">
                                         <span class="fa fa-refresh"></span>
-                                    </button>
+                                </button>
                                 </span>
                             </td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="report in reports">
-                                <td>{{ report.report }} {{ report.colel ? 'עבור כולל ' + report.colel
-                                    : '' }} נוצר לחודש {{ report.date_created }}.
+                                <td>{{ report.report }} {{ report.colel ? 'עבור כולל ' + report.colel : '' }} נוצר לחודש {{ report.date_created
+                                    }}.
                                     <a class="btn btn-link" ng-href="{{ report.url }}" ng-if="report.url">להורדה</a>
                                 </td>
                             </tr>

@@ -11,7 +11,6 @@ angular.module('RDash')
             Data.get('scores/' + $scope.date).then(function (data) {
                 $scope.students = data.scores;
                 $scope.title = data.test_type;
-                $scope.options = data.options;
             });
         }
         
