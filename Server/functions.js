@@ -338,9 +338,23 @@ function getColel(req, res) {
 
 function editColel(req, res) {
     var reqColel = req.body.colel;
-    reqColel.group_type = 1;
+    
+    var Colel = {
+        id: reqColel.id,
+        name: reqColel.name,
+        address: reqColel.address,
+        mail_address: reqColel.mail_address,
+        phone: reqColel.phone,
+        manager_name: reqColel.manager_name,
+        is_only_daily: reqColel.is_only_daily || false,
+        is_prev_month: reqColel.is_prev_month || false,
+        is_one_time_allow: reqColel.is_one_time_allow || false,
+        schedule: reqColel.schedule,
+        note: reqColel.note || false,
+        group_type: 1
+    };
 
-    sql.mq([sql.ia('tb_colel', [reqColel], true), queries.updateColel(reqColel)], function (data) {
+    sql.mq([sql.ia('tb_colel', [Colel], true), queries.updateColel(Colel)], function (data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים' });
         } else {
@@ -356,24 +370,37 @@ function editColel(req, res) {
 
 function newColel(req, res) {
     var reqColel = req.body.colel;
-    reqColel.group_type = 1;
 
-    var newUser = [{
-        user_name: tempObject.name,
-        token: getToken(),
-        password: tempObject.password,
-        permission: 'User',
-        colel_id: data.results.insertId
-    }];
+    var newColel = {
+        name: reqColel.name,
+        address: reqColel.address,
+        mail_address: reqColel.mail_address,
+        phone: reqColel.phone,
+        manager_name: reqColel.manager_name,
+        is_only_daily: reqColel.is_only_daily || false,
+        is_prev_month: reqColel.is_prev_month || false,
+        is_one_time_allow: reqColel.is_one_time_allow || false,
+        schedule: reqColel.schedule,
+        note: reqColel.note || false,
+        group_type: 1
+    };
 
-    sql.mq([sql.ia('tb_colel', [reqColel], false), sql.ia('tb_user', newUser, false)], function (data) {
+    sql.q(sql.ia('tb_colel', [newColel], false), function (data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים' });
         } else {
-            sql.q(queries.getColel(), function (data) {
+            var newUser = [{
+                user_name: reqColel.name,
+                token: getToken(),
+                password: reqColel.password,
+                permission: 'User',
+                colel_id: data.results.insertId
+            }];
+
+            sql.mq([queries.getColel(), sql.ia('tb_user', newUser, false)], function (data) {
                 res.send({
                     success: 'השינויים בוצעו בהצלחה!',
-                    colels: data.results
+                    colels: data.results[0]
                 });
             });
         }
