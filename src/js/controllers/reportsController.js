@@ -12,7 +12,7 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
 
     Data.get('definitions').then(function (data) {
         $scope.definitions = data.definitions;
-        $scope.test_types = data.testTypes;
+        $scope.test_types = data.test_types;
         $scope.titles = data.titles;
         $scope.reports = data.reports;
         $scope.reportTypes = data.reportTypes;
@@ -22,6 +22,11 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
             type: 1
         };
     });
+
+    $scope.f = function(def){
+        debugger;
+        console.log(def)
+    }
 
     $scope.refresh = function () {
         $scope.refreshing = true;

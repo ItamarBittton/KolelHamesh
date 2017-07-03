@@ -103,18 +103,16 @@ function getScores(req) {
     var year = parseInt(sql.v(parseInt(req.params.date.split('-')[0])));
     var month = parseInt(sql.v(parseInt(req.params.date.split('-')[1])));
 
-    return `SELECT t1.id, t1.first_name, t1.last_name, t2.score AS 'oral', t3.score AS 'write', t4.comment AS 'comment', t5.exception AS 'exception'
+    return `SELECT t1.id, t1.last_name, t1.first_name, t2.oral_score AS 'oral', t2.write_score AS 'write', t4.comment AS 'comment'
             FROM tb_student t1
-            LEFT OUTER JOIN tb_score t2 ON (t1.id = t2.student_id AND t2.year = ${year} AND t2.month = ${month} AND t2.test_type = 1)
-            LEFT OUTER JOIN tb_score t3 ON (t1.id = t3.student_id AND t3.year = ${year} AND t3.month = ${month} AND t3.test_type = 2)
+            LEFT OUTER JOIN tb_score t2 ON (t1.id = t2.student_id AND t2.year = ${year} AND t2.month = ${month})
             LEFT OUTER JOIN tb_comment t4 ON (t1.id = t4.student_id AND t4.year = ${year} AND t4.month = ${month})
-            LEFT OUTER JOIN tb_exception t5 ON (t1.id = t5.student_id AND t5.year = ${year} AND t5.month = ${month})
             WHERE t1.colel_id = ${req.currentUser.colel_id}
             ORDER BY t1.last_name, t1.first_name`;
 };
 
 function getTestTypes() {
-    return `SELECT t1.id, t1.name 
+    return `SELECT t1.id, t1.name, t1.min_score 
             FROM tbk_test_types t1`;
 };
 
@@ -180,7 +178,7 @@ function prevMonth(req) {
 };
 
 function getDefinitions() {
-    return `SELECT t1.key, t1.name, t1.value, t1.group_type
+    return `SELECT t1.group_type, t1.late, t1.per_late, t1.min_presence, t1.missed, t1.monthly_payment
             FROM tbk_settings t1`;
 };
 
