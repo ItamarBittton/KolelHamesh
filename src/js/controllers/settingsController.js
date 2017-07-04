@@ -34,9 +34,8 @@ angular.module('RDash')
 
         Data.get('colelSettings').then(function (data) {
             $scope.data = data.data;
-            copy = JSON.parse(JSON.stringify(data.data));
             $scope.data.schedule = JSON.parse($scope.data.schedule);
-            copy.schedule = JSON.parse(copy.schedule)
+            copy = angular.copy($scope.data);
         })
 
         $scope.submitData = function (changed) {
@@ -51,9 +50,9 @@ angular.module('RDash')
                 //     };
                 // });
 
-                if (JSON.stringify($scope.data) !== JSON.stringify(copy)) {
+                if (!angular.equals($scope.data, copy)) {
                     Data.post('recomends', {
-                        data: {newObj : $scope.data, oldObj: copy},
+                        data: { newObj: $scope.data, oldObj: copy },
                         table: 'colel',
                         type: 'עריכה'
                     }, function (data) {
