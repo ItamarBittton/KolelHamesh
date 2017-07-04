@@ -3,6 +3,7 @@ angular.module('RDash')
         $scope.reload = function (reload) {
             Data.get('recomends').then(function (data) {
                 $scope.recomends = data.recomends;
+                $scope.stats = data.stats;
                 if (reload) Notification.success("נתונים נטענו בהצלחה!")
             });
         };
@@ -50,18 +51,20 @@ angular.module('RDash')
             var recomend = angular.copy($scope.recomends[index]),
                 newObj = recomend.data.newObj;
             
-            newObj.schedule = [];
+            if (recomend.req_type === "כולל") {
+                newObj.schedule = [];
             
-            for (var i = 0; i < 7; i++) {
-                if (newObj[i]) {
-                    var time = newObj[i].split(' - ');
-                    newObj.schedule.push({
-                        start: time[0],
-                        end: time[1]
-                    });
-                    delete newObj[i];
-                }
-            };
+                for (var i = 0; i < 7; i++) {
+                    if (newObj[i]) {
+                        var time = newObj[i].split(' - ');
+                        newObj.schedule.push({
+                            start: time[0],
+                            end: time[1]
+                        });
+                        delete newObj[i];
+                    }
+                };
+            };    
 
             Data.post(action, { recomend_id: $scope.recomend_id, data: recomend }).then(function (data) {
                 if (data.status) $scope.recomends[index].status = data.status;

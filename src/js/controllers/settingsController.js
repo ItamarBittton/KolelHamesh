@@ -59,7 +59,7 @@ angular.module('RDash')
 
                     })
                 };
-                $state.go('students');
+                $state.go('recomends');
 
             } else {
                 Notification.error('חובה לאשר את הנתונים');

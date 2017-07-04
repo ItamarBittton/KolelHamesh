@@ -1,57 +1,51 @@
 <div class="row">
-    <div class="col-lg-4">
-        <rd-widget ng-if="display">
-            <form name="recomendForm" novalidate>
-                <rd-widget-header icon="icon-note" title="פרטי הבקשה">
-                    <button ng-click="save(recomendForm.$valid)" ng-class="{'disabled': recomendForm.$invalid}"
-                        class="btn btn-sm btn-info pull-left">שמור</button>
-                    <button ng-click="close()" class="btn btn-sm btn-warning pull-right">בטל</button>
-                </rd-widget-header>
-                <rd-widget-body classes="xlarge no-padding">
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.name.$dirty) && recomendForm.name.$invalid }">
-                        <label class="col-md-4 control-label">כולל מבקש</label>
-                        <div class="col-md-8">
-                            <input name="UserID" type="text" ng-model="recomends.name" class="form-control" ng-minlength="3"
-                                required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.type.$dirty) && recomendForm.type.$invalid }">
-                        <label class="col-md-4 control-label">סוג בקשה</label>
-                        <div class="col-md-8">
-                            <input name="Type" type="text" ng-model="recomends.type" class="form-control" ng-minlength="3"
-                                required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.requested_date.$dirty) && recomendForm.requested_date.$invalid }">
-                        <label class="col-md-4 control-label">תאריך בקשה</label>
-                        <div class="col-md-8">
-                            <input name="RequestedDate" type="text" ng-model="recomends.requested_date" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.approved_date.$dirty) && recomendForm.approved_date.$invalid }">
-                        <label class="col-md-4 control-label">סטטוס</label>
-                        <div class="col-md-8">
-                            <input name="ApprovedDate" type="text" ng-model="recomends.approved_date" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.req_type.$dirty) && recomendForm.req_type.$invalid }">
-                        <label class="col-md-4 control-label">סוג הבקשה</label>
-                        <div class="col-md-8">
-                            <input name="TableName" type="text" ng-model="recomends.req_type" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || recomendForm.data.$dirty) && recomendForm.data.$invalid }">
-                        <label class="col-md-4 control-label">תוכן הבקשה</label>
-                        <div class="col-md-8">
-                            <input name="data" type="text" ng-model="recomends.data" class="form-control" required>
-                        </div>
-                    </div>
-                </rd-widget-body>
-            </form>
+    <div class="col-lg-3 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon green pull-left">
+                    <i class="icon-clock"></i>
+                </div>
+                <div class="title">{{ (stats.hoursMonth || 0) | timeFilter }}/{{ (stats.hoursTotal || 0) | timeFilter }}</div>
+                <div class="comment">שעות לימוד</div>
+            </rd-widget-body>
         </rd-widget>
     </div>
-
-    <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
+    <div class="col-lg-3 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon orange pull-left">
+                    <i class="icon-layers"></i>
+                </div>
+                <div class="title">{{ (stats.testsMonth || 0) | number:0 }}/{{ (stats.testsTotal || 0) | number:0 }}</div>
+                <div class="comment">מאמרים בעל פה</div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+    <div class="col-lg-3 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon red pull-left">
+                    <i class="icon-people"></i>
+                </div>
+                <div class="title">{{ (stats.students || 0) | number:0 }}</div>
+                <div class="comment">אברכים קבועים</div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+    <div class="col-lg-3 col-md-6 col-xs-12">
+        <rd-widget>
+            <rd-widget-body>
+                <div class="widget-icon blue pull-left">
+                    <i class="icon-user-follow"></i>
+                </div>
+                <div class="title">{{ (stats.extraStudents || 0) | number:0 }}</div>
+                <div class="comment">אברכים נוספים</div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
+<div class="row" style="margin-top:15px;">
+    <div class="col-lg-12">
         <rd-widget>
             <rd-widget-header icon="icon-notebook" title="רשימת המלצות">
                 <button ng-click="reload(true)" class="btn btn-sm btn-success"><span class="fa fa-refresh"></span></button>
@@ -104,3 +98,4 @@
             </rd-widget-body>
         </rd-widget>
     </div>
+</div>

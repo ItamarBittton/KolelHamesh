@@ -67,17 +67,18 @@ function getColelSettings(req, res) {
 }
 
 function getRecomends(req, res) {
-    sql.q(queries.getRecommends(req), function (data) {
+    sql.mq([queries.getRecommends(req), queries.getStats(req)], function (data) {
         if (data.error) {
             res.send({
                 error: 'לא ניתן להציג נתונים'
             });
         } else {
             for (var i = 0; i < data.results.length; i++) {
-                data.results[i].data = JSON.parse(data.results[i].data);
+                data.results[0][i].data = JSON.parse(data.results[0][i].data);
             }
             res.send({
-                recomends: data.results
+                recomends: data.results[0],
+                stats: data.results[1][0]
             });
         }
     });

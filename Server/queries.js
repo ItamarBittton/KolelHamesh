@@ -206,6 +206,36 @@ function getReport(req) {
             WHERE report_id = ${sql.v(req.body.type || 0)}`
 };
 
+function getStats(req) {
+    var colelId = (req.currentUser.permission !== 'Admin') ? `colel_id = ${req.currentUser.colel_id}` : "true";
+    var t2colelID = (req.currentUser.permission !== 'Admin') ? `t2.colel_id = ${req.currentUser.colel_id}` : "true";
+    return `SELECT (SELECT SUM(amount) FROM tb_onetime_student WHERE ${colelId}) AS 'extraStudents',
+                   (SELECT COUNT(*) FROM tb_student WHERE ${colelId}) AS 'students',
+                   (SELECT COUNT(*) FROM tb_score t1
+		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+                    WHERE t1.oral_score = 100 AND
+                          t1.month = month(CURRENT_DATE) AND
+                          ${t2colelID}) AS 'testsMonth',
+                   (SELECT COUNT(*) FROM tb_score t1
+		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+                    WHERE t1.oral_score = 100 AND
+                          ${t2colelID}) AS 'testsTotal',
+                   (SELECT (COUNT(*) * 90 - SUM(t1.presence)) / 60
+                    FROM (SELECT t1.student_id, t1.date, t1.presence, t2.colel_id
+                          FROM tb_daily t1
+		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+                    WHERE t1.presence >= 0 AND 
+                          year(t1.date) = year(CURRENT_DATE) AND
+                          month(t1.date) = month(CURRENT_DATE) AND
+                          ${t2colelID}) t1) AS 'hoursMonth',
+                   (SELECT ((COUNT(*) + extraStudents) * 90 - SUM(t1.presence)) / 60
+                    FROM (SELECT t1.student_id, t1.date, t1.presence, t2.colel_id
+                          FROM tb_daily t1
+		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+                    WHERE t1.presence >= 0 AND
+                          ${t2colelID}) t1) AS 'hoursTotal'`
+};
+
 module.exports = {
     getUser:            getUser,
     getStudents:        getStudents,
@@ -233,4 +263,5 @@ module.exports = {
     getReports:         getReports,
     getReportTypes:     getReportTypes,
     getReport:          getReport,
+    getStats:           getStats,
 }
