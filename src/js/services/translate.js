@@ -34,7 +34,7 @@ angular.module('RDash').constant("translate", {
     "3": "יום רביעי",
     "4": "יום חמישי",
     "5": "יום שישי",
-    "manager_name": "שם מנהל הכולל",
+    "manager_name": "שם המנהל",
     "mail_address": "כתובת דואר",
     "address": "כתובת הכולל",
     "schedule": "שעות פעילות",
