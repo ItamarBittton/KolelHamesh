@@ -479,8 +479,12 @@ ul.sidebar .sidebar-list .menu-icon {
   height: 573px;
   overflow-y: auto;
 }
-.widget .widget-body.xlarge {
+.widget .widget-body.xxlarge {
   height: 550px;
+  overflow-y: auto;
+}
+.widget .widget-body.xlarge {
+  height: 450px;
   overflow-y: auto;
 }
 .widget .widget-body.large {

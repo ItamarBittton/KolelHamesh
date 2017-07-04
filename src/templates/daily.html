@@ -6,7 +6,7 @@
                     <button ng-click="save(dailyForm.$valid)" ng-class="{'disabled': dailyForm.$invalid}" class="btn btn-sm btn-info">שמור</button>
                     <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
                 </rd-widget-header>
-                <rd-widget-body classes="xlarge no-padding">
+                <rd-widget-body classes="xxlarge no-padding">
                     <div class="form-group form-md-line-input">
                         <label class="col-md-4 control-label">תאריך עדכון:</label>
                         <div class="col-md-8">
@@ -42,7 +42,7 @@
                     <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                 </select>
             </rd-widget-header>
-            <rd-widget-body classes="xlarge no-padding">
+            <rd-widget-body classes="xxlarge no-padding">
                 <my-calendar view-date="viewDate" status="status" show="show(date)"></my-calendar>
             </rd-widget-body>
         </rd-widget>

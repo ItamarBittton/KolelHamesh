@@ -7,7 +7,7 @@
           <button ng-if="!isNew" ng-click="save(studentForm.$valid, true)" ng-class="{'disabled': studentForm.$invalid}" class="btn btn-sm btn-danger">מחק</button>
           <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
         </rd-widget-header>
-        <rd-widget-body classes="xlarge no-padding">
+        <rd-widget-body classes="xxlarge no-padding">
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.lastName.$dirty) && studentForm.lastName.$invalid }">
             <label class="col-md-4 control-label">שם משפחה</label>
             <div class="col-md-8">
@@ -90,7 +90,7 @@
       <rd-widget-header icon="icon-people" title="רשימת אברכים (לחץ על אברך על מנת לערוך אותו)">
         <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף אברך</button>
       </rd-widget-header>
-      <rd-widget-body classes="xlarge no-padding">
+      <rd-widget-body classes="xxlarge no-padding">
         <div class="table-responsive">
           <table class="table">
             <thead style="text-align: center">
