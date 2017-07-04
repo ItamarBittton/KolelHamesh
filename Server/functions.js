@@ -344,7 +344,7 @@ function editColel(req, res) {
         group_type: 1
     };
 
-    sql.mq([sql.ia('tb_colel', [Colel], true), queries.updateColel(Colel)], function (data) {
+    sql.mq([sql.ia('tb_colel', [Colel], true), queries.updateColel(Colel, reqColel.password)], function (data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים' });
         } else {

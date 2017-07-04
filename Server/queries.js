@@ -144,9 +144,9 @@ function getColel() {
             ORDER BY t1.id, t1.name`;
 };
 
-function updateColel(reqColel) {
+function updateColel(reqColel, password) {
     return `UPDATE tb_user 
-            SET password = ${sql.v(reqColel.password)},
+            SET password = ${sql.v(password)},
                 user_name = ${sql.v(reqColel.name)}
             WHERE colel_id = ${sql.v(reqColel.id)} AND NOT permission = 'Admin'`;
 };
