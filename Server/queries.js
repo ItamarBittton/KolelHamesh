@@ -83,7 +83,7 @@ function getDailyCount(req, month) {
     return `SELECT DAYOFMONTH(date) AS monthday, COUNT(*) AS count
             FROM tb_daily t1
             LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
-            WHERE MONTH(date) = 6 AND t2.colel_id = ${req.currentUser.colel_id}
+            WHERE MONTH(date) = ${month} AND t2.colel_id = ${req.currentUser.colel_id}
             GROUP BY MONTH(date), DAYOFMONTH(date)`
 };
 
