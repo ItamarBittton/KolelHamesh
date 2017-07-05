@@ -22,9 +22,25 @@
                     <div class="form-group form-md-line-input" ng-if="isOneTimeAllow">
                         <label class="col-md-4 control-label">סמן כולם כ:</label>
                         <div class="col-md-8">
-                            <select ng-model="changeAllValue" ng-change="changeAll(changeAllValue, dailyForm.$valid)" class="form-control">
+                            <div class="btn-group btn-group-justified">
+                                <span class="btn btn-sm btn-default" ng-click="changeAll(0)">
+                                    <i class="fa fa-check-square"></i> נוכח
+                                </span>
+                                <span class="btn btn-sm btn-default" ng-click="changeAll(-1)">
+                                    <i class="fa fa-times"></i> חסר
+                                </span>
+                                <span class="btn btn-sm btn-default" ng-click="changeAll(-2)">
+                                    <i class="fa fa-thumbs-o-up"></i> ח.מ.
+                                </span>
+                                <span class="btn btn-sm btn-default" ng-click="changeAll(-3)">
+                                    <i class="fa fa-black-tie"></i> חג
+                                </span>
+                            </div>
+                            <!--<div class="col-md-8">
+                            <select ng-model="changeAllValue" ng-change="changeAll(changeAllValue)" class="form-control">
+                                <option value="null">בחר אפשרות</option>
                                 <option ng-repeat="(key, date) in dropList.options" value="{{ date.value }}">{{date.name}}</option>
-                            </select>
+                            </select>-->
                         </div>
                     </div>
                     <student-list students="students" drop-list="dropList"></student-list>

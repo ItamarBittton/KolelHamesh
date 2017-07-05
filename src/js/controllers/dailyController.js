@@ -23,7 +23,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         month: new Date().getMonth() + 1
     };
 
-    $scope.changeAll = function (value, valid) {
+    $scope.changeAll = function (value) {
         $scope.students.forEach(x => x.presence = parseInt(value));
     }
 
