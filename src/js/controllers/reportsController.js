@@ -41,7 +41,7 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
     };
 
     $scope.changeMonth = function (selected) {
-        $scope.data.month = selected;
+        if (selected) $scope.data.month = selected;
     };
 
     $scope.changeColel = function (selected) {

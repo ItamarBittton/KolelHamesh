@@ -19,7 +19,7 @@ angular.module('RDash')
         })
 
         $scope.changeMonth = function (currentMonth) {
-            $scope.loadData(Object.values(JSON.parse(currentMonth)).join('-'))
+            if(currentMonth) $scope.loadData(Object.values(JSON.parse(currentMonth)).join('-'))
         }
 
         $scope.save = function (data) {

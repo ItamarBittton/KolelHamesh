@@ -42,7 +42,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     });
 
     $scope.changeMonth = function (currentMonth) {
-        $scope.viewDate = JSON.parse(currentMonth);
+        if (currentMonth) $scope.viewDate = JSON.parse(currentMonth);
     }
 
     $scope.save = function (valid) {
