@@ -1,138 +1,166 @@
 <!doctype html>
 <html lang="en" ng-app="RDash">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>מרכז חמש - מערכת ניהול</title>
-  <!-- STYLES -->
-  <!-- build:css lib/css/main.min.css -->
-  <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="components/bootstrap-rtl/dist/css/bootstrap-rtl.min.css">
-  <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="components/simple-line-icons/css/simple-line-icons.css">
-  <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/rdash-rtl.css">
-  <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/styles.css">
-  <link rel="stylesheet" type="text/css" href="components/angular-ui-notification/dist/angular-ui-notification.min.css">
-  <link rel="stylesheet" type="text/css" href="components/angular-material/angular-material.css">
-  <!-- endbuild -->
-  <!-- SCRIPTS -->
-  <!-- build:js lib/js/main.min.js -->
-  <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="components/angular/angular.min.js"></script>
-  <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-  <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
-  <script type="text/javascript" src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
-  <script type="text/javascript" src="components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
-  <script type="text/javascript" src="components/hebcal/hebcal.min.js"></script>
-  <script type="text/javascript" src="components/angular-ui-mask/dist/mask.min.js"></script>
-  <script type="text/javascript" src="components/angular-aria/angular-aria.js"></script>
-  <script type="text/javascript" src="components/angular-animate/angular-animate.js"></script>
-  <script type="text/javascript" src="components/angular-material/angular-material.js"></script>
+        <title>מרכז חמש - מערכת ניהול</title>
+        <!-- STYLES -->
+        <!-- build:css lib/css/main.min.css -->
+        <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="components/bootstrap-rtl/dist/css/bootstrap-rtl.min.css">
+        <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="components/simple-line-icons/css/simple-line-icons.css">
+        <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/rdash-rtl.css">
+        <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/styles.css">
+        <link rel="stylesheet" type="text/css" href="components/angular-ui-notification/dist/angular-ui-notification.min.css">
+        <link rel="stylesheet" type="text/css" href="components/angular-material/angular-material.css">
+        <!-- endbuild -->
+        <!-- SCRIPTS -->
+        <!-- build:js lib/js/main.min.js -->
+        <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="components/angular/angular.min.js"></script>
+        <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
+        <script type="text/javascript" src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
+        <script type="text/javascript" src="components/hebcal/hebcal.min.js"></script>
+        <script type="text/javascript" src="components/angular-ui-mask/dist/mask.min.js"></script>
+        <script type="text/javascript" src="components/angular-aria/angular-aria.js"></script>
+        <script type="text/javascript" src="components/angular-animate/angular-animate.js"></script>
+        <script type="text/javascript" src="components/angular-material/angular-material.js"></script>
 
-  <!-- endbuild -->
-  <!-- Custom Scripts -->
-  <script type="text/javascript" src="javascript/dashboard.min.js"></script>
-</head>
+        <!-- endbuild -->
+        <!-- Custom Scripts -->
+        <script type="text/javascript" src="javascript/dashboard.min.js"></script>
+    </head>
 
-<body ng-controller="MasterCtrl">
-  <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+    <body ng-controller="MasterCtrl">
+        <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-      <ul class="sidebar">
-        <li class="sidebar-main">
-          <a ng-click="toggleSidebar()">
-            לוח הבקרה
-            <span class="menu-icon glyphicon glyphicon-transfer"></span>
-          </a>
-        </li>
-        <span ng-if="role === 'User'" ng-show="isAgreed()">
-        <li class="sidebar-title"><span>תפריט מנהל כולל</span></li>
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar">
+                    <li class="sidebar-main">
+                        <a ng-click="toggleSidebar()">
+                            לוח הבקרה
+                            <span class="menu-icon glyphicon glyphicon-transfer"></span>
+                        </a>
+                    </li>
+                    <span ng-if="role === 'User'" ng-show="isAgreed()">
+                        <li class="sidebar-title">
+                            <span>תפריט מנהל כולל</span>
+                        </li>
 
-        <li class="sidebar-list">
-          <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="scores" ui-sref-active="active">ציונים <span class="menu-icon icon-layers"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="students" ui-sref-active="active">אברכים <span class="menu-icon icon-people"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
-        </li>
-        </span>
-        <span ng-if="role === 'Admin'">
-        <li class="sidebar-title"><span>תפריט מנהל רשת</span></li>
-        <li class="sidebar-list">
-          <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות<span class="menu-icon icon-notebook"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="colels" ui-sref-active="active">כוללים<span class="menu-icon icon-cup"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-title"><span>צפה כ:</span>
-          <select ng-model="currColel" ng-options="colel.id as colel.name for colel in colelList" class="pull-left form-control colelSelect"
-            ng-change="changedColel(e)">
-          </select>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="daily" ui-sref-active="active">דוח נוכחות<span class="menu-icon icon-clock"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="scores" ui-sref-active="active">ציונים <span class="menu-icon icon-layers"></span></a>
-        </li>
-        <li class="sidebar-list">
-          <a ui-sref="students" ui-sref-active="active">אברכים<span class="menu-icon icon-user"></span></a>
-        </li>
-        <li class="sidebar-title"></li>
-        <li class="sidebar-list">
-          <a ui-sref="reports">דוחות והגדרות<span class="menu-icon icon-settings"></span></a>
-        </li>
-        </span>
-      </ul>
+                        <li class="sidebar-list">
+                            <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
+                                <span class="menu-icon icon-clock"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="scores" ui-sref-active="active">ציונים
+                                <span class="menu-icon icon-layers"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="students" ui-sref-active="active">אברכים
+                                <span class="menu-icon icon-people"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-title"></li>
+                        <li class="sidebar-list">
+                            <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
+                                <span class="menu-icon icon-notebook"></span>
+                            </a>
+                        </li>
+                    </span>
+                    <span ng-if="role === 'Admin'">
+                        <li class="sidebar-title">
+                            <span>תפריט מנהל רשת</span>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
+                                <span class="menu-icon icon-notebook"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="colels" ui-sref-active="active">כוללים
+                                <span class="menu-icon icon-cup"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-title"></li>
+                        <li class="sidebar-title">
+                            <span>צפה כ:</span>
+                            <select ng-model="currColel" ng-options="colel.id as colel.name for colel in colelList" class="pull-left form-control colelSelect"
+                                ng-change="changedColel(e)">
+                            </select>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
+                                <span class="menu-icon icon-clock"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="scores" ui-sref-active="active">ציונים
+                                <span class="menu-icon icon-layers"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-list">
+                            <a ui-sref="students" ui-sref-active="active">אברכים
+                                <span class="menu-icon icon-user"></span>
+                            </a>
+                        </li>
+                        <li class="sidebar-title"></li>
+                        <li class="sidebar-list">
+                            <a ui-sref="reports">דוחות והגדרות
+                                <span class="menu-icon icon-settings"></span>
+                            </a>
+                        </li>
+                    </span>
+                </ul>
 
-    </div>
-    <!-- End Sidebar -->
-
-    <div id="content-wrapper">
-      <div class="page-content">
-
-        <!-- Header Bar -->
-        <div class="row header">
-          <div class="col-xs-12">
-            <div class="user pull-left">
-              <div class="item dropdown">
-                <a ng-click="logout()">
-                  <i class="fa icon-logout"></i>
-                </a>
-              </div>
-              <div class="item dropdown">
-                <i>שלום {{ userName }}</i>
-              </div>
             </div>
-            <div class="meta">
-              <div class="page">
-                <img src="image/logo.png" width="50" />
-              </div>
+            <!-- End Sidebar -->
+
+            <div id="content-wrapper">
+                <div class="page-content">
+
+                    <!-- Header Bar -->
+                    <div class="row header">
+                        <div class="col-xs-12">
+                            <div class="user pull-left">
+                                <div class="item dropdown">
+                                    <a ng-click="logout()">
+                                        <i class="fa icon-logout"></i>
+                                    </a>
+                                </div>
+                                <div class="item dropdown">
+                                    <i>שלום {{ userName }}</i>
+                                </div>
+                                <div class="item dropdown" loading>
+                                    <rd-loading></rd-loading>
+                                </div>
+                            </div>
+                            <div class="meta">
+                                <div class="page">
+                                    <img src="image/logo.png" width="50" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Header Bar -->
+
+                    <!-- Main Content -->
+                    <div ui-view></div>
+
+                </div>
+                <!-- End Page Content -->
             </div>
-          </div>
+            <!-- End Content Wrapper -->
         </div>
-        <!-- End Header Bar -->
+        <!-- End Page Wrapper -->
 
-        <!-- Main Content -->
-        <div ui-view></div>
-
-      </div>
-      <!-- End Page Content -->
-    </div>
-    <!-- End Content Wrapper -->
-  </div>
-  <!-- End Page Wrapper -->
-
-</body>
+    </body>
 
 </html>

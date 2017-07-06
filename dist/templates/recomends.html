@@ -5,7 +5,7 @@
                 <div class="widget-icon green pull-left">
                     <i class="icon-clock"></i>
                 </div>
-                <div class="title">{{ (stats.hoursMonth || 0) | timeFilter }}/{{ (stats.hoursTotal || 0) | timeFilter }}</div>
+                <div class="title">{{ (stats.hoursMonth || 0) | timeFilter}}/{{ (stats.hoursTotal || 0) | timeFilter }}</div>
                 <div class="comment">שעות לימוד</div>
             </rd-widget-body>
         </rd-widget>
@@ -48,23 +48,26 @@
     <div class="col-lg-12">
         <rd-widget>
             <rd-widget-header icon="icon-notebook" title="רשימת המלצות">
+                <button class="btn btn-link btn-sm ng-scope" style="padding:0;margin: -5px 0 -10px">
+                    <dir-pagination-controls max-size="7"></dir-pagination-controls>
+                </button>
                 <button ng-click="reload(true)" class="btn btn-sm btn-success"><span class="fa fa-refresh"></span></button>
             </rd-widget-header>
             <rd-widget-body classes="xlarge no-padding">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <td width="9%">שם הכולל</td>
+                            <td width="10%">שם הכולל</td>
                             <td width="9%">פעולה</td>
                             <td width="9%">סוג הבקשה</td>
                             <td width="13%">תאריך בקשה</td>
                             <td width="10%">סטטוס</td>
                             <td width="13%">תאריך אישור</td>
-                            <td width="30%">פרטי הבקשה</td>
+                            <td width="29%">פרטי הבקשה</td>
                             <td width="7%" ng-if="role === 'Admin'">פעולות</td>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="recomend in recomends track by $index" ng-class="{'archive': recomend.status !== 'ממתין...'}">
+                            <tr dir-paginate="recomend in recomends | itemsPerPage:10" ng-class="{'archive': recomend.status !== 'ממתין...'}">
                                 <td>{{ recomend.name }}</td>
                                 <td>{{ recomend.type }}</td>
                                 <td>{{ recomend.req_type }}</td>
@@ -83,10 +86,10 @@
                                 </td>
                                 <td ng-if="role === 'Admin'">
                                     <div ng-if="recomend.status === 'ממתין...'">
-                                        <span class="btn btn-xs btn-danger" ng-click="action($index, 'deny')">
+                                        <span class="btn btn-xs btn-danger" ng-click="action(recomend, 'deny')">
                                             <i class="fa fa-times"></i>
                                         </span>
-                                        <span class="btn btn-xs btn-success" ng-click="action($index, 'approve')">
+                                        <span class="btn btn-xs btn-success" ng-click="action(recomend, 'approve')">
                                             <i class="fa fa-check-square"></i>
                                         </span>
                                     </div>

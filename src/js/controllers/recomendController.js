@@ -47,8 +47,8 @@ angular.module('RDash')
             return (oldVal !== newVal)
         }
 
-        $scope.action = function (index, action) {
-            var recomend = angular.copy($scope.recomends[index]),
+        $scope.action = function (originalRecomend, action) {
+            var recomend = angular.copy(originalRecomend),
                 newObj = recomend.data.newObj;
             
             if (recomend.req_type === "כולל") {
@@ -67,7 +67,7 @@ angular.module('RDash')
             };    
 
             Data.post(action, { recomend_id: $scope.recomend_id, data: recomend }).then(function (data) {
-                if (data.status) $scope.recomends[index].status = data.status;
+                if (data.status) originalRecomend.status = data.status;
             });
         };
     });
