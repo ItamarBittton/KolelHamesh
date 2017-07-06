@@ -79,8 +79,8 @@
                                         <summary>{{ recomend.data.newObj.first_name + ' ' + recomend.data.newObj.last_name }} {{ recomend.data.newObj.manager_name }}
                                         </summary>
                                         <p ng-repeat="(key, value) in recomend.data.newObj | inputfilter track by $index">
-                                            <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                            <input class="col-lg-7 form-control" type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}">
+                                            <label ng-if="key != 'colel_id'" class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
+                                            <input ng-if="key != 'colel_id'" class="col-lg-7 form-control" type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}">
                                         </p>
                                     </details>
                                 </td>
