@@ -73,7 +73,7 @@ function getRecomends(req, res) {
                 error: 'לא ניתן להציג נתונים'
             });
         } else {
-            for (var i = 0; i < data.results.length; i++) {
+            for (var i = 0; i < data.results[0].length; i++) {
                 data.results[0][i].data = JSON.parse(data.results[0][i].data);
             }
             res.send({
@@ -127,7 +127,7 @@ function approveRecomend(req, res) {
         } else {
             var recomend = data.results[0][0];
             recomend.data = req.body.data.data;
-
+            
             if (recomend.type !== 'מחיקה') {
                 if (recomend.table_name === 'tb_student') {
                     recomend.data.newObj.colel_id = recomend.colel_update;
