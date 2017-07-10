@@ -4,7 +4,7 @@
             <rd-widget-header icon="fa-calculator" title="הגדרות חישוב">
                 <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info">שמור</button>
             </rd-widget-header>
-            <rd-widget-body classes="medium no-padding">
+            <rd-widget-body classes="large no-padding">
                 <div class="table-responsive">
                     <table class="table" style="margin-bottom:0;">
                         <thead>
@@ -72,7 +72,7 @@
             <rd-widget-header icon="icon-layers" title="הגדרות מבחנים">
                 <button ng-click="save('test_types', test_types)" class="btn btn-sm btn-info pull-left">שמור</button>
             </rd-widget-header>
-            <rd-widget-body classes="medium no-padding">
+            <rd-widget-body classes="small no-padding">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -107,8 +107,12 @@
                         <label class="control-label">דוח כולל</label>
                     </div>
                     <div class="col-md-4">
-                        <select ng-model="currColel" class="form-control" ng-change="changeColel(currColel)" ng-options="colel as colel.name for colel in colelList"
-                            style="margin-bottom:0;">
+                        <select ng-model="currColel"
+                                class="form-control"
+                                ng-change="changeColel(currColel)" 
+                                ng-options="colel as colel.name for colel in colelList"
+                                style="margin-bottom:0;">
+                            <option value="">בחר דוח</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -118,7 +122,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <a class="btn btn-success" ng-click="newReport(report)">
+                        <a class="btn btn-success" ng-click="newReport({id: 1})">
                             <i class="fa fa-file-excel-o"></i>
                         </a>
                     </div>
@@ -128,9 +132,12 @@
                         <label class="control-label">עוד דוחות</label>
                     </div>
                     <div class="col-md-4">
-                        <select ng-model="currentType" ng-change="changeType(currentType)" class="form-control" style="margin-bottom:0;">
+                        <select ng-model="currentType"
+                                ng-change="changeType(currentType)"
+                                class="form-control" 
+                                ng-options="type as type.name for type in reportTypes  | filter: {id : '!1'}"
+                                style="margin-bottom:0;">
                             <option value="">בחר דוח</option>
-                            <option ng-repeat="type in reportTypes | filter: {id : '!1'}" value="{{ type.id }}">{{type.name}}</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -140,7 +147,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <a class="btn btn-success" ng-click="newReport(report)">
+                        <a class="btn btn-success" ng-click="newReport(currentType)">
                             <i class="fa fa-file-excel-o"></i>
                         </a>
                     </div>

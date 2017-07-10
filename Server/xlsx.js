@@ -1,65 +1,86 @@
 var Excel = require('exceljs'),
     sql = require('./mysql.js'),
-    style = require('./xslx-styles');
+    queries = require('./queries');
 
-function makeReport(path, data, res) {
-
-    var queries = {
-        students: `SELECT supported_id, last_name, first_name, id, phone, street, house, city, bank, branch, account, account_name
-                        FROM tb_student
-                        WHERE colel_id = ${data.colel_id}`,
-        log: undefined //sql.ia("tb_report_history", [data])
-    };
-    sql.mq(queries, function (data) {
+function makeReport(path, userData, res) {
+    var query = queries.getExcel(userData);
+    sql.mq(query, function (data) {
         if (data.error) {
             res.send({
-                error: 'אין אפשרות לעדכן את ההגדרות'
+                error: 'ארעה שגיאה במהלך הנפקת הדוח'
             })
         } else {
             var workbook = new Excel.Workbook();
-            workbook.creator = 'כולל חמש';
+            workbook.creator = 'מערכת ניהול - כולל חמש';
             workbook.created = new Date();
 
-            var worksheet = workbook.addWorksheet('פרטי האברכים', {
-                properties: {
-                    tabColor: { argb: '8A2BE2' }
-                }
-                // ,
-                // views: [{ rightToLeft: 1 }],
-            });
+            // All Worksheets            
+            data.results.forEach(function (result, sheetIndex) {
+                // Hide "empty" keys, (Hack for if there is only one sheet).
+                if (Object.keys(query)[sheetIndex] === "log") return;
+                
+                var worksheet = workbook.addWorksheet(Object.keys(queries)[sheetIndex]);
 
-            worksheet.columns = [
-                { header: 'מספר\r\nנתמך', key: 'supported_id', width: 6.89, style: style(['multiCentered', 'regularBorder']) },
-                { header: 'שם משפחה', key: 'last_name', width: 11.33, style: style(['header']) },
-                { header: 'שם פרטי', key: 'first_name', width: 11.33, style: style(['regularBorder']) },
-                { header: 'מספר זהות', key: 'id', width: 11.22, style: style(['regularBorder']) },
-                { header: 'טלפון', key: 'phone', width: 12.56, style: style(['regularBorder']) },
-                { header: 'רחוב', key: 'street', width: 18.67, style: style(['regularBorder']) },
-                { header: 'בית', key: 'house', width: 6.33, style: style(['regularBorder']) },
-                { header: 'עיר', key: 'city', width: 18.89, style: style(['regularBorder']) },
-                { header: 'מס בנק', key: 'bank', width: 7.11, style: style(['regularBorder']) },
-                { header: 'סניף', key: 'branch', width: 8.56, style: style(['regularBorder']) },
-                { header: 'מס חשבון', key: 'account', width: 14.89, style: style(['regularBorder']) },
-                { header: 'שם בעל החשבון', key: 'account_name', width: 14.89, style: style(['regularBorder']) }
-            ];
+                // All Columns.
+                worksheet.columns = data.fields[sheetIndex].map(function (field, columnIndex) {
+                    return {
+                        header: field.name,
+                        key: field.name,
+                        width: 14,
+                        style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
+                    }
+                });
 
-            // worksheet.addRows(data.results[0]);
-            worksheet.addRows(data.results);
+                // All Rows.                
+                worksheet.addRows(data.results[sheetIndex]);
 
-            worksheet.eachRow(function (row, i) {
-                if (i == 1) {
-                    row.height = 40;
-                } else {
-                    row.height = 30;
-                }
+                var prevRow = undefined,
+                    range = undefined;                
+                worksheet.eachRow(function (row, rowNumber) {
+                    if (rowNumber == 1) {
+                        row.eachCell(function (cell, colNumber) {
+                            cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC0C0C0' } };
+                        });
+                        row.height = 40;
+                        row.font = { bold: true };
+                    } else {
+                        row.height = 30;
+                        row.eachCell(function (cell, colNumber) {
+                            cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                        });
+
+                        // Merge identical cells in izy report.
+                        if (userData.report_id === 3) {
+                            if (!range) {
+                                range = ['E' + rowNumber];
+                            }
+                            if (prevRow) {
+                                if (prevRow.getCell(5).value === row.getCell(5).value) {
+                                    range[1] = 'E' + rowNumber;
+                                } else {
+                                    if (range[1]) {
+                                        worksheet.mergeCells(range.join(':'));
+                                    }
+
+                                    range = ['E' + rowNumber];
+                                }
+                            }   
+
+                            prevRow = row;
+                        }
+                    }
+                });
             });
 
             workbook.xlsx.writeFile(`./dist${path}`).then(function () {
                 res.send({
-                    success: 'הקובץ נשמר בהצלחה!',
+                    success: 'הדוח הונפק בהצלחה!',
                     url: path
                 });
-            }).catch(function (err) { console.log(err) });
+            }).catch(function (err) { 
+                 res.send({ error: 'ארעה שגיאה במהלך הנפקת הדוח' })
+             });
         }
     });
 }

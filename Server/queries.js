@@ -236,6 +236,57 @@ function getStats(req) {
                           ${t2colelID}) t1) AS 'hoursTotal'`
 };
 
+function getExcel(data) {
+    return [{
+        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "דוח נוכחות":      ``,
+        "פרטי האברכים":    `SELECT supported_id AS 'מספר נתמך',
+                                    last_name AS 'שם משפחה',
+                                    first_name AS 'שם פרטי',
+                                    id AS 'תעודת זהות',
+                                    phone AS 'טלפון',
+                                    street AS 'רחוב',
+                                    house AS 'בית',
+                                    city AS 'עיר',
+                                    bank AS 'מס בנק',
+                                    branch AS 'סניף',
+                                    account AS 'מס חשבון',
+                                    account_nam AS 'שם בעל החשבון'
+                             FROM tb_student
+                             WHERE colel_id = ${data.colel_id}`,
+        "סיכום מלגות":     ``,
+        "milgot":           ``,
+        "דוח העברה":       ``
+    }, {
+        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "פרטי האברכים":    `SELECT supported_id AS 'מספר נתמך',
+                                    last_name AS 'שם משפחה',
+                                    first_name AS 'שם פרטי',
+                                    id AS 'תעודת זהות',
+                                    phone AS 'טלפון',
+                                    street AS 'רחוב',
+                                    house AS 'בית',
+                                    city AS 'עיר',
+                                    bank AS 'מס בנק',
+                                    branch AS 'סניף',
+                                    account AS 'מס חשבון',
+                                    account_nam AS 'שם בעל החשבון'
+                             FROM tb_student`
+    }, {
+        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "milgot":           `SELECT supported_id AS 'מספר נתמך',
+                                    account AS 'סכום',
+                                    last_name AS 'שם להצגה',
+                                    CURDATE() AS 'תאריך',
+                                    colel_id AS 'חלוקת הדפסה'
+                             FROM   tb_student
+                             ORDER BY colel_id`
+    }, {
+        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "דוח העברה":       `SELECT NULL LIMIT 0`
+    }][data.report_id - 1];
+};
+
 module.exports = {
     getUser:            getUser,
     getStudents:        getStudents,
@@ -264,4 +315,5 @@ module.exports = {
     getReportTypes:     getReportTypes,
     getReport:          getReport,
     getStats:           getStats,
+    getExcel:           getExcel,
 }

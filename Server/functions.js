@@ -478,7 +478,7 @@ function updDefinitions(req, res) {
 }
 
 function newReport(req, res) {
-    var name = req.body.type == 1 ? (req.body.colelName || req.body.colel) : req.body.type,
+    var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
         path = `/files/${name}_${req.body.month}.xlsx`;
 
     sql.q(queries.getReport(req), function (data) {
@@ -492,7 +492,7 @@ function newReport(req, res) {
         } else {
             xlsx.makeReport(path, {
                 report_id: req.body.type,
-                colel_id: req.body.type == 1 ? req.body.colel : null,
+                colel_id: req.body.colel,
                 date_created: req.body.month,
                 url: path
             }, res);
