@@ -19,7 +19,7 @@ function makeReport(path, userData, res) {
                 // Hide "empty" keys, (Hack for if there is only one sheet).
                 if (Object.keys(query)[sheetIndex] === "log") return;
                 
-                var worksheet = workbook.addWorksheet(Object.keys(queries)[sheetIndex]);
+                var worksheet = workbook.addWorksheet(Object.keys(query)[sheetIndex]);
 
                 // All Columns.
                 worksheet.columns = data.fields[sheetIndex].map(function (field, columnIndex) {

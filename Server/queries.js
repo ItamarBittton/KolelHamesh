@@ -237,29 +237,68 @@ function getStats(req) {
 };
 
 function getExcel(data) {
+    data.date_created = data.date_created.split('-'),
+        year = parseInt(data.date_created[0]),
+        month = parseInt(data.date_created[1]);
+
     return [{
-        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "דוח נוכחות":      ``,
-        "פרטי האברכים":    `SELECT supported_id AS 'מספר נתמך',
-                                    last_name AS 'שם משפחה',
-                                    first_name AS 'שם פרטי',
-                                    id AS 'תעודת זהות',
-                                    phone AS 'טלפון',
-                                    street AS 'רחוב',
-                                    house AS 'בית',
-                                    city AS 'עיר',
-                                    bank AS 'מס בנק',
-                                    branch AS 'סניף',
-                                    account AS 'מס חשבון',
-                                    account_nam AS 'שם בעל החשבון'
-                             FROM tb_student
-                             WHERE colel_id = ${data.colel_id}`,
-        "סיכום מלגות":     ``,
-        "milgot":           ``,
-        "דוח העברה":       ``
+        "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        //"דוח נוכחות": ``,
+        "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
+                                    t1.last_name AS 'שם משפחה',
+                                    t1.first_name AS 'שם פרטי',
+                                    t1.id AS 'תעודת זהות',
+                                    t1.phone AS 'טלפון',
+                                    t1.street AS 'רחוב',
+                                    t1.house AS 'בית',
+                                    t1.city AS 'עיר',
+                                    t1.bank AS 'מס בנק',
+                                    t1.branch AS 'סניף',
+                                    t1.account AS 'מס חשבון',
+                                    t1.account_name AS 'שם בעל החשבון'
+                             FROM tb_student t1
+                             WHERE t1.colel_id = ${data.colel_id}
+                             order by t1.last_name`,
+
+        "סיכום מלגות" : `select t1.name as 'שם כולל',
+                                t1.last_name as 'שם משפחה',
+                                t1.first_name as 'שם פרטי',
+                                t1.id as 'תעודת זהות',
+                                t1.phone as 'מספר פלאפון',
+                                t1.street as 'כתובת',
+                                t1.late as 'איחורים בדקות',
+                                t1.missed as 'חיסורים בימים',
+                                t1.appMissed as 'חיסורים באישור',
+                                t1.present as 'ימי נוכחות',
+                                t1.comment as 'חריגים',
+                                t1.monthlyPayment as 'לתשלום נוכחות',
+                                t1.writeTest as 'מבחן בכתב',
+                                t1.oralTest as 'מבחן בע"פ',
+                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                            from ${bigString(month, year, data.colel_id)} t1`,
+
+        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+                                    (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סכום',
+                                    concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
+                                    '${month + '-' + year}' AS 'תאריך',
+                                    t1.name AS 'חלוקת הדפסה'
+                             FROM ${bigString(month, year, data.colel_id)} t1`,
+
+           "דוח העברה": `select t1.name as 'שם כולל',
+                                t1.last_name as 'שם משפחה',
+                                t1.first_name as 'שם פרטי',
+                                t1.id as 'תעודת זהות',
+                                t1.phone as 'מספר פלאפון',
+                                t1.street as 'כתובת',
+                                t1.comment as 'חריגים',
+                                t1.monthlyPayment as 'לתשלום נוכחות',
+                                t1.writeTest as 'מבחן בכתב',
+                                t1.oralTest as 'מבחן בע"פ',
+                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                            from ${bigString(month, year, data.colel_id)} t1`
     }, {
-        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "פרטי האברכים":    `SELECT supported_id AS 'מספר נתמך',
+        "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "פרטי האברכים": `SELECT supported_id AS 'מספר נתמך',
                                     last_name AS 'שם משפחה',
                                     first_name AS 'שם פרטי',
                                     id AS 'תעודת זהות',
@@ -270,11 +309,11 @@ function getExcel(data) {
                                     bank AS 'מס בנק',
                                     branch AS 'סניף',
                                     account AS 'מס חשבון',
-                                    account_nam AS 'שם בעל החשבון'
+                                    account_name AS 'שם בעל החשבון'
                              FROM tb_student`
     }, {
-        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "milgot":           `SELECT supported_id AS 'מספר נתמך',
+        "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "milgot": `SELECT supported_id AS 'מספר נתמך',
                                     account AS 'סכום',
                                     last_name AS 'שם להצגה',
                                     CURDATE() AS 'תאריך',
@@ -282,38 +321,98 @@ function getExcel(data) {
                              FROM   tb_student
                              ORDER BY colel_id`
     }, {
-        "log":              `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "דוח העברה":       `SELECT NULL LIMIT 0`
+        "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
+        "דוח העברה": `SELECT NULL LIMIT 0`
     }][data.report_id - 1];
 };
 
+function bigString(month, year, colel_id) {
+    return `(select t7.name,
+                    t1.supported_id,
+                    t1.last_name,
+                    t1.first_name,
+                    t1.id,
+                    t1.phone,
+                    t1.street,
+                    t3.late,
+                    t4.missed,
+                    t5.appMissed,
+                    t2.present,
+                    t6.comment,
+                    case 
+                    when t2.present < t8.min_presence then 0 
+                    else (t8.monthly_payment - (t4.missed * t8.missed) - (t3.late/t8.per_late * t8.late)) end 'monthlyPayment',
+                    case when t6.write_score > 75 
+                    then 100 
+                    else 0 end 'writeTest',
+                    case when t6.oral_score > 100
+                    then 120 
+                    else 0 end 'oralTest'
+
+                from tb_student t1 
+                                    left outer join (select t2.student_id, count(t2.student_id) as 'present'
+                                        from tb_daily t2
+                                        where t2.presence = 0 and month(t2.date) = ${month} 
+                                        group by t2.student_id) t2 on (t1.id = t2.student_id)
+
+                                    left outer join (select t2.student_id, sum(t2.presence) as 'late'
+                                        from tb_daily t2
+                                        where t2.presence > 0 and month(t2.date) = ${month}
+                                        group by t2.student_id) t3 on (t1.id = t3.student_id)
+
+                                    left outer join (select t2.student_id, count(t2.student_id) as 'missed'
+                                        from tb_daily t2
+                                        where t2.presence = -1 and month(t2.date) = ${month}
+                                        group by t2.student_id) t4 on (t1.id = t4.student_id)
+
+                                    left outer join (select t2.student_id, count(t2.student_id) as 'appMissed'
+                                        from tb_daily t2
+                                        where t2.presence = -2 and month(t2.date) = ${month}
+                                        group by t2.student_id) t5 on (t1.id = t5.student_id)
+
+                                    left outer join (select t2.student_id, t2.write_score, t2.oral_score, t3.comment
+                                        from tb_score t2, tb_comment t3
+                                        where t2.year = ${year} and 
+                                                t2.month = ${month} and
+                                                t2.year = t3.year and
+                                                t2.month = t3.month and
+                                                t2.student_id = t3.student_id)
+                                        t6 on (t1.id = t6.student_id)
+
+                                    left outer join tb_colel t7 on (t1.colel_id = t7.id)
+                                    left outer join tbk_settings t8 on (t7.group_type = t8.group_type)
+                where t1.colel_id = ${colel_id}
+                order by t7.name, t1.last_name
+                )`
+}
+
 module.exports = {
-    getUser:            getUser,
-    getStudents:        getStudents,
-    getColelSettings:   getColelSettings,
-    getRecommends:      getRecommends,
-    getRecomend:        getRecomend,
-    updateRecomend:     updateRecomend,
-    approveDelete:      approveDelete,
-    getDailyReport:     getDailyReport,
-    getDailyOptions:    getDailyOptions,
-    getDailyCount:      getDailyCount,
-    getTempStudents:    getTempStudents,
+    getUser: getUser,
+    getStudents: getStudents,
+    getColelSettings: getColelSettings,
+    getRecommends: getRecommends,
+    getRecomend: getRecomend,
+    updateRecomend: updateRecomend,
+    approveDelete: approveDelete,
+    getDailyReport: getDailyReport,
+    getDailyOptions: getDailyOptions,
+    getDailyCount: getDailyCount,
+    getTempStudents: getTempStudents,
     getColelPermissions: getColelPermissions,
-    getScores:          getScores,
-    getTestTypes:       getTestTypes,
-    getColels:          getColels,
-    updateUser:         updateUser,
-    getColel:           getColel,
-    updateColel:        updateColel,
-    deleteColel:        deleteColel,
-    prevMonths:         prevMonths,
-    prevMonth:          prevMonth,
-    getDefinitions:     getDefinitions,
-    getFullTestTypes:   getFullTestTypes,
-    getReports:         getReports,
-    getReportTypes:     getReportTypes,
-    getReport:          getReport,
-    getStats:           getStats,
-    getExcel:           getExcel,
+    getScores: getScores,
+    getTestTypes: getTestTypes,
+    getColels: getColels,
+    updateUser: updateUser,
+    getColel: getColel,
+    updateColel: updateColel,
+    deleteColel: deleteColel,
+    prevMonths: prevMonths,
+    prevMonth: prevMonth,
+    getDefinitions: getDefinitions,
+    getFullTestTypes: getFullTestTypes,
+    getReports: getReports,
+    getReportTypes: getReportTypes,
+    getReport: getReport,
+    getStats: getStats,
+    getExcel: getExcel,
 }
