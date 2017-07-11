@@ -313,13 +313,12 @@ function getExcel(data) {
                              FROM tb_student`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "milgot": `SELECT supported_id AS 'מספר נתמך',
-                                    account AS 'סכום',
-                                    last_name AS 'שם להצגה',
-                                    CURDATE() AS 'תאריך',
-                                    colel_id AS 'חלוקת הדפסה'
-                             FROM   tb_student
-                             ORDER BY colel_id`
+        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+                                    (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סכום',
+                                    concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
+                                    '${month + '-' + year}' AS 'תאריך',
+                                    t1.name AS 'חלוקת הדפסה'
+                             FROM   ${bigString(month, year, '0 or 1 = 1')} t1`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
         "דוח העברה": `SELECT NULL LIMIT 0`
