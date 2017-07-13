@@ -298,19 +298,21 @@ function getExcel(data) {
                             from ${bigString(month, year, data.colel_id)} t1`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "פרטי האברכים": `SELECT supported_id AS 'מספר נתמך',
-                                    last_name AS 'שם משפחה',
-                                    first_name AS 'שם פרטי',
-                                    id AS 'תעודת זהות',
-                                    phone AS 'טלפון',
-                                    street AS 'רחוב',
-                                    house AS 'בית',
-                                    city AS 'עיר',
-                                    bank AS 'מס בנק',
-                                    branch AS 'סניף',
-                                    account AS 'מס חשבון',
-                                    account_name AS 'שם בעל החשבון'
-                             FROM tb_student`
+        "פרטי האברכים": `SELECT t2.name as "שם כולל",
+                                    t1.supported_id AS 'מספר נתמך',
+                                    t1.last_name AS 'שם משפחה',
+                                    t1.first_name AS 'שם פרטי',
+                                    t1.id AS 'תעודת זהות',
+                                    t1.phone AS 'טלפון',
+                                    t1.street AS 'רחוב',
+                                    t1.house AS 'בית',
+                                    t1.city AS 'עיר',
+                                    t1.bank AS 'מס בנק',
+                                    t1.branch AS 'סניף',
+                                    t1.account AS 'מס חשבון',
+                                    t1.account_name AS 'שם בעל החשבון'
+                             FROM tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
+                             order by t1.colel_id`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
         "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
@@ -321,7 +323,22 @@ function getExcel(data) {
                              FROM   ${bigString(month, year, '0 or 1 = 1')} t1`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
-        "דוח העברה": `SELECT NULL LIMIT 0`
+        "דוח העברה": `select t1.name as 'שם כולל',
+                                t1.last_name as 'שם משפחה',
+                                t1.first_name as 'שם פרטי',
+                                t1.id as 'תעודת זהות',
+                                t1.phone as 'מספר פלאפון',
+                                t1.street as 'כתובת',
+                                t1.comment as 'חריגים',
+                                t1.monthlyPayment as 'לתשלום נוכחות',
+                                t1.writeTest as 'מבחן בכתב',
+                                t1.oralTest as 'מבחן בע"פ',
+                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                            from ${bigString(month, year, '0 or 1 = 1')} t1`//,
+
+        // "סיכום מלגות ופרטי כוללים": `select t1.name as 'שם כולל',
+        // t1.address as 'כתובת הכולל',
+        // t1.`
     }][data.report_id - 1];
 };
 

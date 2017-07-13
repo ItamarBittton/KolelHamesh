@@ -118,7 +118,7 @@
                     <div class="col-md-4">
                         <select ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control" style="margin-bottom:0;">
                             <option value="">בחר חודש</option>
-                            <option ng-repeat="date in dates" value="{{ date }}">{{ date }}</option>
+                            <option ng-repeat="date in dates" value="{{ date.month + '-' + date.year }}">{{ date.month + '-' + date.year }}</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -143,7 +143,7 @@
                     <div class="col-md-4">
                         <select ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control" style="margin-bottom:0;">
                             <option value="">בחר חודש</option>
-                            <option ng-repeat="date in dates" value="{{ date }}">{{ date }}</option>
+                            <option ng-repeat="date in dates" value="{{ date.month + '-' + date.year }}">{{ date.month + '-' + date.year }}</option>
                         </select>
                     </div>
                     <div class="col-md-2">
