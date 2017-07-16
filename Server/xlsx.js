@@ -69,6 +69,7 @@ function makeReport(path, userData, res) {
                     // Set the new results
                     data.results = finalResults;
                     data.fields = fieldsTempArray;
+                    query["סיכום מלגות ופרטי כוללים"] = ' ';
                 }
             }
 

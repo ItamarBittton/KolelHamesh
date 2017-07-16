@@ -238,8 +238,8 @@ function getStats(req) {
 
 function getExcel(data) {
     data.date_created = data.date_created.split('-'),
-        year = parseInt(data.date_created[0]),
-        month = parseInt(data.date_created[1]);
+        year = parseInt(data.date_created[1]),
+        month = parseInt(data.date_created[0]);
 
     return [{
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
@@ -260,7 +260,7 @@ function getExcel(data) {
                              WHERE t1.colel_id = ${data.colel_id}
                              order by t1.last_name`,
 
-        "סיכום מלגות" : `select t1.name as 'שם כולל',
+        "סיכום מלגות": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -284,7 +284,7 @@ function getExcel(data) {
                                     t1.name AS 'חלוקת הדפסה'
                              FROM ${bigString(month, year, data.colel_id)} t1`,
 
-           "דוח העברה": `select t1.name as 'שם כולל',
+        "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -316,7 +316,7 @@ function getExcel(data) {
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
         "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
-                                    (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סכום',
+                                    case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
                                     t1.name AS 'חלוקת הדפסה'
@@ -334,16 +334,24 @@ function getExcel(data) {
                                 t1.writeTest as 'מבחן בכתב',
                                 t1.oralTest as 'מבחן בע"פ',
                                 (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
-                            from ${bigString(month, year, '0 or 1 = 1')} t1`//,
-
-        // "סיכום מלגות ופרטי כוללים": `select t1.name as 'שם כולל',
-        // t1.address as 'כתובת הכולל',
-        // t1.`
+                            from ${bigString(month, year, '0 or 1 = 1')} t1`
+        ,
+        "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
+sum(t1.monthlyPayment) as "סך הכול מלגות",
+	   t1.colel_address as "כתובת הכולל",
+	   t1.manager_name as "שם אחראי",
+	   t1.manager_phone as "טלפון"
+        from ${bigString(month, year, ' 0 or 1 = 1')} t1
+        group by t1.name, t1.colel_address, t1.manager_name, t1.manager_phone`
     }][data.report_id - 1];
 };
 
 function bigString(month, year, colel_id) {
-    return `(select t7.name,
+    return `(select t7.id as "colel_id",
+					t7.name,
+					t7.manager_name,
+					t7.phone as "manager_phone",
+					t7.address as "colel_address",
                     t1.supported_id,
                     t1.last_name,
                     t1.first_name,
@@ -354,14 +362,14 @@ function bigString(month, year, colel_id) {
                     t4.missed,
                     t5.appMissed,
                     t2.present,
-                    t6.comment,
+                    t9.comment,
                     case 
                     when t2.present < t8.min_presence then 0 
                     else (t8.monthly_payment - (t4.missed * t8.missed) - (t3.late/t8.per_late * t8.late)) end 'monthlyPayment',
-                    case when t6.write_score > 75 
+                    case when t6.write_score >= 75 
                     then 100 
                     else 0 end 'writeTest',
-                    case when t6.oral_score > 100
+                    case when t6.oral_score = 100
                     then 120 
                     else 0 end 'oralTest'
 
@@ -386,17 +394,19 @@ function bigString(month, year, colel_id) {
                                         where t2.presence = -2 and month(t2.date) = ${month}
                                         group by t2.student_id) t5 on (t1.id = t5.student_id)
 
-                                    left outer join (select t2.student_id, t2.write_score, t2.oral_score, t3.comment
-                                        from tb_score t2, tb_comment t3
-                                        where t2.year = ${year} and 
-                                                t2.month = ${month} and
-                                                t2.year = t3.year and
-                                                t2.month = t3.month and
-                                                t2.student_id = t3.student_id)
-                                        t6 on (t1.id = t6.student_id)
+                                    left outer join tb_score t6
+                                        on (t6.year = ${year} and 
+                                            t6.month = ${month} and
+                                            t1.id = t6.student_id)
 
                                     left outer join tb_colel t7 on (t1.colel_id = t7.id)
+
                                     left outer join tbk_settings t8 on (t7.group_type = t8.group_type)
+                                    
+                                    left outer join tb_comment t9 
+                                        on (t9.year = ${year} and
+                                            t9.month = ${month} and
+                                            t1.id = t9.student_id)
                 where t1.colel_id = ${colel_id}
                 order by t7.name, t1.last_name
                 )`
