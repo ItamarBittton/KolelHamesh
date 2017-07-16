@@ -363,10 +363,10 @@ function bigString(month, year, colel_id) {
                     case 
                     when t2.present < t8.min_presence then 0 
                     else (t8.monthly_payment - (t4.missed * t8.missed) - (t3.late/t8.per_late * t8.late)) end 'monthlyPayment',
-                    case when t6.write_score < t8.min_score_write_test 
+                    case when t6.write_score < t8.min_score_write_test or t6.write_score is null
                     then 0 
                     else t8.payment_write_test end 'writeTest',
-                    case when t6.oral_score < t8.min_score_oral_test
+                    case when t6.oral_score < t8.min_score_oral_test or t6.oral_score is null
                     then 0 
                     else t8.payment_oral_test end 'oralTest'
 
