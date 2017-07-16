@@ -159,10 +159,7 @@ function deleteColel(req) {
 
 function prevMonths(req) {
     return `SELECT year(t1.date) AS year, month(t1.date) AS month 
-            FROM tb_daily t1 
-            WHERE t1.student_id IN (SELECT t2.id 
-                                    FROM tb_student t2 
-                                    WHERE t2.colel_id = ${req.currentUser.colel_id})
+            FROM tb_daily t1
             GROUP BY year(t1.date), month(t1.date)`;
 };
 
@@ -366,12 +363,12 @@ function bigString(month, year, colel_id) {
                     case 
                     when t2.present < t8.min_presence then 0 
                     else (t8.monthly_payment - (t4.missed * t8.missed) - (t3.late/t8.per_late * t8.late)) end 'monthlyPayment',
-                    case when t6.write_score >= 75 
-                    then 100 
-                    else 0 end 'writeTest',
-                    case when t6.oral_score = 100
-                    then 120 
-                    else 0 end 'oralTest'
+                    case when t6.write_score < t8.min_score_write_test 
+                    then 0 
+                    else t8.payment_write_test end 'writeTest',
+                    case when t6.oral_score < t8.min_score_oral_test
+                    then 0 
+                    else t8.payment_oral_test end 'oralTest'
 
                 from tb_student t1 
                                     left outer join (select t2.student_id, count(t2.student_id) as 'present'
