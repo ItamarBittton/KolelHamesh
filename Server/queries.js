@@ -170,7 +170,7 @@ function prevMonth(req) {
     return `select year(t1.date) AS year, month(t1.date) AS month 
             FROM tb_daily t1
             WHERE TIMESTAMPDIFF(month,t1.date,CURDATE()) BETWEEN 0 AND 1 AND
-                  TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 32 AND
+                  TIMESTAMPDIFF(day,t1.date,CURDATE()) <= 60 AND
                   t1.student_id IN (SELECT t2.id 
                                     FROM tb_student t2 
                                     WHERE t2.colel_id = ${req.currentUser.colel_id})
