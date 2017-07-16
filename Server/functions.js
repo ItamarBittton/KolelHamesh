@@ -250,7 +250,10 @@ function updateDailyReport(req, res) {
 
 function isOnlyDaily(req, res) {
     sql.q(queries.getColelPermissions(req), function (data) {
-        res.send({ data });
+        res.send({
+            is_only_daily: data.results[0].is_only_daily,
+            is_one_time_allow: data.results[0].is_one_time_allow
+        });
     });
 };
 
@@ -438,7 +441,7 @@ function getDefinitions(req, res) {
             })
         } else {
             res.send({
-                definitions: data.results[0] || [],
+                definitions: data.results[0][0] || [],
                 test_types: data.results[1] || [],
                 titles: ['הגדרות חישובים', 'מבחנים'],
                 reports: data.results[2] || [],
