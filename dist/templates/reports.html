@@ -1,74 +1,6 @@
 <div class="row">
     <div class="col-lg-6">
         <rd-widget>
-            <rd-widget-header icon="fa-calculator" title="הגדרות חישוב">
-                <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info">שמור</button>
-            </rd-widget-header>
-            <rd-widget-body classes="large no-padding">
-                <div class="table-responsive">
-                    <table class="table" style="margin-bottom:0">
-                        <thead>
-                            <td>שם הגדרה</td>
-                            <td>ערך בשקלים</td>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="def in definitions track by f(def)">
-                                </tr><tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">סוג הקבוצה</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.group_type" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">שווי איחור לכל X דקות</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.late" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">X דקות</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.per_late" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">נוכחות מינימלית</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.min_presence" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">שווי חיסור יומי</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.missed" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    <label class="control-label" style="margin-bottom:0">גובה מלגה חודשית</label>
-                                </td>
-                                <td>
-                                    <input type="number" ng-model="def.monthly_payment" class="form-control" style="margin-bottom: 0">
-                                </td>
-                                </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </rd-widget-body>
-        </rd-widget>
-        <br>
-        <rd-widget>
             <rd-widget-header icon="icon-layers" title="הגדרות מבחנים">
                 <button ng-click="save('test_types', test_types)" class="btn btn-sm btn-info pull-left">שמור</button>
             </rd-widget-header>
@@ -92,6 +24,74 @@
                                     <input name="name" type="number" ng-model="test.value" class="form-control" style="margin-bottom:0">
                                 </td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+        <br>
+        <rd-widget>
+            <rd-widget-header icon="fa-calculator" title="הגדרות חישוב">
+                <button ng-click="save('settings', definitions)" class="btn btn-sm btn-info">שמור</button>
+            </rd-widget-header>
+            <rd-widget-body classes="large no-padding">
+                <div class="table-responsive">
+                    <table class="table" style="margin-bottom:0">
+                        <thead>
+                            <td>שם הגדרה</td>
+                            <td>ערך בשקלים</td>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                </tr><tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">סוג הקבוצה</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.group_type" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">שווי איחור לכל X דקות</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.late" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">X דקות</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.per_late" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">נוכחות מינימלית</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.min_presence" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">שווי חיסור יומי</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.missed" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    <label class="control-label" style="margin-bottom:0">גובה מלגה חודשית</label>
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="definitions.monthly_payment" class="form-control" style="margin-bottom: 0">
+                                </td>
+                                </tr>
+                            
                         </tbody>
                     </table>
                 </div>
