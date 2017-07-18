@@ -271,11 +271,11 @@ function getExcel(data) {
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 t1.writeTest as 'מבחן בכתב',
                                 t1.oralTest as 'מבחן בע"פ',
-                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                                case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`,
 
         "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
-                                    (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סכום',
+                                    case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
                                     t1.name AS 'חלוקת הדפסה'
@@ -291,7 +291,7 @@ function getExcel(data) {
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 t1.writeTest as 'מבחן בכתב',
                                 t1.oralTest as 'מבחן בע"פ',
-                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                                case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
@@ -330,7 +330,7 @@ function getExcel(data) {
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 t1.writeTest as 'מבחן בכתב',
                                 t1.oralTest as 'מבחן בע"פ',
-                                (t1.monthlyPayment + t1.writeTest + t1.oralTest) as 'סה"כ לתשלום'
+                                case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, '0 or 1 = 1')} t1`
         ,
         "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
