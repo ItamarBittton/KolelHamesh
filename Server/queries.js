@@ -269,8 +269,8 @@ function getExcel(data) {
                                 t1.present as 'ימי נוכחות',
                                 t1.comment as 'חריגים',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
-                                t1.writeTest as 'מבחן בכתב',
-                                t1.oralTest as 'מבחן בע"פ',
+                                case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
+                                case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`,
 
@@ -289,8 +289,8 @@ function getExcel(data) {
                                 t1.street as 'כתובת',
                                 t1.comment as 'חריגים',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
-                                t1.writeTest as 'מבחן בכתב',
-                                t1.oralTest as 'מבחן בע"פ',
+                                case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
+                                case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`
     }, {
@@ -328,8 +328,8 @@ function getExcel(data) {
                                 t1.street as 'כתובת',
                                 t1.comment as 'חריגים',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
-                                t1.writeTest as 'מבחן בכתב',
-                                t1.oralTest as 'מבחן בע"פ',
+                                case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
+                                case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, '0 or 1 = 1')} t1`
         ,
