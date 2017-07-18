@@ -361,8 +361,8 @@ function bigString(month, year, colel_id) {
                     t2.present,
                     t9.comment,
                     case 
-                    when t2.present < t8.min_presence then 0 
-                    else (t8.monthly_payment - (t4.missed * t8.missed) - (t3.late/t8.per_late * t8.late)) end 'monthlyPayment',
+                    when IFNULL(t2.present,0) < t8.min_presence then 0 
+                    else (t8.monthly_payment - (IFNULL(t4.missed, 0) * t8.missed) - (IFNULL(t3.late,0)/t8.per_late * t8.late)) end 'monthlyPayment',
                     case when t6.write_score < t8.min_score_write_test or t6.write_score is null
                     then 0 
                     else t8.payment_write_test end 'writeTest',
