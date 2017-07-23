@@ -11,19 +11,19 @@
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.lastName.$dirty) && studentForm.lastName.$invalid }">
             <label class="col-md-4 control-label">שם משפחה</label>
             <div class="col-md-8">
-              <input name="lastName" type="text" ng-model="student.last_name" class="form-control" ng-minlength="3" required>
+              <input name="lastName" type="text" ng-model="student.last_name" class="form-control" ng-minlength="2" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.firstName.$dirty) && studentForm.firstName.$invalid }">
             <label class="col-md-4 control-label">שם פרטי</label>
             <div class="col-md-8">
-              <input name="firstName" type="text" ng-model="student.first_name" class="form-control" ng-minlength="3" required>
+              <input name="firstName" type="text" ng-model="student.first_name" class="form-control" ng-minlength="2" required>
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.id.$dirty) && studentForm.id.$invalid }">
             <label class="col-md-4 control-label">תעודת זהות</label>
             <div class="col-md-8">
-                <input name="id" type="text" ng-model="student.id" class="form-control" ng-disabled="(student.id + '').length == 9" required>          
+                <input name="id" type="text" ng-model="student.id" class="form-control" ng-disabled="editId" ng-minlength="8" required>          
             </div>
           </div>
           <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || studentForm.phone.$dirty) && studentForm.phone.$invalid }">
