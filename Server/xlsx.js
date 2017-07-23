@@ -2,6 +2,51 @@ var Excel = require('exceljs'),
     sql = require('./mysql.js'),
     queries = require('./queries');
 
+function createMonthTable(result, worksheet) {
+    var table = [],
+        fields = [
+            { name: "שם משפחה", width: 14 },
+            { name: "שם פרטי", width: 14 },
+            { name: "מס זהות", width: 14 },
+            { name: "טלפון", width: 14 },
+        ];
+    
+    result.forEach(function (r, i) {
+        var currDate = r.date.getDate()
+        // Add date to fields.
+        if (!fields.filter(x => x.name === currDate)[0]) {
+            fields.push({ name: currDate, width: 4 });
+        }
+
+        // Check if current student exists.
+        var curr = table.filter(x => x["מס זהות"] === r.id)[0];
+
+        if (curr) {
+            curr[currDate] = r.presence;
+        } else {
+            table.push({
+                "שם משפחה": r.first_name,
+                "שם פרטי": r.last_name,
+                "מס זהות": r.id,
+                "טלפון": r.phone,
+                [currDate]: r.presence
+            });
+        }
+    });
+
+    // All Columns.
+     worksheet.columns = fields.map(function (field, columnIndex) {
+         return {
+             header: field.name,
+             key: field.name,
+             width: field.width,
+             style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
+         }
+    });
+    
+    return table;
+};
+
 function makeReport(path, userData, res) {
     var query = queries.getExcel(userData);
     sql.mq(query, function (data) {
@@ -13,7 +58,6 @@ function makeReport(path, userData, res) {
             var workbook = new Excel.Workbook();
             workbook.creator = 'מערכת ניהול - כולל חמש';
             workbook.created = new Date();
-
 
             // Check if its דוח פרטי אברכים or דוח העברה
             if (userData.report_id === 2 || userData.report_id === 4) {
@@ -77,18 +121,22 @@ function makeReport(path, userData, res) {
             data.results.forEach(function (result, sheetIndex) {
                 // Hide "empty" keys, (Hack for if there is only one sheet).
                 if (Object.keys(query)[sheetIndex] === "log") return;
+                var worksheet = workbook.addWorksheet(Object.keys(query)[sheetIndex], { views: [{ rightToLeft: true }] });
 
-                var worksheet = workbook.addWorksheet(Object.keys(query)[sheetIndex]);
+                if (Object.keys(query)[sheetIndex] === "דוח נוכחות") {
+                    data.results[sheetIndex] = createMonthTable(result, worksheet);
+                } else {
 
-                // All Columns.
-                worksheet.columns = data.fields[sheetIndex].map(function (field, columnIndex) {
-                    return {
-                        header: field.name,
-                        key: field.name,
-                        width: 14,
-                        style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
-                    }
-                });
+                    // All Columns.
+                    worksheet.columns = data.fields[sheetIndex].map(function (field, columnIndex) {
+                        return {
+                            header: field.name,
+                            key: field.name,
+                            width: 14,
+                            style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
+                        }
+                    });
+                };    
 
                 // All Rows.                
                 worksheet.addRows(data.results[sheetIndex]);
@@ -107,6 +155,7 @@ function makeReport(path, userData, res) {
                         row.height = 30;
                         row.eachCell(function (cell, colNumber) {
                             cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                            if (cell.value === 'חג') cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFB00' } };
                         });
 
                         // Merge identical cells in izy report.
