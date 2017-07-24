@@ -373,7 +373,7 @@ function bigString(month, year, colel_id) {
                 from tb_student t1 
                                     left outer join (select t2.student_id, count(t2.student_id) as 'present'
                                         from tb_daily t2
-                                        where t2.presence = 0 and month(t2.date) = ${month} 
+                                        where t2.presence >= 0 and month(t2.date) = ${month} 
                                         group by t2.student_id) t2 on (t1.id = t2.student_id)
 
                                     left outer join (select t2.student_id, sum(t2.presence) as 'late'

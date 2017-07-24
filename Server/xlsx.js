@@ -25,8 +25,8 @@ function makeReport(path, userData, res) {
                 var firstResult = tempResults[1];
                 var firstField = tempFields[1];
                 var tempArry = [];
-                var fieldsTempArray = [];
-                var finalResults = [];
+                var fieldsTempArray = new Array(1);
+                var finalResults = new Array(1);
                 var tempQuery = Object.keys(query)[1];
 
                 // Get the first colel name
@@ -38,6 +38,9 @@ function makeReport(path, userData, res) {
                     // Push it to the first temp array
                     tempArry.push(firstResult[0]);
                     delete query[tempQuery];
+                    if(query["סיכום מלגות ופרטי כוללים"]){
+                        delete query["סיכום מלגות ופרטי כוללים"];
+                    }
                     query[currentColel] = ' ';
 
                     // Loop the whole 'רשימת האברכים באשר היא'
