@@ -289,6 +289,7 @@ function getExcel(data) {
                                     '${month + '-' + year}' AS 'תאריך',
                                     t1.name AS 'חלוקת הדפסה'
                              FROM ${bigString(month, year, data.colel_id)} t1`,
+                             
 
         "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
@@ -296,12 +297,12 @@ function getExcel(data) {
                                 t1.id as 'תעודת זהות',
                                 t1.phone as 'מספר פלאפון',
                                 t1.street as 'כתובת',
-                                t1.comment as 'חריגים',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
-                            from ${bigString(month, year, data.colel_id)} t1`
+                            from ${bigString(month, year, data.colel_id)} t1`,
+                            "סיכומים והגדרות": ''
     }, {
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
         "פרטי האברכים": `SELECT t2.name as "שם כולל",
@@ -335,7 +336,6 @@ function getExcel(data) {
                                 t1.id as 'תעודת זהות',
                                 t1.phone as 'מספר פלאפון',
                                 t1.street as 'כתובת',
-                                t1.comment as 'חריגים',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
