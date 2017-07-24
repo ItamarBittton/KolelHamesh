@@ -107,6 +107,11 @@ function makeReport(path, userData, res) {
 
                     }
 
+                    // Push one last time every last result
+                    finalResults.push(tempArry);
+                    query[currentColel] = ' ';
+                    fieldsTempArray.push(firstField)
+
                     // Collect the rest of the results
                     for (var i = 2; i < tempResults.length; i++) {
                         finalResults.push(tempResults[i]);
