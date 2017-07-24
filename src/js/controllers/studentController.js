@@ -66,5 +66,6 @@ angular.module('RDash')
             $scope.student = {};
             $scope.formErrors = false;
             $scope.display = false;
+            $scope.editId = null;
         }
     });
