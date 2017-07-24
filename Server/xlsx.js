@@ -2,6 +2,18 @@ var Excel = require('exceljs'),
     sql = require('./mysql.js'),
     queries = require('./queries');
 
+function placeSumOfEverithing(workSheet, arrToSum, keyToSum, letterOfCellToPlace, numberOfCellToPlace){
+
+    var sum = 0;
+
+    for (var i = 0; i < arrToSum.length; i++){
+        sum += arrToSum[i][keyToSum];
+    }
+
+    workSheet.getCell(letterOfCellToPlace + numberOfCellToPlace).value  = 'סה"כ ' + keyToSum;
+    workSheet.getCell(String.fromCharCode(letterOfCellToPlace.charCodeAt(0) + 1) + numberOfCellToPlace).value = sum;
+}
+
 function createMonthTable(result, worksheet) {
     var table = [],
         fields = [
@@ -10,7 +22,7 @@ function createMonthTable(result, worksheet) {
             { name: "מס זהות", width: 14 },
             { name: "טלפון", width: 14 },
         ];
-    
+
     result.forEach(function (r, i) {
         var currDate = r.date.getDate()
         // Add date to fields.
@@ -35,15 +47,15 @@ function createMonthTable(result, worksheet) {
     });
 
     // All Columns.
-     worksheet.columns = fields.map(function (field, columnIndex) {
-         return {
-             header: field.name,
-             key: field.name,
-             width: field.width,
-             style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
-         }
+    worksheet.columns = fields.map(function (field, columnIndex) {
+        return {
+            header: field.name,
+            key: field.name,
+            width: field.width,
+            style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
+        }
     });
-    
+
     return table;
 };
 
@@ -82,7 +94,7 @@ function makeReport(path, userData, res) {
                     // Push it to the first temp array
                     tempArry.push(firstResult[0]);
                     delete query[tempQuery];
-                    if(query["סיכום מלגות ופרטי כוללים"]){
+                    if (query["סיכום מלגות ופרטי כוללים"]) {
                         delete query["סיכום מלגות ופרטי כוללים"];
                     }
                     query[currentColel] = ' ';
@@ -144,13 +156,39 @@ function makeReport(path, userData, res) {
                             style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
                         }
                     });
-                };    
+                };
 
                 // All Rows.                
                 worksheet.addRows(data.results[sheetIndex]);
 
+
+
                 var prevRow = undefined,
-                    range = undefined;
+                    range = undefined,
+                    arrOfAllQueries = [
+                        "log",
+                        "פרטי האברכים",
+                        "milgot",
+                        "דוח נוכחות",
+                        "סיכום מלגות ופרטי כוללים"
+                    ];
+
+                if (arrOfAllQueries.indexOf(Object.keys(query)[sheetIndex]) == -1) {
+
+                    var cellCurrentStart = 'M';
+                    var typeToSum = [
+                        "לתשלום נוכחות",
+                        "מבחן בכתב",
+                        'מבחן בע"פ'
+                    ];
+
+                    if(Object.keys(query)[sheetIndex] == "סיכום מלגות") cellCurrentStart = 'R'
+                    for (var i = 0; i < 3; i++){
+                        placeSumOfEverithing(worksheet, data.results[sheetIndex], typeToSum[i], cellCurrentStart, i + 2)
+                    }
+                    
+                }
+
                 worksheet.eachRow(function (row, rowNumber) {
                     if (rowNumber == 1) {
                         row.eachCell(function (cell, colNumber) {
