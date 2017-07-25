@@ -170,7 +170,7 @@ function makeReport(path, userData, res) {
 
                 if (arrOfAllQueries.indexOf(Object.keys(query)[sheetIndex]) == -1) {
 
-                    var cellCurrentStart = 'M';
+                    var cellCurrentStart = 'N';
                     var typeToSum = [
                         "לתשלום נוכחות",
                         "מבחן בכתב",
