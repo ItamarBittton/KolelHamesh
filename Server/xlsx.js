@@ -2,16 +2,11 @@ var Excel = require('exceljs'),
     sql = require('./mysql.js'),
     queries = require('./queries');
 
-function placeSumOfEverithing(workSheet, arrToSum, keyToSum, letterOfCellToPlace, numberOfCellToPlace){
+function placeSomthingOnTheSheet(workSheet, keyToSum, letterOfCellToPlace, numberOfCellToPlace, val) {
 
-    var sum = 0;
 
-    for (var i = 0; i < arrToSum.length; i++){
-        sum += arrToSum[i][keyToSum];
-    }
-
-    workSheet.getCell(letterOfCellToPlace + numberOfCellToPlace).value  = 'סה"כ ' + keyToSum;
-    workSheet.getCell(String.fromCharCode(letterOfCellToPlace.charCodeAt(0) + 1) + numberOfCellToPlace).value = sum;
+    workSheet.getCell(letterOfCellToPlace + numberOfCellToPlace).value = 'סה"כ ' + keyToSum;
+    workSheet.getCell(String.fromCharCode(letterOfCellToPlace.charCodeAt(0) + 1) + numberOfCellToPlace).value = val;
 }
 
 function createMonthTable(result, worksheet) {
@@ -179,14 +174,36 @@ function makeReport(path, userData, res) {
                     var typeToSum = [
                         "לתשלום נוכחות",
                         "מבחן בכתב",
-                        'מבחן בע"פ'
+                        'מבחן בע"פ',
+                        ' '
                     ];
 
-                    if(Object.keys(query)[sheetIndex] == "סיכום מלגות") cellCurrentStart = 'R'
-                    for (var i = 0; i < 3; i++){
-                        placeSumOfEverithing(worksheet, data.results[sheetIndex], typeToSum[i], cellCurrentStart, i + 2)
+                    if (Object.keys(query)[sheetIndex] == "סיכום מלגות") {
+                        cellCurrentStart = 'T';
+
+                        // setSettingsToCell(worksheet)
+
+                        cellCurrentStart = 'R';
                     }
-                    
+
+                    var fullSum = 0;
+                    var arrToSum = data.results[sheetIndex];
+                    for (var i = 0; i < 3; i++) {
+
+                        var sum = 0;
+                            
+
+                        for (var j = 0; j < arrToSum.length; j++) {
+                            sum += arrToSum[j][typeToSum[i]];
+                        }
+
+                        placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, sum)
+
+                        fullSum += sum;
+                    }
+
+                    placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, fullSum)
+
                 }
 
                 worksheet.eachRow(function (row, rowNumber) {
