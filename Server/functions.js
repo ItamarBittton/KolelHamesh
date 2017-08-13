@@ -127,7 +127,7 @@ function approveRecomend(req, res) {
         } else {
             var recomend = data.results[0][0];
             recomend.data = req.body.data.data;
-            
+
             if (recomend.type !== 'מחיקה') {
                 if (recomend.table_name === 'tb_student') {
                     recomend.data.newObj.colel_id = recomend.colel_update;
@@ -170,17 +170,18 @@ function getDailyReport(req, res) {
     if ((req.currentUser.permission === 'Admin') ||
         (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() + 1) ||
         (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() && new Date().getDate() <= 10) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate())
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate()) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_prev_month == true && currMonth == new Date().getMonth())
     ) {
         sql.mq([queries.getDailyReport(req), queries.getDailyOptions(req),
-                queries.getTempStudents(req), queries.getDailyCount(req, currMonth)], function (data) {
+        queries.getTempStudents(req), queries.getDailyCount(req, currMonth)], function (data) {
             if (data.error) {
                 res.send({ error: 'אין אפשרות לצפות בנתונים בתאריך הנל' });
             } else {
                 var statuses = data.results[3];
                 var count = [];
 
-                statuses.forEach(function(status) {
+                statuses.forEach(function (status) {
                     if (status.count === data.results[0].length) {
                         count[status.monthday - 1] = ('green');
                     } else {
@@ -188,7 +189,7 @@ function getDailyReport(req, res) {
                     }
                 });
 
-                for (var i = 0; i < new Date().getDate() - 1; i++){
+                for (var i = 0; i < new Date().getDate() - 1; i++) {
                     if (!count[i] && new Date(`2017-${currMonth}-${i + 1}`).getDay() < 5) {
                         count[i] = 'red';
                     }
@@ -332,7 +333,7 @@ function getColel(req, res) {
 
 function editColel(req, res) {
     var reqColel = req.body.colel;
-    
+
     var Colel = {
         id: reqColel.id,
         name: reqColel.name,
