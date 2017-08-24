@@ -26,11 +26,15 @@ function requireRole(role) {
 }
 
 function getUser(credentials, callback) {
+    try {
     sql.q(queries.getUser(credentials),
         function (data) {
             callback(data.results[0]);
         }
     );
+    } catch(err){
+        console.log(err);
+    }
 };
 
 function sendCookies(req, res) {

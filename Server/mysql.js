@@ -72,6 +72,8 @@ function query(string, callback) {
         if (err) {
             console.error('Error by the connection: ')
             console.log(err);
+            console.log(process.env)
+            throw err;
         } else {
             connection.query(string, function (error, results = [], fields = []) {
                 connection.release();
