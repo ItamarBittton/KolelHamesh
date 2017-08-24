@@ -72,17 +72,18 @@ function query(string, callback) {
         if (err) {
             console.error('Error by the connection: ')
             console.log(err);
-        }
-        connection.query(string, function (error, results = [], fields = []) {
-            connection.release();
+        } else {
+            connection.query(string, function (error, results = [], fields = []) {
+                connection.release();
 
-            if (error) console.error(error);
-            callback({
-                error,
-                results,
-                fields
+                if (error) console.error(error);
+                callback({
+                    error,
+                    results,
+                    fields
+                });
             });
-        });
+        }
     });
 }
 
