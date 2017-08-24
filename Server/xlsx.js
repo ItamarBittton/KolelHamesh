@@ -32,8 +32,8 @@ function createMonthTable(result, worksheet) {
             curr[currDate] = r.presence;
         } else {
             table.push({
-                "שם משפחה": r.first_name,
-                "שם פרטי": r.last_name,
+                "שם משפחה": r.last_name,
+                "שם פרטי": r.first_name,
                 "מס זהות": r.id,
                 "טלפון": r.phone,
                 [currDate]: r.presence

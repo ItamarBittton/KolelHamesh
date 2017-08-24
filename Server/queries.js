@@ -243,8 +243,8 @@ function getExcel(data) {
         "דוח נוכחות": `SELECT t1.date,
                                t3.id AS 'id',
                                t2.key AS 'presence',
-                               t3.first_name AS 'first_name', 
                                t3.last_name AS 'last_name', 
+                               t3.first_name AS 'first_name', 
                                t3.phone AS 'phone'
                         FROM tb_daily t1
                         LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
@@ -337,9 +337,9 @@ function getExcel(data) {
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
                                 t1.phone as 'מספר פלאפון',
-                                t1.city AS 'עיר',
                                 t1.street as 'כתובת',
                                 t1.house as 'בית',
+                                t1.city AS 'עיר',
                                 t1.monthlyPayment as 'לתשלום נוכחות',
                                 case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
