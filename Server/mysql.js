@@ -1,11 +1,11 @@
 var mysql = require('mysql'),
     pool = mysql.createPool({
-         host: process.env.host,
-         user: process.env.user,
-         password: process.env.password,
-         database: process.env.database,
-         multipleStatements: true
-     }
+        host: process.env.host,
+        user: process.env.user,
+        password: process.env.password,
+        database: process.env.database,
+        multipleStatements: true
+    }
     );
 
 var tableStruct = {
@@ -69,8 +69,10 @@ function multiQuery(object, callback) {
 
 function query(string, callback) {
     pool.getConnection(function (err, connection) {
-        if(err) console.error(err);
-
+        if (err) {
+            console.error('Error by the connection: ')
+            console.log(err);
+        }
         connection.query(string, function (error, results = [], fields = []) {
             connection.release();
 
@@ -99,9 +101,9 @@ function insert(table, object) {
 function insertArray(table, array, duplicate) {
     // Validate Keys and Values.
     var keys = validate(Object.keys(array[0])),
-        splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),    
+        splitKeys = keys.split(/\s*'| |,\s*/).filter(Boolean),
         values = array.map(value => validate(Object.keys(value).map(v => Array.isArray(value[v]) ? JSON.stringify(value[v]) : value[v])));
-        //array.map(value => validate(Object.keys(value).map(v => value[v])));
+    //array.map(value => validate(Object.keys(value).map(v => value[v])));
 
     // Build request string.
     var request = [
