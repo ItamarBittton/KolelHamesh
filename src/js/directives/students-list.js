@@ -14,7 +14,7 @@ angular
 				<td ng-repeat="title in dropList.title">{{title}}</td>
 			  </thead>
 			  <tbody>
-				<tr ng-repeat="student in students">
+				<tr ng-repeat="student in students" ng-style="{'background-color' : student.is_deleted && 'gray'}">
 					<td >{{student.last_name}}</td>
 					<td >{{student.first_name}}</td>
 					<td >{{student.phone}}</td>

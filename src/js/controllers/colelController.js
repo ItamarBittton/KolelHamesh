@@ -1,9 +1,11 @@
 angular.module('RDash')
     .controller('colelController', function ($scope, Data, $rootScope, Helper) {
         Data.get('colels').then(updateColels);
-        
+
         $scope.colel = {};
         $scope.newColel = false;
+        $scope.openLastMonth = 0;
+        $scope.openDaily = 0;
 
         $scope.add = function () {
             $scope.display = true;
@@ -18,7 +20,7 @@ angular.module('RDash')
                 ],
                 note: {}
             };
-            $scope.colel.schedule.map(function(val){
+            $scope.colel.schedule.map(function (val) {
                 val.start = '00:00';
                 val.end = '00:00';
             })
@@ -63,9 +65,28 @@ angular.module('RDash')
 
         function updateColels(data) {
             $scope.colels = data.colels;
-            $scope.colels.forEach(function(colel) {
+            $scope.colels.forEach(function (colel) {
                 colel.schedule = Helper.parseJson(colel.schedule);
                 colel.note = Helper.parseJson(colel.note);
             });
         }
+
+        $scope.updateAllColelsToLastMonthOpen = function () {
+            $scope.openLastMonth = ($scope.openLastMonth + 1) % 2;
+            Data.get('updateAllColelsToLastMonthOpen/' + $scope.openLastMonth).then(function (data) {
+                getColels();
+            })
+        }
+
+        $scope.updateAllColelsToDailyOpen = function () {
+            $scope.openDaily = ($scope.openDaily + 1) % 2;
+            Data.get('updateAllColelsToDailyOpen/' + $scope.openDaily).then(function (data) {
+                getColels();
+            })
+        }
+
+        $scope.subDays = function (date) {
+            return Math.round(Math.abs((new Date().getTime() - new Date(date).getTime()) / (86400000)));
+        }
+        
     });

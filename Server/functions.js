@@ -10,6 +10,16 @@ function getToken() {
     return rand + rand;
 };
 
+function twoDigits(d) {
+    if (0 <= d && d < 10) return "0" + d.toString();
+    if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
+    return d.toString();
+}
+
+Date.prototype.toMysqlFormat = function () {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
+
 function requireRole(role) {
     return function (req, res, next) {
         var credentials = req.cookies.token ? req.cookies : req.body;
@@ -17,7 +27,13 @@ function requireRole(role) {
         getUser(credentials, function (user) {
             if (role.includes(user && user.permission)) {
                 req.currentUser = user;
-                next();
+                if (req.currentUser.permission === 'User') {
+                    sql.q(`update tb_user set last_login = '${new Date().toMysqlFormat()}' where id = ${req.currentUser.id}`, function (data) {
+                        next();
+                    })
+                } else {
+                    next();
+                }
             } else {
                 res.sendStatus(403);
             }
@@ -27,12 +43,12 @@ function requireRole(role) {
 
 function getUser(credentials, callback) {
     try {
-    sql.q(queries.getUser(credentials),
-        function (data) {
-            callback(data.results[0]);
-        }
-    );
-    } catch(err){
+        sql.q(queries.getUser(credentials),
+            function (data) {
+                callback(data.results[0]);
+            }
+        );
+    } catch (err) {
         console.log(err);
     }
 };
@@ -415,6 +431,41 @@ function deleteColel(req, res) {
     })
 };
 
+
+function updateAllColelsToLastMonthOpen(req, res) {
+    const val = req.params.val != 0 ? 1 : 0;
+
+    sql.q(`UPDATE tb_colel SET is_prev_month = ${val}`, function (data) {
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        }
+        else {
+            res.send({
+                success: 'הבקשה בוצעה בהצלחה'
+            })
+        }
+    })
+}
+
+function updateAllColelsToDailyOpen(req, res) {
+    const val = req.params.val != 0 ? 1 : 0;
+
+    sql.q(`UPDATE tb_colel SET is_only_daily = ${val}`, function (data) {
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        }
+        else {
+            res.send({
+                success: 'הבקשה בוצעה בהצלחה'
+            })
+        }
+    })
+}
+
 function getPreviousDate(req, res) {
     var date = new Date().getDate();
 
@@ -540,5 +591,9 @@ module.exports = {
     updDefinitions: updDefinitions,
 
     getReports: getReports,
-    newReport: newReport
+    newReport: newReport,
+
+
+    updateAllColelsToLastMonthOpen: updateAllColelsToLastMonthOpen,
+    updateAllColelsToDailyOpen: updateAllColelsToDailyOpen
 }

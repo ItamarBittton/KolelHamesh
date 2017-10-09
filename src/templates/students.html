@@ -115,8 +115,8 @@
               <td ng-if="role !== 'User'">מספר נתמך</td>
             </thead>
             <tbody>
-              <tr ng-repeat="student in students track by $index">
-                <td ng-click="edit($index)" ng-if="role !== 'User'">{{ student.name }}</td>
+              <tr ng-repeat="student in students track by $index" ng-style="{'background-color' : student.is_deleted && 'gray'}">
+                <td ng-click="edit($index)" ng-if="role !== 'User'" >{{ student.name }}</td>
                 <td ng-click="edit($index)">{{ student.last_name }}</td>
                 <td ng-click="edit($index)">{{ student.first_name }}</td>
                 <td ng-click="edit($index)">{{ student.phone }}</td>

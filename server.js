@@ -64,6 +64,9 @@ app.put('/definitions', f.requireRole([Admin]), f.updDefinitions);
 app.get('/reports', f.requireRole([Admin]), f.getReports);
 app.put('/newReport', f.requireRole([Admin]), f.newReport);
 
+app.get('/updateAllColelsToLastMonthOpen/:val', f.requireRole([Admin]), f.updateAllColelsToLastMonthOpen);
+app.get('/updateAllColelsToDailyOpen/:val', f.requireRole([Admin]), f.updateAllColelsToDailyOpen);
+
 var port = process.env.PORT || 8080;
 
 app.listen(port, function () {

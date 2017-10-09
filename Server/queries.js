@@ -11,7 +11,7 @@ function getUser(credentials) {
 function getStudents(req) {
     return `SELECT      t1.*, t2.name
             FROM        tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
-            WHERE       t1.colel_id = ${sql.v(req.currentUser.colel_id)}
+            WHERE       t1.colel_id = ${sql.v(req.currentUser.colel_id)} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY    t1.last_name, t1.first_name;`;
 };
 
@@ -58,17 +58,14 @@ function updateRecomend(recomend_id, status) {
 };
 
 function approveDelete(recomend) {
-    return `DELETE 
-            FROM ${recomend.table_name} 
-            WHERE id = ${recomend.data.newObj.id} AND
-                  colel_id = ${recomend.data.newObj.colel_id}`
+    return `update ${recomend.table_name} set is_deleted = 1 where id = ${recomend.data.newObj.id}`
 };
 
 function getDailyReport(req) {
-    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence
+    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted
             FROM tb_student t1 
             LEFT OUTER JOIN tb_daily t2 ON (t2.student_id = t1.id AND t2.date = ${sql.v(req.params.date)}) 
-            WHERE t1.colel_id = ${req.currentUser.colel_id}
+            WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY t1.last_name, t1.first_name`;
 };
 
@@ -103,11 +100,11 @@ function getScores(req) {
     var year = parseInt(sql.v(parseInt(req.params.date.split('-')[0])));
     var month = parseInt(sql.v(parseInt(req.params.date.split('-')[1])));
 
-    return `SELECT t1.id, t1.last_name, t1.first_name, t2.oral_score AS 'oral', t2.write_score AS 'write', t4.comment AS 'comment'
+    return `SELECT t1.id, t1.last_name, t1.first_name, t2.oral_score AS 'oral', t2.write_score AS 'write', t4.comment AS 'comment', t1.is_deleted
             FROM tb_student t1
             LEFT OUTER JOIN tb_score t2 ON (t1.id = t2.student_id AND t2.year = ${year} AND t2.month = ${month})
             LEFT OUTER JOIN tb_comment t4 ON (t1.id = t4.student_id AND t4.year = ${year} AND t4.month = ${month})
-            WHERE t1.colel_id = ${req.currentUser.colel_id}
+            WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY t1.last_name, t1.first_name`;
 };
 
@@ -138,7 +135,8 @@ function getColel() {
                    t1.is_prev_month, 
                    t1.schedule, 
                    t1.note, 
-                   t2.password
+                   t2.password,
+                   t2.last_login
             FROM tb_colel t1
             LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')
             ORDER BY t1.id, t1.name`;
