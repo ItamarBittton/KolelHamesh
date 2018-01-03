@@ -173,9 +173,9 @@ function getDailyReport(req, res) {
     var currMonth = req.params.date.split('-')[1];
     if ((req.currentUser.permission === 'Admin') ||
         (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() + 1) ||
-        (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() && new Date().getDate() <= 10) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate()) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_prev_month == true && currMonth == new Date().getMonth())
+        (req.currentUser.permission === 'User' && currMonth == (new Date().getMonth() || 12) && new Date().getDate() <= 10) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily && req.params.date.split('-')[2] == new Date().getDate()) ||
+        (req.currentUser.permission === 'User' && req.currentUser.is_prev_month == true && currMonth == (new Date().getMonth() || 12))
     ) {
         sql.mq([queries.getDailyReport(req), queries.getDailyOptions(req),
         queries.getTempStudents(req), queries.getDailyCount(req, currMonth)], function (data) {
@@ -216,7 +216,7 @@ function updateDailyReport(req, res) {
         userMonth = req.body.date.split('-')[1],
         userDay = req.body.date.split('-')[2],
         sysMonth = new Date().getMonth() + 1,
-        sysLastMonth = new Date().getMonth(),
+        sysLastMonth = new Date().getMonth() || 12,
         sysDay = new Date().getDate();
 
     if ((isUser && (userMonth == sysMonth) ||
