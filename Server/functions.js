@@ -232,7 +232,7 @@ function updateDailyReport(req, res) {
         userMonth = req.body.date.split('-')[1],
         userDay = req.body.date.split('-')[2],
         sysMonth = new Date().getMonth() + 1,
-        sysLastMonth = new Date().getMonth(),
+        sysLastMonth = new Date().getMonth() || 12,
         sysDay = new Date().getDate();
 
     if ((isUser && (userMonth == sysMonth) ||
