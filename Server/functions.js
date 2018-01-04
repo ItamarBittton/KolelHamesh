@@ -4,22 +4,6 @@ var db = require('./database.js'),
     xlsx = require('./xlsx.js'),
     queries = require('./queries');
 
-// Auth Functions
-function getToken() {
-    var rand = Math.random().toString(36).substr(2);
-    return rand + rand;
-}
-
-function twoDigits(d) {
-    if (0 <= d && d < 10) return "0" + d.toString();
-    if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
-    return d.toString();
-}
-
-Date.prototype.toMysqlFormat = function () {
-    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
-};
-
 function requireRole(role) {
     return function (req, res, next) {
         var credentials = req.cookies.token ? req.cookies : req.body;
@@ -28,7 +12,7 @@ function requireRole(role) {
             if (role.includes(user && user.permission)) {
                 req.currentUser = user;
                 if (req.currentUser.permission === 'User') {
-                    sql.q(`update tb_user set last_login = '${new Date().toMysqlFormat()}' where id = ${req.currentUser.id}`, function (data) {
+                    sql.q(`update tb_user set last_login = '${helper.jsDateToMySql(new Date())}' where id = ${req.currentUser.id}`, function (data) {
                         next();
                     });
                 } else {
@@ -595,4 +579,4 @@ module.exports = {
 
     updateAllColelsToLastMonthOpen: updateAllColelsToLastMonthOpen,
     updateAllColelsToDailyOpen: updateAllColelsToDailyOpen
-};
+}
