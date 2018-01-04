@@ -480,7 +480,7 @@ ul.sidebar .sidebar-list .menu-icon {
   overflow-y: auto;
 }
 .widget .widget-body.xxlarge {
-  height: 550px;
+  height: 80vh;
   overflow-y: auto;
 }
 .widget .widget-body.xlarge {
