@@ -30,4 +30,4 @@ function rdLoading() {
                    </svg>`
     };
     return directive;
-};
+}

@@ -15,5 +15,5 @@ angular.module('RDash').service("Helper", function () {
         } catch (ex) {
             return "";
         }
-    }    
+    };
 });

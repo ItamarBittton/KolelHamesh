@@ -2,7 +2,7 @@ angular.module('RDash')
     .controller('studentController', function ($scope, Data) {
         Data.get('students').then(function (data) {
             $scope.students = data.students;
-        })
+        });
 
         $scope.student = {};
         $scope.isNew = false;
@@ -17,7 +17,7 @@ angular.module('RDash')
             $scope.display = true;
             $scope.student = angular.copy($scope.students[id]);
             $scope.editId = id.toString();
-        }
+        };
 
         $scope.save = function (valid, toDelete) {
             var type = '';
@@ -26,7 +26,7 @@ angular.module('RDash')
             var data = {
                 oldObj: null,
                 newObj: $scope.student
-            }
+            };
             if (toDelete) {
                 type = 'מחיקה';
             } else if ($scope.isNew) {
@@ -47,7 +47,7 @@ angular.module('RDash')
 
                 $scope.close();
             }
-        }
+        };
 
         $scope.deleteStud = function (valid) {
             if (!valid) {
@@ -60,12 +60,12 @@ angular.module('RDash')
 
                 $scope.close();
             }
-        }
+        };
 
         $scope.close = function () {
             $scope.student = {};
             $scope.formErrors = false;
             $scope.display = false;
             $scope.editId = null;
-        }
+        };
     });

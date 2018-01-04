@@ -8,5 +8,5 @@ angular.module('RDash').filter('timeFilter', function ($filter) {
         var minutes = pad(Math.ceil(input % 1 * 60));
 
         return ($filter('number')(hours) + ':' + minutes);
-    }
+    };
 });

@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
     usemin = require('gulp-usemin'),
-    wrap = require('gulp-wrap'),
     connect = require('gulp-connect'),
     watch = require('gulp-watch'),
     minifyCss = require('gulp-cssnano'),
@@ -8,9 +7,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     less = require('gulp-less'),
     rename = require('gulp-rename'),
+    jshint = require('gulp-jshint'),
     minifyHTML = require('gulp-htmlmin');
 
 var paths = {
+    server: 'server/**/*.js',
     scripts: 'src/js/**/*.*',
     styles: 'src/less/**/*.*',
     images: 'src/img/**/*.*',
@@ -47,18 +48,26 @@ gulp.task('copy-bower_fonts', function() {
 /**
  * Handle custom files
  */
-gulp.task('build-custom', ['custom-images', 'custom-js', 'custom-less', 'custom-templates']);
+gulp.task('build-custom', ['custom-images', 'client-js', 'server-js', 'custom-less', 'custom-templates']);
 
 gulp.task('custom-images', function() {
     return gulp.src(paths.images)
         .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('custom-js', function() {
+gulp.task('client-js', function() {
     return gulp.src(paths.scripts)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))    
         // .pipe(minifyJs())
         .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('server-js', function() {
+    return gulp.src(paths.server)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
 gulp.task('custom-less', function() {
@@ -79,7 +88,8 @@ gulp.task('custom-templates', function() {
 gulp.task('watch', function() {
     gulp.watch([paths.images], ['custom-images']);
     gulp.watch([paths.styles], ['custom-less']);
-    gulp.watch([paths.scripts], ['custom-js']);
+    gulp.watch([paths.scripts], ['client-js']);
+    gulp.watch([paths.server], ['server-js']);
     gulp.watch([paths.templates], ['custom-templates']);
     gulp.watch([paths.index], ['usemin']);
 });

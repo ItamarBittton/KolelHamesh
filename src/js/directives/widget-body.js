@@ -18,4 +18,4 @@ function rdWidgetBody() {
         restrict: 'E'
     };
     return directive;
-};
+}

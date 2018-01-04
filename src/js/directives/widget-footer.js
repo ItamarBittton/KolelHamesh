@@ -14,4 +14,4 @@ function rdWidgetFooter() {
         restrict: 'E'
     };
     return directive;
-};
+}

@@ -7,7 +7,7 @@ angular.module('RDash').factory("Data", function ($http, Notification) {
     var alertMessage = function (data) {
         if (data.success) Notification.success(data.success);
         if (data.error) Notification.error(data.error);
-    }
+    };
     obj.get = function (q, external) {
         var path = external ? q : serviceBase + q;
         return $http.get(path).then(function (results) {

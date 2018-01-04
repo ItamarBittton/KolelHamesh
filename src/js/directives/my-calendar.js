@@ -35,7 +35,7 @@ angular
                             scope.viewDate = {
                                 year: new Date().getFullYear(),
                                 month: new Date().getMonth() + 1
-                            }
+                            };
                         }
                         var month = scope.viewDate.month - 1,
                             year = scope.viewDate.year,
@@ -75,7 +75,7 @@ angular
                         scope.selected = false;
                         scope.currentDate = scope.currentDate || new Date();
                         scope.chooseDay = function (day) {
-                            var elementsSelected = document.querySelector(".selected")
+                            var elementsSelected = document.querySelector(".selected");
                             if (elementsSelected) elementsSelected.classList.remove("selected");
                             document.getElementById(day.key).className += ' selected';
                             day.selected = true;
@@ -83,7 +83,7 @@ angular
                                 date: day.gerg,
                                 hebDate: day
                             });
-                        }
+                        };
 
                         var weekAmount = week(year, month + 1);
                         scope.month = new Array(weekAmount * 7);
@@ -108,5 +108,5 @@ angular
                     }
                 });
             }
-        }
+        };
     });

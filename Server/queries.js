@@ -5,21 +5,21 @@ function getUser(credentials) {
             FROM        tb_user t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
             WHERE       t1.token = ${sql.v(credentials.token || '0')} OR
                         (t1.user_name = ${sql.v(credentials.username || '0')} AND
-                         t1.password = ${sql.v(credentials.password || '0')})`
-};
+                         t1.password = ${sql.v(credentials.password || '0')})`;
+}
 
 function getStudents(req) {
     return `SELECT      t1.*, t2.name
             FROM        tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
             WHERE       t1.colel_id = ${sql.v(req.currentUser.colel_id)} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY    t1.last_name, t1.first_name;`;
-};
+}
 
 function getColelSettings(req) {
     return `SELECT      t2.id, t2.name, t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
             FROM        tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
             WHERE       t1.id = ${req.currentUser.id}`;
-};
+}
 
 function getRecommends(req) {
     return `SELECT      t1.id as "recomend_id",
@@ -42,24 +42,24 @@ function getRecommends(req) {
                 LEFT OUTER JOIN tb_colel t3 ON (t1.colel_update = t3.id)
             WHERE       '${req.currentUser.permission}' = 'Admin' || ${req.currentUser.colel_id} = t3.id
             ORDER BY    t1.status, t1.requested_date, t1.approved_date desc`;
-};
+}
 
 function getRecomend(recomend_id) {
     return `SELECT      * 
             FROM        tb_recomend t1
             WHERE       t1.id = ${recomend_id}`;
-};
+}
 
 function updateRecomend(recomend_id, status) {
     return `UPDATE tb_recomend 
             SET approved_date = '${new Date().toISOString().slice(0, 19).replace("T", " ")}', 
                 status = ${status}
-            WHERE id = ${recomend_id}`
-};
+            WHERE id = ${recomend_id}`;
+}
 
 function approveDelete(recomend) {
-    return `update ${recomend.table_name} set is_deleted = 1 where id = ${recomend.data.newObj.id}`
-};
+    return `update ${recomend.table_name} set is_deleted = 1 where id = ${recomend.data.newObj.id}`;
+}
 
 function getDailyReport(req) {
     return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted
@@ -67,34 +67,34 @@ function getDailyReport(req) {
             LEFT OUTER JOIN tb_daily t2 ON (t2.student_id = t1.id AND t2.date = ${sql.v(req.params.date)}) 
             WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY t1.last_name, t1.first_name`;
-};
+}
 
 function getDailyOptions(req) {
     return `SELECT t1.id, t1.key, t1.name, t1.value
             FROM tbk_presence_status t1
             WHERE t1.group_type = ${req.currentUser.group_type} 
-            ORDER BY t1.id`
-};
+            ORDER BY t1.id`;
+}
 
 function getDailyCount(req, month) {
     return `SELECT DAYOFMONTH(date) AS monthday, COUNT(*) AS count
             FROM tb_daily t1
             LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
             WHERE MONTH(date) = ${month} AND t2.colel_id = ${req.currentUser.colel_id}
-            GROUP BY MONTH(date), DAYOFMONTH(date)`
-};
+            GROUP BY MONTH(date), DAYOFMONTH(date)`;
+}
 
 function getTempStudents(req) {
     return `SELECT t1.amount
             FROM tb_onetime_student t1
-            WHERE t1.colel_id = ${req.currentUser.colel_id} AND t1.date = ${sql.v(req.params.date)}`
-};
+            WHERE t1.colel_id = ${req.currentUser.colel_id} AND t1.date = ${sql.v(req.params.date)}`;
+}
 
 function getColelPermissions(req) {
     return `SELECT t1.is_only_daily, t1.is_one_time_allow
             FROM tb_colel t1 
-            WHERE t1.id = ${sql.v(req.currentUser.colel_id)}`
-};
+            WHERE t1.id = ${sql.v(req.currentUser.colel_id)}`;
+}
 
 function getScores(req) {
     var year = parseInt(sql.v(parseInt(req.params.date.split('-')[0])));
@@ -106,22 +106,22 @@ function getScores(req) {
             LEFT OUTER JOIN tb_comment t4 ON (t1.id = t4.student_id AND t4.year = ${year} AND t4.month = ${month})
             WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
             ORDER BY t1.last_name, t1.first_name`;
-};
+}
 
 function getTestTypes() {
     return `SELECT t1.id, t1.name, t1.min_score 
             FROM tbk_test_types t1`;
-};
+}
 
 function getColels() {
     return `SELECT t1.id, t1.name FROM tb_colel t1`;
-};
+}
 
 function updateUser(req) {
     return `UPDATE tb_user 
             SET colel_id = ${sql.v(req.body.currColel)} 
             WHERE id = ${req.currentUser.id}`;
-};
+}
 
 function getColel() {
     return `SELECT t1.id,
@@ -140,26 +140,26 @@ function getColel() {
             FROM tb_colel t1
             LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')
             ORDER BY t1.id, t1.name`;
-};
+}
 
 function updateColel(reqColel, password) {
     return `UPDATE tb_user 
             SET password = ${sql.v(password)},
                 user_name = ${sql.v(reqColel.name)}
             WHERE colel_id = ${sql.v(reqColel.id)} AND NOT permission = 'Admin'`;
-};
+}
 
 function deleteColel(req) {
     return `UPDATE tb_user 
             SET colel_id = ${sql.v(req.body.currColel)}
             WHERE id = ${req.currentUser.id}`;
-};
+}
 
 function prevMonths(req) {
     return `SELECT year(t1.date) AS year, month(t1.date) AS month 
             FROM tb_daily t1
             GROUP BY year(t1.date), month(t1.date)`;
-};
+}
 
 function prevMonth(req) {
     return `select year(t1.date) AS year, month(t1.date) AS month 
@@ -170,17 +170,17 @@ function prevMonth(req) {
                                     FROM tb_student t2 
                                     WHERE t2.colel_id = ${req.currentUser.colel_id})
             GROUP BY year(t1.date), month(t1.date)`;
-};
+}
 
 function getDefinitions() {
     return `SELECT t1.group_type, t1.late, t1.per_late, t1.min_presence, t1.missed, t1.monthly_payment
             FROM tbk_settings t1`;
-};
+}
 
 function getFullTestTypes() {
     return `SELECT t1.id, t1.name, t1.min_score, t1.value
             FROM tbk_test_types t1`;
-};
+}
 
 function getReports() {
     return `SELECT t2.name as colel, t3.name as report, t1.date_created, t1.url
@@ -188,18 +188,18 @@ function getReports() {
 	        LEFT OUTER JOIN tb_colel t2 ON (t1.colel_id = t2.id)
             JOIN tbk_report t3 ON (t1.report_id = t3.id)
             ORDER BY t1.date_created DESC`;
-};
+}
 
 function getReportTypes() {
     return `SELECT id, name
             FROM tbk_report`;
-};
+}
 
 function getReport(req) {
     return `SELECT url, date_created
             FROM tb_report_history
-            WHERE report_id = ${sql.v(req.body.type || 0)}`
-};
+            WHERE report_id = ${sql.v(req.body.type || 0)}`;
+}
 
 function getStats(req) {
     var colelId = (req.currentUser.permission !== 'Admin') ? `colel_id = ${req.currentUser.colel_id}` : "true";
@@ -228,13 +228,13 @@ function getStats(req) {
                           FROM tb_daily t1
 		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
                     WHERE t1.presence >= 0 AND
-                          ${t2colelID}) t1) AS 'hoursTotal'`
-};
+                          ${t2colelID}) t1) AS 'hoursTotal'`;
+}
 
 function getExcel(data) {
-    data.date_created = data.date_created.split('-'),
-        year = parseInt(data.date_created[1]),
-        month = parseInt(data.date_created[0]);
+    data.date_created = data.date_created.split('-');
+    var year = parseInt(data.date_created[1]);
+    var month = parseInt(data.date_created[0]);
 
     return [{
         "log": `SELECT NULL LIMIT 0`,//sql.ia("tb_report_history", [data]),
@@ -342,8 +342,7 @@ function getExcel(data) {
                                 case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
-                            from ${bigString(month, year, '0 or 1 = 1')} t1`
-        ,
+                            from ${bigString(month, year, '0 or 1 = 1')} t1`,
         "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
 sum(t1.monthlyPayment) as "סך הכול מלגות",
 	   t1.colel_address as "כתובת הכולל",
@@ -352,7 +351,7 @@ sum(t1.monthlyPayment) as "סך הכול מלגות",
         from ${bigString(month, year, ' 0 or 1 = 1')} t1
         group by t1.name, t1.colel_address, t1.manager_name, t1.manager_phone`
     }][data.report_id - 1];
-};
+}
 
 function bigString(month, year, colel_id) {
     return `(select t7.id as "colel_id",
@@ -419,7 +418,7 @@ function bigString(month, year, colel_id) {
                                             t1.id = t9.student_id)
                 where t1.colel_id = ${colel_id}
                 order by t7.name, t1.last_name
-                )`
+                )`;
 }
 
 module.exports = {
@@ -451,4 +450,4 @@ module.exports = {
     getReport: getReport,
     getStats: getStats,
     getExcel: getExcel,
-}
+};

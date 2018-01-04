@@ -4,7 +4,7 @@ angular.module('RDash')
             Data.get('recomends').then(function (data) {
                 $scope.recomends = data.recomends;
                 $scope.stats = data.stats;
-                if (reload) Notification.success("נתונים נטענו בהצלחה!")
+                if (reload) Notification.success("נתונים נטענו בהצלחה!");
             });
         };
         $scope.reload();
@@ -18,7 +18,7 @@ angular.module('RDash')
             $scope.display = true;
             $scope.recomend = $scope.recomends[id];
             $scope.editId = id.toString();
-        }
+        };
 
         $scope.save = function (valid) {
             if (!valid) {
@@ -35,17 +35,17 @@ angular.module('RDash')
 
                 $scope.close();
             }
-        }
+        };
 
         $scope.close = function () {
             $scope.recomend = {};
             $scope.formErrors = false;
             $scope.display = false;
-        }
+        };
 
         $scope.whatChange = function (oldVal, newVal) {
-            return (oldVal !== newVal)
-        }
+            return (oldVal !== newVal);
+        };
 
         $scope.action = function (originalRecomend, action) {
             var recomend = angular.copy(originalRecomend),
@@ -63,8 +63,8 @@ angular.module('RDash')
                         });
                         delete newObj[i];
                     }
-                };
-            };    
+                }
+            }
 
             Data.post(action, { recomend_id: $scope.recomend_id, data: recomend }).then(function (data) {
                 if (data.status) originalRecomend.status = data.status;

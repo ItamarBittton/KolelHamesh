@@ -23,7 +23,7 @@ angular.module('RDash')
             $scope.colel.schedule.map(function (val) {
                 val.start = '00:00';
                 val.end = '00:00';
-            })
+            });
             $scope.newColel = true;
         };
 
@@ -35,7 +35,7 @@ angular.module('RDash')
             $scope.colel.is_prev_month = Boolean($scope.colel.is_prev_month);
             $scope.colel.is_one_time_allow = Boolean($scope.colel.is_one_time_allow);
             //$scope.colel.note = Helper.parseJson($scope.colel.note);
-        }
+        };
 
         $scope.save = function (valid) {
             if (!valid) {
@@ -48,13 +48,13 @@ angular.module('RDash')
                 Data[method]('colels', { colel: $scope.colel }).then(updateColels);
                 $scope.close();
             }
-        }
+        };
 
         $scope.close = function () {
             $scope.colel = {};
             $scope.formErrors = false;
             $scope.display = false;
-        }
+        };
 
         // $scope.action = function (index, action) {
         //     Data.post(action, { editId: $scope.editId, data: $scope.colels[index] }).then(function (data) {
@@ -74,19 +74,20 @@ angular.module('RDash')
         $scope.updateAllColelsToLastMonthOpen = function () {
             $scope.openLastMonth = ($scope.openLastMonth + 1) % 2;
             Data.get('updateAllColelsToLastMonthOpen/' + $scope.openLastMonth).then(function (data) {
+                // TODO: seems like an error.
                 getColels();
-            })
-        }
+            });
+        };
 
         $scope.updateAllColelsToDailyOpen = function () {
             $scope.openDaily = ($scope.openDaily + 1) % 2;
             Data.get('updateAllColelsToDailyOpen/' + $scope.openDaily).then(function (data) {
+                // TODO: seems like an error.
                 getColels();
-            })
-        }
+            });
+        };
 
         $scope.subDays = function (date) {
             return Math.round(Math.abs((new Date().getTime() - new Date(date).getTime()) / (86400000)));
-        }
-        
+        };
     });

@@ -17,4 +17,4 @@ function rdWidget() {
     function link(scope, element, attrs) {
         /* */
     }
-};
+}

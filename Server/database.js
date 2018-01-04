@@ -109,7 +109,7 @@ var DAL = {
             late: 0
         },
     ],
-    presenceStatus : [
+    presenceStatus: [
         {
             name: 'v',
             value: 0
@@ -147,13 +147,13 @@ var DAL = {
             value: -1
         },
     ],
-}
+};
 
 var get = function (table, UserID) {
     return DAL[table].filter(function (value) {
         return (value.UserID == UserID || UserID === "0");
     });
-}
+};
 
 var getByID = function (table, id) {
     return DAL[table].filter(function (value) {
@@ -165,28 +165,29 @@ var add = function (table, object = {}) {
     var match = getByID(table || object.TableName, object.id);
 
     if (match && match.id) {
-        return false
+        return false;
     } else {
         DAL[table].push(object);
-        return true
+        return true;
     }
-}
+};
 
 var remove = function (table, id) {
     DAL[table][id] = undefined;
-}
+};
 
 var edit = function (table, object, id) {
     DAL[table][id] = object;
-    return true
-}
+    return true;
+};
 
 var count = function (table) {
     return DAL[table].length;
-}
+};
+
 var getAll = function (table) {
     return DAL[table];
-}
+};
 
 module.exports = {
     ADD: add,

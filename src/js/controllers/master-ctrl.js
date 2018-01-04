@@ -10,7 +10,7 @@ angular.module('RDash')
         var mobileView = 992;
         var watch = false;
 
-        $scope.userName = $cookies.get('user') || 'משתמש'
+        $scope.userName = $cookies.get('user') || 'משתמש';
 
         $scope.getWidth = function () {
             return window.innerWidth;
@@ -25,7 +25,7 @@ angular.module('RDash')
             });
 
             window.location.href = '/';
-        }
+        };
 
         $scope.$watch($scope.getWidth, function (newValue, oldValue) {
             if (newValue >= mobileView) {
@@ -61,38 +61,32 @@ angular.module('RDash')
             Data.put('updColel', { currColel: this.currColel }).then(function (data) {
                 $state.reload();
             });
-        }
+        };
 
         if ($scope.role == 'Admin') {
             Data.get('colelList').then(function (data) {
                 $scope.currColel = data.colel_id;
                 $scope.colelList = data.colelList;
-            })
+            });
         }
 
         var state;
         $("select.form-control").click(function (event) {
             var isMenu = $(this).parent().find('ul').text();
-
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 if (isMenu == "") {
-                    href = $(this).attr('href');
-                    window.location = href;
+                    window.location = $(this).attr('href');
                 } else {
                     if (!state) {
                         state = true;
                         return false;
                     } else {
                         state = false;
-                        href = $(this).attr('href');
-                        window.location = href;
+                        window.location = $(this).attr('href');
                     }
                 }
-
             } else {
-                var href = $(this).attr('href');
-                window.location = href;
+                window.location = $(this).attr('href');
             }
         });
-
     });

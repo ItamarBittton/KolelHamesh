@@ -36,7 +36,7 @@ angular.module('RDash')
             $scope.data = data.data;
             $scope.data.schedule = JSON.parse($scope.data.schedule);
             copy = angular.copy($scope.data);
-        })
+        });
 
         $scope.submitData = function (changed) {
             if ($scope.agree) {
@@ -57,12 +57,12 @@ angular.module('RDash')
                         type: 'עריכה'
                     }, function (data) {
 
-                    })
-                };
+                    });
+                }
                 $state.go('recomends');
 
             } else {
                 Notification.error('חובה לאשר את הנתונים');
             }
         };
-    })
+    });

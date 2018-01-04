@@ -45,7 +45,7 @@ var tableStruct = {
         'schedule',
         'note'
     ]
-}
+};
 
 function validate(string) {
     // var r = `/('(''|[^'])*')|(;)|(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/g)`;
@@ -57,7 +57,7 @@ function multiQuery(object, callback) {
     pool.getConnection(function (err, connection) {
         if (err) console.error(err);
 
-        var string = Object.keys(object).map((k) => object[k]).join(';')
+        var string = Object.keys(object).map((k) => object[k]).join(';');
         connection.query(string, function (error, results = [], fields = []) {
             connection.release();
             if (error) throw error;
@@ -70,9 +70,9 @@ function multiQuery(object, callback) {
 function query(string, callback) {
     pool.getConnection(function (err, connection) {
         if (err) {
-            console.error('Error by the connection: ')
+            console.error('Error by the connection: ');
             console.log(err);
-            console.log(process.env)
+            console.log(process.env);
             throw err;
         } else {
             connection.query(string, function (error, results = [], fields = []) {
@@ -96,7 +96,7 @@ function query(string, callback) {
 // })
 
 function insert(table, object) {
-    var request = `INSERT INTO ${table} (${tableStruct[table].join(', ')}) VALUES ('${Object.values(object).join("', '")}');`
+    var request = `INSERT INTO ${table} (${tableStruct[table].join(', ')}) VALUES ('${Object.values(object).join("', '")}');`;
     console.log(request);
     return request;
 }
@@ -122,7 +122,7 @@ function insertArray(table, array, duplicate) {
     // Upsert.
     if (duplicate) {
         request.push('ON DUPLICATE KEY UPDATE',
-            splitKeys.map((x, i) => x + '=VALUES(' + x + ')'))
+            splitKeys.map((x, i) => x + '=VALUES(' + x + ')'));
     }
 
     return request.join(' ');

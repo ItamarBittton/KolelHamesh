@@ -8,7 +8,7 @@ var db = require('./database.js'),
 function getToken() {
     var rand = Math.random().toString(36).substr(2);
     return rand + rand;
-};
+}
 
 function twoDigits(d) {
     if (0 <= d && d < 10) return "0" + d.toString();
@@ -30,7 +30,7 @@ function requireRole(role) {
                 if (req.currentUser.permission === 'User') {
                     sql.q(`update tb_user set last_login = '${new Date().toMysqlFormat()}' where id = ${req.currentUser.id}`, function (data) {
                         next();
-                    })
+                    });
                 } else {
                     next();
                 }
@@ -38,7 +38,7 @@ function requireRole(role) {
                 res.sendStatus(403);
             }
         });
-    }
+    };
 }
 
 function getUser(credentials, callback) {
@@ -51,7 +51,7 @@ function getUser(credentials, callback) {
     } catch (err) {
         console.log(err);
     }
-};
+}
 
 function sendCookies(req, res) {
     res.send({
@@ -60,7 +60,7 @@ function sendCookies(req, res) {
         alert: [req.currentUser.note],
         user: req.currentUser.user_name
     });
-};
+}
 
 function getStudents(req, res) {
     sql.q(queries.getStudents(req),
@@ -70,20 +70,20 @@ function getStudents(req, res) {
             });
         }
     );
-};
+}
 
 function getColelSettings(req, res) {
     sql.q(queries.getColelSettings(req), function (data) {
         if (data.error) {
             res.send({
                 error: 'לא ניתן להציג נתונים'
-            })
+            });
         } else {
             res.send({
                 data: data.results[0]
-            })
+            });
         }
-    })
+    });
 }
 
 function getRecomends(req, res) {
@@ -102,7 +102,7 @@ function getRecomends(req, res) {
             });
         }
     });
-};
+}
 
 function newRecomend(req, res) {
     // try and save object in database, and send result to client.
@@ -118,24 +118,24 @@ function newRecomend(req, res) {
             status: null,
             table_name: `tb_${table}`,
             data: JSON.stringify(recomend)
-        }
+        };
         sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function (data) {
             if (data.error) {
                 res.send({
                     error: 'אין אפשרות להוסיף את ההמלצה'
-                })
+                });
             } else {
                 res.send({
                     success: 'ההמלצה הועברה בהצלחה להמשך תהליך האישור'
-                })
+                });
             }
-        })
+        });
     } else {
         res.send({
             error: 'אין אפשרות להוסיף את הבקשה'
-        })
+        });
     }
-};
+}
 
 function approveRecomend(req, res) {
     // Update recomendation to Approved and add date.
@@ -170,7 +170,7 @@ function approveRecomend(req, res) {
             }
         }
     });
-};
+}
 
 function denyRecomend(req, res) {
     // Update recomendation to Approved and add date.
@@ -181,9 +181,9 @@ function denyRecomend(req, res) {
             res.send({ error: 'אירעה שגיאה בעת עדכון ההמלצה' });
         } else {
             res.send({ status: 'נדחה', success: 'הבקשה בוטלה בהצלחה!' });
-        };
-    })
-};
+        }
+    });
+}
 
 function getDailyReport(req, res) {
     var currMonth = req.params.date.split('-')[1];
@@ -213,18 +213,18 @@ function getDailyReport(req, res) {
                     if (!count[i] && new Date(`2017-${currMonth}-${i + 1}`).getDay() < 5) {
                         count[i] = 'red';
                     }
-                };
+                }
 
                 res.send({
                     dailyRep: data.results[0] || [],
                     dropList: { title: ['נוכחות'], options: data.results[1] || [] },
                     tempStudents: data.results[2].length != 1 ? undefined : data.results[2][0].amount,
                     status: count
-                })
+                });
             }
         });
     }
-};
+}
 
 function updateDailyReport(req, res) {
     var isAdmin = req.currentUser.permission === 'Admin',
@@ -232,7 +232,7 @@ function updateDailyReport(req, res) {
         userMonth = req.body.date.split('-')[1],
         userDay = req.body.date.split('-')[2],
         sysMonth = new Date().getMonth() + 1,
-        sysLastMonth = new Date().getMonth(),
+        sysLastMonth = new Date().getMonth() || 12,
         sysDay = new Date().getDate();
 
     if ((isUser && (userMonth == sysMonth) ||
@@ -267,7 +267,7 @@ function updateDailyReport(req, res) {
     } else {
         res.send({ error: 'אין לך הרשאה להוסיף נתונים בתאריך הנל' });
     }
-};
+}
 
 function isOnlyDaily(req, res) {
     sql.q(queries.getColelPermissions(req), function (data) {
@@ -276,7 +276,7 @@ function isOnlyDaily(req, res) {
             is_one_time_allow: data.results[0].is_one_time_allow
         });
     });
-};
+}
 
 function getScores(req, res) {
     sql.mq([queries.getScores(req), queries.getTestTypes()], function (data) {
@@ -285,7 +285,7 @@ function getScores(req, res) {
             test_type: data.results[1] || []
         });
     });
-};
+}
 
 function putScores(req, res) {
 
@@ -310,7 +310,7 @@ function putScores(req, res) {
                 year: year,
                 month: month,
                 comment: val.comment
-            })
+            });
         }
     }
 
@@ -326,7 +326,7 @@ function putScores(req, res) {
             res.send({ success: 'הציונים הוזנו בהצלחה' });
         }
     });
-};
+}
 
 function getColelList(req, res) {
     sql.q(queries.getColels(), function (data) {
@@ -341,15 +341,15 @@ function updColelId(req, res) {
     sql.q(queries.updateUser(req), function (data) {
         res.send({
             success: 'הפעולה בוצעה בהצלחה'
-        })
+        });
     });
-};
+}
 
 function getColel(req, res) {
     sql.q(queries.getColel(), function (data) {
         res.send({ colels: data.results });
     });
-};
+}
 
 function editColel(req, res) {
     var reqColel = req.body.colel;
@@ -381,7 +381,7 @@ function editColel(req, res) {
             });
         }
     });
-};
+}
 
 function newColel(req, res) {
     var reqColel = req.body.colel;
@@ -406,7 +406,7 @@ function newColel(req, res) {
         } else {
             var newUser = [{
                 user_name: reqColel.name,
-                token: getToken(),
+                token: helper.generateToken(),
                 password: reqColel.password,
                 permission: 'User',
                 colel_id: data.results.insertId
@@ -420,7 +420,7 @@ function newColel(req, res) {
             });
         }
     });
-};
+}
 
 function deleteColel(req, res) {
     sql.q(deleteColel(req), function (data) {
@@ -428,8 +428,8 @@ function deleteColel(req, res) {
             res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
         }
         res.send({ success: 'הפעולה בוצעה בהצלחה' });
-    })
-};
+    });
+}
 
 
 function updateAllColelsToLastMonthOpen(req, res) {
@@ -444,9 +444,9 @@ function updateAllColelsToLastMonthOpen(req, res) {
         else {
             res.send({
                 success: 'הבקשה בוצעה בהצלחה'
-            })
+            });
         }
-    })
+    });
 }
 
 function updateAllColelsToDailyOpen(req, res) {
@@ -461,9 +461,9 @@ function updateAllColelsToDailyOpen(req, res) {
         else {
             res.send({
                 success: 'הבקשה בוצעה בהצלחה'
-            })
+            });
         }
-    })
+    });
 }
 
 function getPreviousDate(req, res) {
@@ -478,7 +478,7 @@ function getPreviousDate(req, res) {
             res.send({ prevDates: data.results });
         });
     } else {
-        res.send({})
+        res.send({});
     }
 }
 
@@ -494,7 +494,7 @@ function getDefinitions(req, res) {
         if (data.error) {
             res.send({
                 error: 'אין אפשרות להציג את הנתונים',
-            })
+            });
         } else {
             res.send({
                 definitions: data.results[0][0] || [],
@@ -557,7 +557,7 @@ function newReport(req, res) {
             }, res);
         }
     });
-};
+}
 
 module.exports = {
     requireRole: requireRole,
@@ -593,7 +593,6 @@ module.exports = {
     getReports: getReports,
     newReport: newReport,
 
-
     updateAllColelsToLastMonthOpen: updateAllColelsToLastMonthOpen,
     updateAllColelsToDailyOpen: updateAllColelsToDailyOpen
-}
+};

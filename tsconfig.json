@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "lib": [
+            "es2017"
+        ]
+    },
+    "include": [
+        "src/**/*",
+        "Server/**/*",
+    ],
+    "exclude": [
+        "node_modules",
+    ],
+    "typeAcquisition": {
+        "enable": true
+    }
+}

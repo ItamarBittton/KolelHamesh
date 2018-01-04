@@ -19,7 +19,7 @@ function createMonthTable(result, worksheet) {
         ];
 
     result.forEach(function (r, i) {
-        var currDate = r.date.getDate()
+        var currDate = r.date.getDate();
         // Add date to fields.
         if (!fields.filter(x => x.name === currDate)[0]) {
             fields.push({ name: currDate, width: 4 });
@@ -48,11 +48,11 @@ function createMonthTable(result, worksheet) {
             key: field.name,
             width: field.width,
             style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
-        }
+        };
     });
 
     return table;
-};
+}
 
 function makeReport(path, userData, res) {
     var query = queries.getExcel(userData);
@@ -60,7 +60,7 @@ function makeReport(path, userData, res) {
         if (data.error) {
             res.send({
                 error: 'ארעה שגיאה במהלך הנפקת הדוח'
-            })
+            });
         } else {
             var workbook = new Excel.Workbook();
             workbook.creator = 'מערכת ניהול - כולל חמש';
@@ -109,20 +109,19 @@ function makeReport(path, userData, res) {
                             currentColel = firstResult[i]['שם כולל'];
                             query[currentColel] = ' ';
                             tempArry.push(firstResult[i]);
-                            fieldsTempArray.push(firstField)
+                            fieldsTempArray.push(firstField);
                         }
-
                     }
 
                     // Push one last time every last result
                     finalResults.push(tempArry);
                     query[currentColel] = ' ';
-                    fieldsTempArray.push(firstField)
+                    fieldsTempArray.push(firstField);
 
                     // Collect the rest of the results
-                    for (var i = 2; i < tempResults.length; i++) {
-                        finalResults.push(tempResults[i]);
-                        fieldsTempArray.push(tempFields[i]);
+                    for (var j = 2; j < tempResults.length; j++) {
+                        finalResults.push(tempResults[j]);
+                        fieldsTempArray.push(tempFields[j]);
                     }
 
                     // Set the new results
@@ -149,24 +148,22 @@ function makeReport(path, userData, res) {
                             key: field.name,
                             width: 14,
                             style: { wrapText: true, vertical: 'middle', horizontal: 'center' }
-                        }
+                        };
                     });
-                };
+                }
 
                 // All Rows.                
                 worksheet.addRows(data.results[sheetIndex]);
 
-
-
-                var prevRow = undefined,
-                    range = undefined,
-                    arrOfAllQueries = [
-                        "log",
-                        "פרטי האברכים",
-                        "milgot",
-                        "דוח נוכחות",
-                        "סיכום מלגות ופרטי כוללים"
-                    ];
+                var prevRow;
+                var range;
+                var arrOfAllQueries = [
+                    "log",
+                    "פרטי האברכים",
+                    "milgot",
+                    "דוח נוכחות",
+                    "סיכום מלגות ופרטי כוללים"
+                ];
 
                 if (arrOfAllQueries.indexOf(Object.keys(query)[sheetIndex]) == -1) {
 
@@ -197,12 +194,12 @@ function makeReport(path, userData, res) {
                             sum += arrToSum[j][typeToSum[i]];
                         }
 
-                        placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, sum)
+                        placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, sum);
 
                         fullSum += sum;
                     }
 
-                    placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, fullSum)
+                    placeSomthingOnTheSheet(worksheet, typeToSum[i], cellCurrentStart, i + 2, fullSum);
 
                 }
 
@@ -250,7 +247,7 @@ function makeReport(path, userData, res) {
                     url: path
                 });
             }).catch(function (err) {
-                res.send({ error: 'ארעה שגיאה במהלך הנפקת הדוח' })
+                res.send({ error: 'ארעה שגיאה במהלך הנפקת הדוח' });
             });
         }
     });

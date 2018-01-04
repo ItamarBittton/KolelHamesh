@@ -14,9 +14,9 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
                 $scope.dropList = data.dropList;
                 $scope.tempStudents = { amount: data.tempStudents };
                 $scope.status = data.status;
-            })
+            });
         }
-    }
+    };
 
     $scope.viewDate = {
         year: new Date().getFullYear(),
@@ -25,7 +25,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
     $scope.changeAll = function (value) {
         $scope.students.forEach(x => x.presence = parseInt(value));
-    }
+    };
 
     $scope.students = [];
 
@@ -37,13 +37,13 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
             Data.get('prevDates').then(function (data) {
                 $scope.prevDates = data.prevDates;
-            })
+            });
         }
     });
 
     $scope.changeMonth = function (currentMonth) {
         if (currentMonth) $scope.viewDate = JSON.parse(currentMonth);
-    }
+    };
 
     $scope.save = function (valid) {
         if (!valid) {
@@ -66,7 +66,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
                 $scope.close();
             }
         }
-    }
+    };
 
     $scope.close = function () {
         $scope.formErrors = undefined;
@@ -74,5 +74,5 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         $scope.definition = undefined;
         $scope.disable = false;
         document.querySelector(".selected").classList.remove("selected");
-    }
+    };
 });

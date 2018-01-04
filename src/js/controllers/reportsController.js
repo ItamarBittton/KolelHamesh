@@ -22,14 +22,14 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
             type: null
         };
 
-        Data.get('prevDates').then(function(data){
+        Data.get('prevDates').then(function (data) {
             $scope.dates = data.prevDates;
-        })
+        });
     });
 
     $scope.f = function (def) {
-        console.log(def)
-    }
+        console.log(def);
+    };
 
     $scope.refresh = function () {
         $scope.refreshing = true;
@@ -48,7 +48,7 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
     };
 
     $scope.changeColel = function (selected) {
-        var selected = selected || {}
+        selected = selected || {};
         $scope.data.colel = selected.id;
         $scope.data.colelName = selected.name;
 
@@ -62,7 +62,7 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
 
         $scope.data.colel = null;
         $scope.data.colelName = null;
-    }
+    };
 
     $scope.newReport = function (type) {
         if (!type || !type.id || !$scope.data.month || (type.id == 1 && !$scope.data.colel)) {
@@ -83,5 +83,5 @@ angular.module('RDash').controller("reportsController", function ($scope, Data, 
                 }
             });
         }
-    }
-})
+    };
+});
