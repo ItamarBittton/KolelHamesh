@@ -115,28 +115,38 @@
     <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
         <rd-widget>
             <rd-widget-header icon="icon-people">
-                <button ng-click="add()" class="btn btn-sm btn-info pull-left">הוסף כולל</button>
-                <button ng-click="updateAllColelsToLastMonthOpen()" class="btn btn-sm pull-left" ng-class="{'btn-success' : !openLastMonth,  'btn-danger' : openLastMonth}">
-                    <span ng-if="!openLastMonth">עדכון כולם לחודש קודם</span>
-                    <span ng-if="openLastMonth">בטל עדכון כולם לחודש קודם</span>
-                </button>
-                <button ng-click="updateAllColelsToDailyOpen()" class="btn btn-sm pull-left" ng-class="{'btn-success' : !openDaily,  'btn-danger' : openDaily}">
-                    <span ng-if="!openDaily">פתח כולם לעדכון יומי</span>
-                    <span ng-if="openDaily">סגור כולם לעדכון יומי</span>
-                </button>
+                <div class="btn-group" uib-dropdown>
+                    <button type="button" ng-click="add()" class="btn btn-sm btn-info">הוסף כולל</button>
+                    <button type="button" class="btn btn-default btn-sm" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" style="left:0;right:auto">
+                        <li style="margin: 0 20px -10px;color:#000">עדכון כל הכוללים</li>
+                        <li class="divider"></li>
+                        <li role="menuitem">
+                            <a href ng-click="updateAll('is_only_daily', !total.daily)">
+                                <span ng-if="!total.daily">הגבל </span>גישה ללוח שנה
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href ng-click="updateAll('is_prev_month', !total.prevMonth)">
+                                <span ng-if="total.prevMonth">הגבל </span>עדכון לחודש הקודם
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <td>שם הכולל</td>
-                            <td>כתובת</td>
+                            <td width="180px">כתובת</td>
                             <td width="180px">שעות פעילות</td>
                             <td>שם האחראי</td>
                             <td>טלפון</td>
                             <td>כתובת דואר</td>
-                            <td>סיסמא</td>
-                            <td>התחברות אחרונה</td>
+                            <td>כניסה אחרונה</td>
                         </thead>
                         <tbody>
                             <tr ng-repeat="colel in colels track by $index">
@@ -157,8 +167,7 @@
                                 <td ng-click="edit($index)">{{ colel.manager_name }}</td>
                                 <td ng-click="edit($index)">{{ colel.phone }}</td>
                                 <td ng-click="edit($index)">{{ colel.mail_address }}</td>
-                                <td ng-click="edit($index)">********</td>
-                                <td ng-style="{'background-color': subDays(colel.last_login) <= 2 ? 'OliveDrab' : subDays(colel.last_login) <= 7 ? 'Orange' : 'OrangeRed'}">{{colel.last_login}}</td>
+                                <td ng-style="{'background-color': timeLapse(colel.last_login)}">{{colel.last_login | date:"MM/dd/yyyy"}}</td>
                             </tr>
                         </tbody>
                     </table>

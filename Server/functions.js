@@ -415,28 +415,11 @@ function deleteColel(req, res) {
     });
 }
 
+function updateAllColels(req, res) {
+    var column = req.body.column;
+    var value = req.body.value || false;
 
-function updateAllColelsToLastMonthOpen(req, res) {
-    const val = req.params.val != 0 ? 1 : 0;
-
-    sql.q(`UPDATE tb_colel SET is_prev_month = ${val}`, function (data) {
-        if (data.error) {
-            res.send({
-                error: 'היתה בעיה בעת עדכון הנתונים'
-            });
-        }
-        else {
-            res.send({
-                success: 'הבקשה בוצעה בהצלחה'
-            });
-        }
-    });
-}
-
-function updateAllColelsToDailyOpen(req, res) {
-    const val = req.params.val != 0 ? 1 : 0;
-
-    sql.q(`UPDATE tb_colel SET is_only_daily = ${val}`, function (data) {
+    sql.q(`UPDATE tb_colel SET ${column} = ${value}`, function (data) {
         if (data.error) {
             res.send({
                 error: 'היתה בעיה בעת עדכון הנתונים'
@@ -576,7 +559,6 @@ module.exports = {
 
     getReports: getReports,
     newReport: newReport,
-
-    updateAllColelsToLastMonthOpen: updateAllColelsToLastMonthOpen,
-    updateAllColelsToDailyOpen: updateAllColelsToDailyOpen
-}
+    
+    updateAll: updateAllColels,
+};
