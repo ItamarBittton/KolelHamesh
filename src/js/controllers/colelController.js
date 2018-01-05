@@ -87,4 +87,10 @@ angular.module('RDash')
                 return 'OrangeRed';
             }
         };
+
+        $scope.goTo = function (colel) {
+            $scope.away = true;
+            // @ts-ignore
+            window.open(location.origin, [colel.name, colel.password].join(';'));
+        };
     });

@@ -115,6 +115,7 @@
     <div ng-class="{'col-lg-12':!display, 'col-md-8':display}">
         <rd-widget>
             <rd-widget-header icon="icon-people">
+                <a ng-if="away" href="/" class="btn btn-danger btn-sm">חזור למנהל</a>
                 <div class="btn-group" uib-dropdown>
                     <button type="button" ng-click="add()" class="btn btn-sm btn-info">הוסף כולל</button>
                     <button type="button" class="btn btn-default btn-sm" uib-dropdown-toggle>
@@ -150,7 +151,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="colel in colels track by $index">
-                                <td ng-click="edit($index)">{{ colel.name }}</td>
+                                <td><a ng-click="goTo(colel)">{{ colel.name }}</a></td>
                                 <td ng-click="edit($index)">{{ colel.address }}</td>
                                 <td>
                                     <details>
