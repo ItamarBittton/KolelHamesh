@@ -1,8 +1,9 @@
-var db = require('./database.js'),
-    sql = require('./mysql.js'),
-    helper = require('./helper'),
-    xlsx = require('./xlsx.js'),
-    queries = require('./queries');
+var db = require('./database.js');
+var sql = require('./mysql.js');
+var helper = require('./helpers/helper');
+var xlsx = require('./xlsx.js');
+var queries = require('./queries');
+var access = require('./helpers/hasAccess');
 
 function requireRole(role) {
     return function (req, res, next) {
@@ -11,7 +12,7 @@ function requireRole(role) {
         getUser(credentials, function (user) {
             if (role.includes(user && user.permission)) {
                 req.currentUser = user;
-                if (req.currentUser.permission === 'User') {
+                if (access.isUser(req)) {
                     sql.q(`update tb_user set last_login = '${helper.jsDateToMySql(new Date())}' where id = ${req.currentUser.id}`, function (data) {
                         next();
                     });
@@ -169,16 +170,15 @@ function denyRecomend(req, res) {
     });
 }
 
+
 function getDailyReport(req, res) {
-    var currMonth = req.params.date.split('-')[1];
-    if ((req.currentUser.permission === 'Admin') ||
-        (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() + 1) ||
-        (req.currentUser.permission === 'User' && currMonth == new Date().getMonth() && new Date().getDate() <= 10) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_only_daily === true && req.params.date.split('-')[2] == new Date().getDate()) ||
-        (req.currentUser.permission === 'User' && req.currentUser.is_prev_month == true && currMonth == new Date().getMonth())
-    ) {
+    var selectedDate = req.method === 'GET' ? req.params.date.split('-') : req.body.date.split('-');
+
+    if (!access.allowed(req.currentUser, selectedDate))  {
+        res.send({ error: 'אין לך הרשאה לצפות בנתונים בתאריך הנל' });
+    } else {
         sql.mq([queries.getDailyReport(req), queries.getDailyOptions(req),
-        queries.getTempStudents(req), queries.getDailyCount(req, currMonth)], function (data) {
+        queries.getTempStudents(req), queries.getDailyCount(req, selectedDate[1])], function (data) {
             if (data.error) {
                 res.send({ error: 'אין אפשרות לצפות בנתונים בתאריך הנל' });
             } else {
@@ -193,8 +193,10 @@ function getDailyReport(req, res) {
                     }
                 });
 
-                for (var i = 0; i < new Date().getDate() - 1; i++) {
-                    if (!count[i] && new Date(`2017-${currMonth}-${i + 1}`).getDay() < 5) {
+                var day = new Date().getDate();
+                for (var i = 1; i < day; i++) {
+                    // If this day is empty and is between Sunday-Thursday.
+                    if (!count[i] && new Date(`2017-${selectedDate[1]}-${i}`).getDay() < 5) {
                         count[i] = 'red';
                     }
                 }
@@ -211,19 +213,9 @@ function getDailyReport(req, res) {
 }
 
 function updateDailyReport(req, res) {
-    var isAdmin = req.currentUser.permission === 'Admin',
-        isUser = req.currentUser.permission === 'User',
-        userMonth = req.body.date.split('-')[1],
-        userDay = req.body.date.split('-')[2],
-        sysMonth = new Date().getMonth() + 1,
-        sysLastMonth = new Date().getMonth() || 12,
-        sysDay = new Date().getDate();
-
-    if ((isUser && (userMonth == sysMonth) ||
-        (userDay == sysDay && req.currentUser.is_only_daily) ||
-        (userMonth == sysLastMonth && (sysDay <= 3 || req.currentUser.is_prev_month))) ||
-        isAdmin) {
-
+    if (!access.allowed(req.currentUser, req.body.date.split('-'))) {
+        res.send({ error: 'אין לך הרשאה להוסיף נתונים בתאריך הנל' });
+    } else {
         var convertObjtoArr = [];
         req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
 
@@ -248,8 +240,6 @@ function updateDailyReport(req, res) {
                 }
             });
         }
-    } else {
-        res.send({ error: 'אין לך הרשאה להוסיף נתונים בתאריך הנל' });
     }
 }
 
