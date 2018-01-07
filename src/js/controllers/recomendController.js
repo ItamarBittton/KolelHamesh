@@ -62,6 +62,10 @@ angular.module('RDash')
                 }
             }
 
+            if (recomend.type == "הוספה" && !recomend.approved_date) {
+                recomend.data.newObj.supported_id = prompt('אנא הכנס מספר נתמך');
+            }
+
             Data.post(action, { recomend_id: $scope.recomend_id, data: recomend }).then(function (data) {
                 if (data.status) originalRecomend.status = data.status;
             });
