@@ -2,12 +2,13 @@
     <div class="col-lg-12">
         <rd-widget>
             <form name="scoreForm" novalidate>
-                <rd-widget-header icon="icon-note" title="ציונים">
-                    <button ng-click="save()" class="btn btn-info btn-sm">שמור</button>
+                <rd-widget-header icon="icon-note" title="ציונים של חודש {{ date.slice(0, -3).split('-').reverse().join('/') }}">
+                    <span></span>
                     <select ng-if="prevDates" style="margin: 0 15px; width: 120px" ng-model="current" ng-change="changeMonth(current)" class="form-control pull-left">
                         <option value="" disabled="disabled">החלף חודש</option>
                         <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                     </select>
+                    <button ng-click="save()" class="btn btn-info btn-sm">שמור</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xxlarge no-padding">
                     <div>
