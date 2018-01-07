@@ -15,12 +15,12 @@ angular
                         <td ng-repeat="title in dropList.title">{{title}}</td>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="student in students" ng-style="{'background-color' : student.is_deleted && 'gray'}">
+                        <tr ng-repeat="student in students" ng-class="{ 'archive' : student.is_deleted }">
                             <td>{{student.last_name}}</td>
                             <td>{{student.first_name}}</td>
                             <td>{{student.phone}}</td>
                             <td>
-                                <select 
+                                <select ng-disabled="{{student.is_deleted}}"
                                         ng-model="student.presence" 
                                         ng-options="def.value as def.name for def in dropList.options" class="form-control">
                                 </select>
