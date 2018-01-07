@@ -69,7 +69,16 @@ function approveDelete(recomend) {
 }
 
 function getDailyReport(req) {
-    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted
+    var temp = req.params.date.split('-');
+    var year = parseInt(sql.v(parseInt(temp[0])));
+    var month = parseInt(sql.v(parseInt(temp[1])));
+
+    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted, 6 - (SELECT COUNT(*)
+                            FROM tb_daily t3
+                            WHERE t3.student_id = t1.id
+                                AND MONTH(t3.date) = ${month}
+                                AND YEAR(t3.date) = ${year}
+                                AND presence = -2) as count
             FROM tb_student t1 
             LEFT OUTER JOIN tb_daily t2 ON (t2.student_id = t1.id AND t2.date = ${sql.v(req.params.date)}) 
             WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 

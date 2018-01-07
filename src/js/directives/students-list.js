@@ -13,6 +13,7 @@ angular
                         <td>שם פרטי</td>
                         <td>טלפון</td>
                         <td ng-repeat="title in dropList.title">{{title}}</td>
+                        <td>ח.מ</td>
                     </thead>
                     <tbody>
                         <tr ng-repeat="student in students" ng-class="{ 'archive' : student.is_deleted }">
@@ -25,12 +26,10 @@ angular
                                         ng-options="def.value as def.name for def in dropList.options" class="form-control">
                                 </select>
                             </td>
+                            <td>{{student.count}}</td>
                         </tr>
                     </tbody>
                 </table>
 		    </div>`,
-            link: function (scope) {
-
-            }
         };
     });
