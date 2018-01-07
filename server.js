@@ -34,10 +34,12 @@ app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 app.get('/colelSettings', f.requireRole([Admin, User]), f.getColelSettings)
 
 app.get('/students', f.requireRole([Admin, User]), f.getStudents);
+app.post('/deleteStudent', f.requireRole([Admin]), f.deleteStudent);
 
 app.get('/colels', f.requireRole([Admin]), f.getColel);
 app.put('/colels', f.requireRole([Admin]), f.newColel);
 app.post('/colels', f.requireRole([Admin]), f.editColel);
+app.post('/deleteColel', f.requireRole([Admin]), f.deleteColel);
 
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([Admin, User]), f.newRecomend);

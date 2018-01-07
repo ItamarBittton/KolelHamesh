@@ -51,6 +51,20 @@ angular.module('RDash')
             }
         };
 
+        $scope.delete = function () {
+            var message = [
+                'אתה עומד למחוק את כולל',
+                $scope.colel.name,
+                'עם שם המשתמש שלו לצמיתות. אתה בטוח?'
+            ].join(' ');
+
+            // @ts-ignore
+            if (confirm(message)) {
+                Data.post('deleteColel', { id: $scope.colel.id }).then(Data.get('colels').then(updateColels));
+                $scope.close();
+            }
+        };
+
         $scope.close = function () {
             $scope.colel = {};
             $scope.formErrors = false;

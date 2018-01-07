@@ -48,6 +48,7 @@
     <div class="col-lg-12">
         <rd-widget>
             <rd-widget-header icon="icon-notebook" title="רשימת המלצות">
+                <input ng-model="data.query" type="text" placeholder="סנן המלצות" autofocus style="height:30px;padding:6px 12px;border:1px solid #ccc;border-radius:4px">
                 <button class="btn btn-link btn-sm ng-scope" style="padding:0;margin: -5px 0 -10px">
                     <dir-pagination-controls max-size="7"></dir-pagination-controls>
                 </button>
@@ -67,7 +68,7 @@
                             <td width="7%" ng-if="role === 'Admin'">פעולות</td>
                         </thead>
                         <tbody>
-                            <tr dir-paginate="recomend in recomends | itemsPerPage:10" ng-class="{'archive': recomend.status !== 'ממתין...'}">
+                            <tr dir-paginate="recomend in recomends | filter:data.query | itemsPerPage:10" ng-class="{'archive': recomend.status !== 'ממתין...'}">
                                 <td>{{ recomend.name }}</td>
                                 <td>{{ recomend.type }}</td>
                                 <td>{{ recomend.req_type }}</td>
@@ -79,8 +80,8 @@
                                         <summary>{{ recomend.data.newObj.first_name + ' ' + recomend.data.newObj.last_name }} {{ recomend.data.newObj.manager_name }}
                                         </summary>
                                         <p ng-repeat="(key, value) in recomend.data.newObj | inputfilter track by $index">
-                                            <label ng-if="key != 'colel_id'" class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                            <input ng-if="key != 'colel_id'" class="col-lg-7 form-control" type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}">
+                                            <label ng-if="toDisplay(key)" class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
+                                            <input ng-if="toDisplay(key)" class="col-lg-7 form-control" type="text" ng-model="recomend.data.newObj[key]" ng-class="{'error' : (whatChange(recomend.data.oldObj[key], recomend.data.newObj[key]) && recomend.data.oldObj)}">
                                         </p>
                                     </details>
                                 </td>
@@ -91,6 +92,11 @@
                                         </span>
                                         <span class="btn btn-xs btn-success" ng-click="action(recomend, 'approve')">
                                             <i class="fa fa-check-square"></i>
+                                        </span>
+                                    </div>
+                                    <div ng-if='recomend.status === "אושר" && recomend.type === "מחיקה"'>
+                                        <span class="btn btn-xs btn-danger" ng-click="delete(recomend)">
+                                            <i class="fa fa-ban"></i>
                                         </span>
                                     </div>
                                 </td>

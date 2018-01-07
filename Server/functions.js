@@ -57,6 +57,18 @@ function getStudents(req, res) {
     );
 }
 
+function deleteStudent(req, res) {
+    var id = sql.v(req.body.id);
+    var recomend_id = sql.v(req.body.recomend_id);
+
+    sql.mq([queries.updateRecomend(recomend_id, 2), queries.deleteStudent(id)], function (data) {
+        if (data.error) {
+            res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
+        }
+        res.send({ success: 'הפעולה בוצעה בהצלחה' });
+    });
+}
+
 function getColelSettings(req, res) {
     sql.q(queries.getColelSettings(req), function (data) {
         if (data.error) {
@@ -397,7 +409,9 @@ function newColel(req, res) {
 }
 
 function deleteColel(req, res) {
-    sql.q(deleteColel(req), function (data) {
+    var id = sql.v(req.body.id);
+
+    sql.q(queries.deleteColel(id), function (data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
         }
@@ -522,6 +536,7 @@ module.exports = {
     sendCookies: sendCookies,
 
     getStudents: getStudents,
+    deleteStudent: deleteStudent,
 
     getColelSettings: getColelSettings,
 

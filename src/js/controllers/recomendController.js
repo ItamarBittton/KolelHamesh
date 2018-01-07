@@ -1,5 +1,6 @@
 angular.module('RDash')
     .controller('recomendController', function ($scope, Data, $rootScope, Notification) {
+        $scope.data = {};
         $scope.reload = function (reload) {
             Data.get('recomends').then(function (data) {
                 $scope.recomends = data.recomends;
@@ -24,13 +25,8 @@ angular.module('RDash')
             if (!valid) {
                 $scope.formErrors = true;
             } else if (valid) {
-                // var method = $scope.editId ? 'put' : 'post';
-                // if (toDelete) {
-                //     method = 'delete';
-                // }
-                // var method = toDelete ? 'delete' : 'post';
                 Data.post('recomends', { student: $scope.recomend }).then(function (result) {
-                    $scope.recomends = data.recomends;
+                    $scope.recomends = result.recomends;
                 });
 
                 $scope.close();
@@ -69,5 +65,24 @@ angular.module('RDash')
             Data.post(action, { recomend_id: $scope.recomend_id, data: recomend }).then(function (data) {
                 if (data.status) originalRecomend.status = data.status;
             });
+        };
+
+        $scope.delete = function (recomend) {
+            var data = recomend.data.newObj;
+            var message = [
+                'אתה עומד למחוק את',
+                data.first_name,
+                data.last_name,
+                'לצמיתות. אתה בטוח?'
+            ].join(' ');
+
+            // @ts-ignore
+            if (confirm(message)) {
+                Data.post('deleteStudent', { id: data.id, recomend_id: recomend.recomend_id }).then($scope.reload);
+            }
+        };
+
+        $scope.toDisplay = function (key) {
+            return !(key === 'is_deleted' || key === 'colel_id');
         };
     });

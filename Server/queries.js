@@ -15,6 +15,12 @@ function getStudents(req) {
             ORDER BY    t1.last_name, t1.first_name;`;
 }
 
+function deleteStudent(id) {
+    return `DELETE student
+            FROM tb_student as student
+            WHERE id = ${id}`;
+}
+
 function getColelSettings(req) {
     return `SELECT      t2.id, t2.name, t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
             FROM        tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
@@ -32,6 +38,7 @@ function getRecommends(req) {
                             end as "req_type", 
                         t1.requested_date,
                         case t1.status
+                            when 2 then "נמחק"
                             when 1 then "אושר"
                             when 0 then "נדחה" 
                             else "ממתין..."
@@ -149,10 +156,11 @@ function updateColel(reqColel, password) {
             WHERE colel_id = ${sql.v(reqColel.id)} AND NOT permission = 'Admin'`;
 }
 
-function deleteColel(req) {
-    return `UPDATE tb_user 
-            SET colel_id = ${sql.v(req.body.currColel)}
-            WHERE id = ${req.currentUser.id}`;
+function deleteColel(id) {
+    return `DELETE colel, user
+            FROM tb_colel as colel, tb_user as user
+            WHERE colel.id = user.colel_id AND
+                  colel.id = ${id}`;
 }
 
 function prevMonths(req) {
@@ -424,6 +432,7 @@ function bigString(month, year, colel_id) {
 module.exports = {
     getUser: getUser,
     getStudents: getStudents,
+    deleteStudent: deleteStudent,
     getColelSettings: getColelSettings,
     getRecommends: getRecommends,
     getRecomend: getRecomend,
