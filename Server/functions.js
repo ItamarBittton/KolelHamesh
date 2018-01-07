@@ -12,7 +12,7 @@ function requireRole(role) {
         getUser(credentials, function (user) {
             if (role.includes(user && user.permission)) {
                 req.currentUser = user;
-                if (access.isUser(req)) {
+                if (access.isUser(user) && req.body.admin == 'false') {
                     sql.q(`update tb_user set last_login = '${helper.jsDateToMySql(new Date())}' where id = ${req.currentUser.id}`, function (data) {
                         next();
                     });

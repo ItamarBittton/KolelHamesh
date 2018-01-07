@@ -131,6 +131,7 @@
 
             function login(e, user, pass) {
                 if (e) e.preventDefault();
+                var isAdmin = Boolean(user);
                 user = user || $(".user").val();
                 pass = pass || $(".pass").val();
 
@@ -146,7 +147,8 @@
                     
                     $.post("/login", {
                         username: user,
-                        password: pass
+                        password: pass,
+                        admin: isAdmin
                     }).done(function (data) {
                         document.cookie = 'token=' + data.token + ";";
                         document.cookie = 'link=' + data.link + ";";

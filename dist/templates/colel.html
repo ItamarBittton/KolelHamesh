@@ -152,7 +152,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="colel in colels track by $index">
-                                <td><a ng-click="goTo(colel)">{{ colel.name }}</a></td>
+                                <td><a style="cursor:pointer" ng-click="goTo(colel)">{{ colel.name }}</a></td>
                                 <td ng-click="edit($index)">{{ colel.address }}</td>
                                 <td>
                                     <details>
