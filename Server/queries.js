@@ -82,7 +82,7 @@ function getDailyReport(req) {
             FROM tb_student t1 
             LEFT OUTER JOIN tb_daily t2 ON (t2.student_id = t1.id AND t2.date = ${sql.v(req.params.date)}) 
             WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
-            ORDER BY t1.last_name, t1.first_name`;
+            ORDER BY t1.is_deleted, t1.last_name, t1.first_name`;
 }
 
 function getDailyOptions(req) {
