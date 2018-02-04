@@ -229,7 +229,7 @@ function updateDailyReport(req, res) {
         res.send({ error: 'אין לך הרשאה להוסיף נתונים בתאריך הנל' });
     } else {
         var convertObjtoArr = [];
-        req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence })));
+        req.body.daily.map((val, idx) => (convertObjtoArr.push({ student_id: val.id, date: req.body.date, presence: val.presence, comment: val.comment })));
 
         if (!convertObjtoArr.length) {
             res.send({ error: 'אין נתונים' });
