@@ -7,7 +7,16 @@ angular.module('RDash', [
     'ngMaterial',
     'angularUtils.directives.dirPagination',
     'zt.angular-loading'
-]).config(function (NotificationProvider, $qProvider) {
+]).config(function (NotificationProvider, $qProvider, $mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function (date) {
+
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + '/' + (monthIndex + 1) + '/' + year;
+
+    };
     $qProvider.errorOnUnhandledRejections(false);
     NotificationProvider.setOptions({
         startTop: 20,

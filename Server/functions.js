@@ -437,6 +437,24 @@ function updateAllColels(req, res) {
     });
 }
 
+function updateDateOfAllStudents(req, res) {
+    var column = req.body.column;
+    var value = req.body.value || false;
+
+    sql.q(`UPDATE tb_colel SET ${column} = ${value}`, function (data) {
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        }
+        else {
+            res.send({
+                success: 'הבקשה בוצעה בהצלחה'
+            });
+        }
+    });
+}
+
 function getPreviousDate(req, res) {
     var date = new Date().getDate();
 
@@ -566,4 +584,5 @@ module.exports = {
     newReport: newReport,
     
     updateAll: updateAllColels,
+    updateAllStudents : updateDateOfAllStudents
 };

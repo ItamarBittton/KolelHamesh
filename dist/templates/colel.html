@@ -68,7 +68,7 @@
                         <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל גישה ללוח שנה</label>-->
                         <div class="col-md-12">
                             <md-switch class="md-warn" ng-model="colel.is_only_daily" aria-label="הגבל גישה ללוח שנה">
-                                הגבל גישה ללוח שנה 
+                                הגבל גישה ללוח שנה
                             </md-switch>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                         </div>-->
                         <div class="col-md-12">
                             <md-switch ng-model="colel.is_prev_month" class="md-primary" md-no-ink aria-label="אפשר עדכון לחודש הקודם">
-                               אפשר עדכון לחודש הקודם
+                                אפשר עדכון לחודש הקודם
                             </md-switch>
                         </div>
                     </div>
@@ -93,19 +93,19 @@
                         <label class="col-md-8 control-label" style="margin-bottom: 20px">הגבל עדכון מרובה</label>-->
                         <div class="col-md-12 md-red">
                             <md-switch class="md-primary" ng-model="colel.is_one_time_allow" md-no-ink aria-label="אפשר עדכון מרובה">
-                               אפשר עדכון מרובה
+                                אפשר עדכון מרובה
                             </md-switch>
                         </div>
                     </div>
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.hours.$dirty) && colelForm.hours.$invalid }">
-                                <label class="col-md-4 control-label">שעות פעילות:</label>
-                                <span class="clearfix"></span>
-                            <p ng-repeat="(key, value) in colel.schedule track by $index" class="container-fluid">
-                                <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
-                                <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].start">
-                                <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
-                                
-                            </p>
+                        <label class="col-md-4 control-label">שעות פעילות:</label>
+                        <span class="clearfix"></span>
+                        <p ng-repeat="(key, value) in colel.schedule track by $index" class="container-fluid">
+                            <label class="col-lg-4 control-label">{{ $root.t[key] || key }}:</label>
+                            <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].start">
+                            <input class="col-lg-4 form-control" type="text" ng-model="colel.schedule[key].end" class="col-lg-4 form-control">
+
+                        </p>
                         
                     </div>
                 </rd-widget-body>
@@ -136,6 +136,17 @@
                             </a>
                         </li>
                     </ul>
+
+                    <div class="dateForAll">
+                        בחר יום בחודש עבור כל הכוללים:
+
+
+                        <md-input-container>
+                            <md-datepicker ng-model="user.submissionDate"></md-datepicker>
+                        </md-input-container>
+
+                        <button class="btn btn-sm btn-info">שמור</button>
+                    </div>
                 </div>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
@@ -152,7 +163,9 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="colel in colels track by $index">
-                                <td><a style="cursor:pointer" ng-click="goTo(colel)">{{ colel.name }}</a></td>
+                                <td>
+                                    <a style="cursor:pointer" ng-click="goTo(colel)">{{ colel.name }}</a>
+                                </td>
                                 <td ng-click="edit($index)">{{ colel.address }}</td>
                                 <td>
                                     <details>
