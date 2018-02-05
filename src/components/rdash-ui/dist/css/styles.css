@@ -23,6 +23,7 @@
     padding-bottom: 5px;
     border-bottom: 1px solid #ddd;
 }
+
 .action,
 summary {
     cursor: pointer;
@@ -113,32 +114,34 @@ details[open] summary:after {
     background-color: #b2bfdc;
 }
 
+
 /*** material-switch Checkbox ***/
 
-.material-switch > input[type="checkbox"] {
-    display: none;   
+.material-switch>input[type="checkbox"] {
+    display: none;
 }
 
-.material-switch > label {
+.material-switch>label {
     cursor: pointer;
     height: 0px;
-    position: relative; 
-    width: 40px;  
+    position: relative;
+    width: 40px;
 }
 
-.material-switch > label::before {
+.material-switch>label::before {
     background: rgb(0, 0, 0);
     box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     content: '';
     height: 16px;
     margin-top: -8px;
-    position:absolute;
+    position: absolute;
     opacity: 0.3;
     transition: all 0.4s ease-in-out;
     width: 40px;
 }
-.material-switch > label::after {
+
+.material-switch>label::after {
     background: rgb(255, 255, 255);
     border-radius: 16px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
@@ -151,20 +154,26 @@ details[open] summary:after {
     transition: all 0.3s ease-in-out;
     width: 24px;
 }
-.material-switch > input[type="checkbox"]:checked + label::before {
+
+.material-switch>input[type="checkbox"]:checked+label::before {
     background: inherit;
     opacity: 0.5;
 }
-.material-switch > input[type="checkbox"]:checked + label::after {
+
+.material-switch>input[type="checkbox"]:checked+label::after {
     background: inherit;
     left: 20px;
 }
-.md-switch:last-of-type{
+
+.md-switch:last-of-type {
     margin: 5px !important;
 }
-.md-switch{
+
+.md-switch {
     margin: 5px !important;
 }
+
+
 /*.md-ink-ripple{
     background-color: red !important;
 }
@@ -175,15 +184,17 @@ details[open] summary:after {
 .md-green{
     background-color: green;
 }*/
-.md-label{
+
+.md-label {
     margin-right: 33.3333% !important;
 }
+
 
 /*select.form-control{
     white-space: nowrap;
 }*/
 
-.dateForAll{
+.dateForAll {
     display: flex;
     margin-right: 20px;
 }

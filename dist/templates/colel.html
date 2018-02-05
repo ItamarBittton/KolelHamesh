@@ -138,14 +138,17 @@
                     </ul>
 
                     <div class="dateForAll">
-                        בחר יום בחודש עבור כל הכוללים:
+                        <span>
+
+                            עדכן את כולם כשבת\חג בתאריך:
+                        </span>
 
 
                         <md-input-container>
-                            <md-datepicker ng-model="user.submissionDate"></md-datepicker>
+                            <md-datepicker ng-model="chosenDate"></md-datepicker>
                         </md-input-container>
 
-                        <button class="btn btn-sm btn-info">שמור</button>
+                        <button ng-click="updateAllStudents(chosenDate)" class="btn btn-sm btn-info">שמור</button>
                     </div>
                 </div>
             </rd-widget-header>

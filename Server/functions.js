@@ -6,14 +6,14 @@ var queries = require('./queries');
 var access = require('./helpers/hasAccess');
 
 function requireRole(role) {
-    return function (req, res, next) {
+    return function(req, res, next) {
         var credentials = req.cookies.token ? req.cookies : req.body;
 
-        getUser(credentials, function (user) {
+        getUser(credentials, function(user) {
             if (role.includes(user && user.permission)) {
                 req.currentUser = user;
                 if (access.isUser(user) && req.body.admin == 'false') {
-                    sql.q(`update tb_user set last_login = '${helper.jsDateToMySql(new Date())}' where id = ${req.currentUser.id}`, function (data) {
+                    sql.q(`update tb_user set last_login = '${helper.jsDateToMySql(new Date())}' where id = ${req.currentUser.id}`, function(data) {
                         next();
                     });
                 } else {
@@ -29,7 +29,7 @@ function requireRole(role) {
 function getUser(credentials, callback) {
     try {
         sql.q(queries.getUser(credentials),
-            function (data) {
+            function(data) {
                 callback(data.results[0]);
             }
         );
@@ -49,7 +49,7 @@ function sendCookies(req, res) {
 
 function getStudents(req, res) {
     sql.q(queries.getStudents(req),
-        function (data) {
+        function(data) {
             res.send({
                 students: data.results
             });
@@ -61,7 +61,7 @@ function deleteStudent(req, res) {
     var id = sql.v(req.body.id);
     var recomend_id = sql.v(req.body.recomend_id);
 
-    sql.mq([queries.updateRecomend(recomend_id, 2), queries.deleteStudent(id)], function (data) {
+    sql.mq([queries.updateRecomend(recomend_id, 2), queries.deleteStudent(id)], function(data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
         }
@@ -70,7 +70,7 @@ function deleteStudent(req, res) {
 }
 
 function getColelSettings(req, res) {
-    sql.q(queries.getColelSettings(req), function (data) {
+    sql.q(queries.getColelSettings(req), function(data) {
         if (data.error) {
             res.send({
                 error: 'לא ניתן להציג נתונים'
@@ -84,7 +84,7 @@ function getColelSettings(req, res) {
 }
 
 function getRecomends(req, res) {
-    sql.mq([queries.getRecommends(req), queries.getStats(req)], function (data) {
+    sql.mq([queries.getRecommends(req), queries.getStats(req)], function(data) {
         if (data.error) {
             res.send({
                 error: 'לא ניתן להציג נתונים'
@@ -109,14 +109,14 @@ function newRecomend(req, res) {
         var table = req.body.table;
         var newRecomend = {
             colel_update: req.currentUser.colel_id,
-            requested_date: new Date().toISOString().slice(0, 19).replace("T", " "),//`${new Date(new Date().getTime()).toLocaleString()} `,
+            requested_date: new Date().toISOString().slice(0, 19).replace("T", " "), //`${new Date(new Date().getTime()).toLocaleString()} `,
             approved_date: null,
             type: req.body.type,
             status: null,
             table_name: `tb_${table}`,
             data: JSON.stringify(recomend)
         };
-        sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function (data) {
+        sql.q(sql.ia(`tb_recomend`, [newRecomend], true), function(data) {
             if (data.error) {
                 res.send({
                     error: 'אין אפשרות להוסיף את ההמלצה'
@@ -138,7 +138,7 @@ function approveRecomend(req, res) {
     // Update recomendation to Approved and add date.
     var recomend_id = sql.v(req.body.data.recomend_id);
 
-    sql.mq([queries.getRecomend(recomend_id), queries.updateRecomend(recomend_id, 1)], function (data) {
+    sql.mq([queries.getRecomend(recomend_id), queries.updateRecomend(recomend_id, 1)], function(data) {
         if (data.error || data.results[0].length < 1) {
             res.send({ error: 'אירעה שגיאה' });
         } else {
@@ -149,7 +149,7 @@ function approveRecomend(req, res) {
                 if (recomend.table_name === 'tb_student') {
                     recomend.data.newObj.colel_id = recomend.colel_update;
                 }
-                sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], (recomend.type !== 'הוספה')), function (data) {
+                sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], (recomend.type !== 'הוספה')), function(data) {
                     if (data.error) {
                         res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים החדשים' });
                     } else {
@@ -157,7 +157,7 @@ function approveRecomend(req, res) {
                     }
                 });
             } else {
-                sql.q(queries.approveDelete(recomend), function (data) {
+                sql.q(queries.approveDelete(recomend), function(data) {
                     if (data.error) {
                         res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
                     } else {
@@ -173,7 +173,7 @@ function denyRecomend(req, res) {
     // Update recomendation to Approved and add date.
     var recomend_id = sql.v(req.body.data.recomend_id);
 
-    sql.mq([queries.getRecomend(recomend_id), queries.updateRecomend(recomend_id, 0)], function (data) {
+    sql.mq([queries.getRecomend(recomend_id), queries.updateRecomend(recomend_id, 0)], function(data) {
         if (data.error || data.results[0].length < 1) {
             res.send({ error: 'אירעה שגיאה בעת עדכון ההמלצה' });
         } else {
@@ -186,18 +186,19 @@ function denyRecomend(req, res) {
 function getDailyReport(req, res) {
     var selectedDate = req.method === 'GET' ? req.params.date.split('-') : req.body.date.split('-');
 
-    if (!access.allowed(req.currentUser, selectedDate))  {
+    if (!access.allowed(req.currentUser, selectedDate)) {
         res.send({ error: 'אין לך הרשאה לצפות בנתונים בתאריך הנל' });
     } else {
         sql.mq([queries.getDailyReport(req), queries.getDailyOptions(req),
-        queries.getTempStudents(req), queries.getDailyCount(req, selectedDate[1])], function (data) {
+            queries.getTempStudents(req), queries.getDailyCount(req, selectedDate[1])
+        ], function(data) {
             if (data.error) {
                 res.send({ error: 'אין אפשרות לצפות בנתונים בתאריך הנל' });
             } else {
                 var statuses = data.results[3];
                 var count = [];
 
-                statuses.forEach(function (status) {
+                statuses.forEach(function(status) {
                     if (status.count === data.results[0].length) {
                         count[status.monthday - 1] = ('green');
                     } else {
@@ -244,7 +245,7 @@ function updateDailyReport(req, res) {
                 }], true);
             }
 
-            sql.q(string, function (data) {
+            sql.q(string, function(data) {
                 if (data.error) {
                     res.send({ error: 'אירעה שגיאה בעת עדכון הנתונים' });
                 } else {
@@ -256,7 +257,7 @@ function updateDailyReport(req, res) {
 }
 
 function isOnlyDaily(req, res) {
-    sql.q(queries.getColelPermissions(req), function (data) {
+    sql.q(queries.getColelPermissions(req), function(data) {
         res.send({
             is_only_daily: data.results[0].is_only_daily,
             is_one_time_allow: data.results[0].is_one_time_allow
@@ -265,7 +266,7 @@ function isOnlyDaily(req, res) {
 }
 
 function getScores(req, res) {
-    sql.mq([queries.getScores(req), queries.getTestTypes()], function (data) {
+    sql.mq([queries.getScores(req), queries.getTestTypes()], function(data) {
         res.send({
             scores: data.results[0] || [],
             test_type: data.results[1] || []
@@ -305,7 +306,7 @@ function putScores(req, res) {
     var query = [sql.ia('tb_score', arr, true)];
     if (commentArr.length) query.push(sql.ia('tb_comment', commentArr, true));
 
-    sql.mq(query, function (data) {
+    sql.mq(query, function(data) {
         if (data.error) {
             res.send({ error: 'שגיאה בשמירת הנתונים' });
         } else {
@@ -315,7 +316,7 @@ function putScores(req, res) {
 }
 
 function getColelList(req, res) {
-    sql.q(queries.getColels(), function (data) {
+    sql.q(queries.getColels(), function(data) {
         res.send({
             colelList: data.results,
             colel_id: req.currentUser.colel_id
@@ -324,7 +325,7 @@ function getColelList(req, res) {
 }
 
 function updColelId(req, res) {
-    sql.q(queries.updateUser(req), function (data) {
+    sql.q(queries.updateUser(req), function(data) {
         res.send({
             success: 'הפעולה בוצעה בהצלחה'
         });
@@ -332,7 +333,7 @@ function updColelId(req, res) {
 }
 
 function getColel(req, res) {
-    sql.q(queries.getColel(), function (data) {
+    sql.q(queries.getColel(), function(data) {
         res.send({ colels: data.results });
     });
 }
@@ -355,11 +356,11 @@ function editColel(req, res) {
         group_type: 1
     };
 
-    sql.mq([sql.ia('tb_colel', [Colel], true), queries.updateColel(Colel, reqColel.password)], function (data) {
+    sql.mq([sql.ia('tb_colel', [Colel], true), queries.updateColel(Colel, reqColel.password)], function(data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים' });
         } else {
-            sql.q(queries.getColel(), function (data) {
+            sql.q(queries.getColel(), function(data) {
                 res.send({
                     success: 'השינויים בוצעו בהצלחה!',
                     colels: data.results
@@ -386,7 +387,7 @@ function newColel(req, res) {
         group_type: 1
     };
 
-    sql.q(sql.ia('tb_colel', [newColel], false), function (data) {
+    sql.q(sql.ia('tb_colel', [newColel], false), function(data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת הוספת הנתונים' });
         } else {
@@ -398,7 +399,7 @@ function newColel(req, res) {
                 colel_id: data.results.insertId
             }];
 
-            sql.mq([queries.getColel(), sql.ia('tb_user', newUser, false)], function (data) {
+            sql.mq([queries.getColel(), sql.ia('tb_user', newUser, false)], function(data) {
                 res.send({
                     success: 'השינויים בוצעו בהצלחה!',
                     colels: data.results[0]
@@ -411,7 +412,7 @@ function newColel(req, res) {
 function deleteColel(req, res) {
     var id = sql.v(req.body.id);
 
-    sql.q(queries.deleteColel(id), function (data) {
+    sql.q(queries.deleteColel(id), function(data) {
         if (data.error) {
             res.send({ error: 'אירעה שגיאה בעת מחיקת הנתונים' });
         }
@@ -423,13 +424,12 @@ function updateAllColels(req, res) {
     var column = req.body.column;
     var value = req.body.value || false;
 
-    sql.q(`UPDATE tb_colel SET ${column} = ${value}`, function (data) {
+    sql.q(`UPDATE tb_colel SET ${column} = ${value}`, function(data) {
         if (data.error) {
             res.send({
                 error: 'היתה בעיה בעת עדכון הנתונים'
             });
-        }
-        else {
+        } else {
             res.send({
                 success: 'הבקשה בוצעה בהצלחה'
             });
@@ -438,16 +438,22 @@ function updateAllColels(req, res) {
 }
 
 function updateDateOfAllStudents(req, res) {
-    var column = req.body.column;
-    var value = req.body.value || false;
+    let date = req.body.date;
 
-    sql.q(`UPDATE tb_colel SET ${column} = ${value}`, function (data) {
+    date = new Date(date);
+
+    sql.q(`INSERT INTO ${process.env.database}.tb_daily (student_id, date, presence, comment)
+           select id, '${helper.jsDateToMySql(date)}', -3, NULL
+           from ${process.env.database}.tb_student
+           ON DUPLICATE KEY UPDATE student_id = id,
+                                   date = '${helper.jsDateToMySql(date)}',
+                                   presence = -3, 
+                                   comment = NULL`, function(data) {
         if (data.error) {
             res.send({
                 error: 'היתה בעיה בעת עדכון הנתונים'
             });
-        }
-        else {
+        } else {
             res.send({
                 success: 'הבקשה בוצעה בהצלחה'
             });
@@ -459,11 +465,11 @@ function getPreviousDate(req, res) {
     var date = new Date().getDate();
 
     if (req.currentUser.permission === 'Admin') {
-        sql.q(queries.prevMonths(req), function (data) {
+        sql.q(queries.prevMonths(req), function(data) {
             res.send({ prevDates: data.results });
         });
     } else if (date <= 3 || req.currentUser.is_prev_month == true) {
-        sql.q(queries.prevMonth(req), function (data) {
+        sql.q(queries.prevMonth(req), function(data) {
             res.send({ prevDates: data.results });
         });
     } else {
@@ -479,7 +485,7 @@ function getDefinitions(req, res) {
         queries.getReportTypes()
     ];
 
-    sql.mq(query, function (data) {
+    sql.mq(query, function(data) {
         if (data.error) {
             res.send({
                 error: 'אין אפשרות להציג את הנתונים',
@@ -497,7 +503,7 @@ function getDefinitions(req, res) {
 }
 
 function getReports(req, res) {
-    sql.q(queries.getReports(), function (data) {
+    sql.q(queries.getReports(), function(data) {
         if (data.error) {
             res.send({ error: 'אין אפשרות לרענן את הדוחות', });
         } else {
@@ -515,7 +521,7 @@ function updDefinitions(req, res) {
     if (table_name === 'settings' || table_name === 'test_types') {
         table_name = 'tbk_' + table_name;
 
-        sql.q(sql.ia(table_name, req.body.object, true), function (results) {
+        sql.q(sql.ia(table_name, req.body.object, true), function(results) {
             if (results.error) {
                 res.send({ error: 'אין אפשרות לעדכן את ההגדרות' });
             } else {
@@ -529,7 +535,7 @@ function newReport(req, res) {
     var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
         path = `/files/${name}_${req.body.month}.xlsx`;
 
-    sql.q(queries.getReport(req), function (data) {
+    sql.q(queries.getReport(req), function(data) {
         if (data.error) {
             res.send({ error: 'אין אפשרות לעדכן את ההגדרות' });
         } else if (data.results.length && data.results.filter(result => result.date_created === req.body.month).length) {
@@ -582,7 +588,7 @@ module.exports = {
 
     getReports: getReports,
     newReport: newReport,
-    
+
     updateAll: updateAllColels,
-    updateAllStudents : updateDateOfAllStudents
+    updateAllStudents: updateDateOfAllStudents
 };

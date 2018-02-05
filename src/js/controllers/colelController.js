@@ -1,15 +1,15 @@
 angular.module('RDash')
-    .controller('colelController', function ($scope, Data, $rootScope, Helper) {
+    .controller('colelController', function($scope, Data, $rootScope, Helper) {
         var newColel = false;
         $scope.colel = {};
         $scope.total = {
             daily: false,
             prevMonth: false
         };
-        
+        $scope.chosenDate = new Date();
         Data.get('colels').then(updateColels);
 
-        $scope.add = function () {
+        $scope.add = function() {
             $scope.display = true;
             $scope.colel = {
                 schedule: [
@@ -22,14 +22,14 @@ angular.module('RDash')
                 ],
                 note: {}
             };
-            $scope.colel.schedule.map(function (val) {
+            $scope.colel.schedule.map(function(val) {
                 val.start = '00:00';
                 val.end = '00:00';
             });
             newColel = true;
         };
 
-        $scope.edit = function (id) {
+        $scope.edit = function(id) {
             newColel = false;
             $scope.display = true;
             $scope.colel = angular.copy($scope.colels[id]);
@@ -38,7 +38,7 @@ angular.module('RDash')
             $scope.colel.is_one_time_allow = Boolean($scope.colel.is_one_time_allow);
         };
 
-        $scope.save = function (valid) {
+        $scope.save = function(valid) {
             if (!valid) {
                 $scope.formErrors = true;
             } else {
@@ -51,7 +51,7 @@ angular.module('RDash')
             }
         };
 
-        $scope.delete = function () {
+        $scope.delete = function() {
             var message = [
                 'אתה עומד למחוק את כולל',
                 $scope.colel.name,
@@ -65,7 +65,7 @@ angular.module('RDash')
             }
         };
 
-        $scope.close = function () {
+        $scope.close = function() {
             $scope.colel = {};
             $scope.formErrors = false;
             $scope.display = false;
@@ -73,7 +73,7 @@ angular.module('RDash')
 
         function updateColels(data) {
             $scope.colels = data.colels;
-            $scope.colels.forEach(function (colel) {
+            $scope.colels.forEach(function(colel) {
                 colel.schedule = Helper.parseJson(colel.schedule);
                 colel.note = Helper.parseJson(colel.note);
             });
@@ -82,17 +82,23 @@ angular.module('RDash')
             $scope.total.prevMonth = $scope.colels.every(colel => Boolean(colel.is_prev_month));
         }
 
-        $scope.updateAll = function (param, value) {
+        $scope.updateAll = function(param, value) {
             Data.post('updateAll/', {
                 column: param,
                 value: value
             }).then(Data.get('colels').then(updateColels));
         };
 
-        $scope.timeLapse = function (date) {
+        $scope.updateAllStudents = function(date) {
+            Data.post('updateAllStudents', { date: date.getTime() }).then(function(res) {
+
+            })
+        }
+
+        $scope.timeLapse = function(date) {
             var lastDate = new Date(date);
             var dateDiff = (Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24);
-            
+
             if (dateDiff <= 2) {
                 return '#5cb85c';
             } else if (dateDiff <= 7) {
@@ -102,7 +108,7 @@ angular.module('RDash')
             }
         };
 
-        $scope.goTo = function (colel) {
+        $scope.goTo = function(colel) {
             $scope.away = true;
             // @ts-ignore
             window.open(location.origin, [colel.name, colel.password].join(';'));
