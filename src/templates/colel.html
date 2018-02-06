@@ -185,7 +185,7 @@
                                 <td ng-click="edit($index)">{{ colel.manager_name }}</td>
                                 <td ng-click="edit($index)">{{ colel.phone }}</td>
                                 <td ng-click="edit($index)">{{ colel.mail_address }}</td>
-                                <td ng-style="{'background-color': timeLapse(colel.last_login)}">{{colel.last_login | date:"MM/dd/yyyy"}}</td>
+                                <td ng-style="{'background-color': timeLapse(colel.last_login)}">{{colel.last_login | date:"dd/MM/yyyy"}}</td>
                             </tr>
                         </tbody>
                     </table>
