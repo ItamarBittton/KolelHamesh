@@ -24,7 +24,8 @@ function deleteStudent(id) {
 function getColelSettings(req) {
     return `SELECT      t2.id, t2.name, t2.manager_name, t2.phone, t2.mail_address, t2.address, t2.schedule
             FROM        tb_user t1 join tb_colel t2 on (t1.colel_id = t2.id) 
-            WHERE       t1.id = ${req.currentUser.id}`;
+            WHERE       t1.id = ${req.currentUser.id}
+            ORDER BY    t2.name`;
 }
 
 function getRecommends(req) {
@@ -130,7 +131,9 @@ function getTestTypes() {
 }
 
 function getColels() {
-    return `SELECT t1.id, t1.name FROM tb_colel t1`;
+    return `SELECT t1.id, t1.name 
+            FROM tb_colel t1 
+            ORDER BY t1.name`;
 }
 
 function updateUser(req) {
@@ -155,7 +158,7 @@ function getColel() {
                    t2.last_login
             FROM tb_colel t1
             LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')
-            ORDER BY t1.id, t1.name`;
+            ORDER BY t1.name`;
 }
 
 function updateColel(reqColel, password) {
