@@ -199,7 +199,7 @@ function getDailyReport(req, res) {
                 var count = [];
 
                 statuses.forEach(function(status) {
-                    if (status.count === data.results[0].length) {
+                    if (status.count === data.results[0].length - status.deletedCount) {
                         count[status.monthday - 1] = ('green');
                     } else {
                         count[status.monthday - 1] = ('orange');

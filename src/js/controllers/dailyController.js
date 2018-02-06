@@ -24,7 +24,11 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     };
 
     $scope.changeAll = function (value) {
-        $scope.students.forEach(x => x.presence = parseInt(value));
+        $scope.students.forEach(function (x) {
+            if (x.is_deleted === 0) {
+                x.presence = parseInt(value)
+            }
+        });
     };
 
     $scope.students = [];
