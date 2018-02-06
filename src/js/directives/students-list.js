@@ -1,5 +1,5 @@
 angular
-    .module('RDash').directive("studentList", function () {
+    .module('RDash').directive("studentList", function() {
         return {
             scope: {
                 students: "=",
@@ -14,7 +14,6 @@ angular
                         <td>טלפון</td>
                         <td ng-repeat="title in dropList.title">{{title}}</td>
                         <td>ח.מ</td>
-                        <td>הערה</td>
                     </thead>
                     <tbody>
                         <tr ng-repeat="student in students" ng-class="{ 'archive' : student.is_deleted }">
@@ -28,9 +27,6 @@ angular
                             </select>
                             </td>
                             <td>{{student.count}}</td>
-                            <td>                   
-                            <input type="text" ng-model="student.comment" ng-value="student.comment" class="form-control">
-                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -193,9 +193,3 @@ details[open] summary:after {
 /*select.form-control{
     white-space: nowrap;
 }*/
-
-.dateForAll {
-    display: flex;
-    align-items: baseline;
-    height: 0px;
-}
