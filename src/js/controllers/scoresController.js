@@ -23,7 +23,7 @@ angular.module('RDash')
         };
 
         $scope.save = function (data) {
-            $scope.UPDstud = $scope.students.filter((val) => (val.oral || val.oral === 0 || val.write || val.comment));
+            $scope.UPDstud = $scope.students.filter((val) => (val.oral || val.oral === 0 || val.write !== null || val.comment));
             Data.put('scores', {
                 score: $scope.UPDstud,
                 date: $scope.date
