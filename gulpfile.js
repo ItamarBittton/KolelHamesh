@@ -26,8 +26,8 @@ var paths = {
 gulp.task('usemin', function() {
     return gulp.src(paths.index)
         .pipe(usemin({
-            js: [],//[minifyJs(), 'concat'],
-            css: [minifyCss({keepSpecialComments: 0}), 'concat'],
+            js: [], //[minifyJs(), 'concat'],
+            css: [minifyCss({ keepSpecialComments: 0 }), 'concat'],
         }))
         .pipe(gulp.dest('dist/'));
 });
@@ -58,7 +58,7 @@ gulp.task('custom-images', function() {
 gulp.task('client-js', function() {
     return gulp.src(paths.scripts)
         .pipe(jshint())
-        .pipe(jshint.reporter('default'))    
+        .pipe(jshint.reporter('default'))
         // .pipe(minifyJs())
         .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
@@ -88,6 +88,7 @@ gulp.task('custom-templates', function() {
 gulp.task('watch', function() {
     gulp.watch([paths.images], ['custom-images']);
     gulp.watch([paths.styles], ['custom-less']);
+    gulp.watch([paths.styles], ['usemin']);
     gulp.watch([paths.scripts], ['client-js']);
     gulp.watch([paths.server], ['server-js']);
     gulp.watch([paths.templates], ['custom-templates']);

@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.get('/', function (req, res) {
-    console.log('enter.html:', new Date().toISOString().slice(0, 19).replace("T"," "));
+app.get('/', function(req, res) {
+    console.log('enter.html:', new Date().toISOString().slice(0, 19).replace("T", " "));
     res.sendFile(__dirname + "/dist/views/enter.html");
 });
 
@@ -67,9 +67,10 @@ app.get('/reports', f.requireRole([Admin]), f.getReports);
 app.put('/newReport', f.requireRole([Admin]), f.newReport);
 
 app.post('/updateAll', f.requireRole([Admin]), f.updateAll);
+app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);
 
 var port = process.env.PORT || 8080;
 
-app.listen(port, function () {
+app.listen(port, function() {
     console.log('The Five Center is running on http://localhost:' + port);
 });

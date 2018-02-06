@@ -549,3 +549,9 @@ svg rect{
 .table{
     margin-bottom: 0 !important;
 }
+
+/* Itamar insert */
+.dateForAll{
+  display: flex;
+  margin-right: 20px;
+}
