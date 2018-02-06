@@ -196,5 +196,6 @@ details[open] summary:after {
 
 .dateForAll {
     display: flex;
-    margin-right: 20px;
+    align-items: baseline;
+    height: 0px;
 }
