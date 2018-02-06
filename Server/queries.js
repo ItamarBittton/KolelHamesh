@@ -74,7 +74,7 @@ function getDailyReport(req) {
     var year = parseInt(sql.v(parseInt(temp[0])));
     var month = parseInt(sql.v(parseInt(temp[1])));
 
-    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted, 6 - (SELECT COUNT(*)
+    return `SELECT t1.id, t1.first_name, t1.last_name, t1.phone, t2.presence, t1.is_deleted, (SELECT COUNT(*)
                             FROM tb_daily t3
                             WHERE t3.student_id = t1.id
                                 AND MONTH(t3.date) = ${month}
