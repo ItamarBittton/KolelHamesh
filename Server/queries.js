@@ -15,6 +15,10 @@ function getStudents(req) {
             ORDER BY    t1.last_name, t1.first_name;`;
 }
 
+const setStudent = (id) => (
+    `UPDATE ${process.env.database}.tb_student set is_deleted = 0 where id = '${id}'`
+);
+
 function deleteStudent(id) {
     return `DELETE student
             FROM tb_student as student
@@ -451,6 +455,7 @@ function bigString(month, year, colel_id) {
 module.exports = {
     getUser: getUser,
     getStudents: getStudents,
+    setStudent: setStudent,
     deleteStudent: deleteStudent,
     getColelSettings: getColelSettings,
     getRecommends: getRecommends,

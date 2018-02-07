@@ -62,6 +62,10 @@ angular.module('RDash')
             }
         };
 
+        $scope.revive = function() {
+            Data.put('students', {data : $scope.student.id})
+        }
+
         $scope.close = function () {
             $scope.student = {};
             $scope.formErrors = false;
