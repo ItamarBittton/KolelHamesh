@@ -430,16 +430,20 @@ function bigString(month, year, colel_id) {
                                         on (t6.year = ${year} and 
                                             t6.month = ${month} and
                                             t1.id = t6.student_id)
-
-                                    left outer join tb_colel t7 on (t1.colel_id = t7.id)
-
-                                    left outer join tbk_settings t8 on (t7.group_type = t8.group_type)
-                                    
+        
                                     left outer join tb_comment t9 
-                                        on (t9.year = ${year} and
-                                            t9.month = ${month} and
-                                            t1.id = t9.student_id)
-                where t1.colel_id = ${colel_id}
+                                    on (t9.year = ${year} and
+                                        t9.month = ${month} and
+                                        t1.id = t9.student_id),
+                                                
+                                    tb_colel t7 
+                                    left outer join tbk_settings t8 on (t7.group_type = t8.group_type)
+                where t1.colel_id = ${colel_id} and t1.colel_id = t7.id and (t1.is_deleted = 0 or t1.id = (select t10.student_id 
+                                                                                                           from tb_daily t10 
+                                                                                                           where year(t10.date) = ${year} and
+                                                                                                                 month(t10.date) = ${month} and
+                                                                                                                 t1.id = t10.student_id
+                                                                                                           group by t10.student_id))
                 order by t7.name, t1.last_name
                 )`;
 }
