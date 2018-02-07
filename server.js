@@ -34,6 +34,7 @@ app.post('/login', f.requireRole([Admin, User]), f.sendCookies);
 app.get('/colelSettings', f.requireRole([Admin, User]), f.getColelSettings)
 
 app.get('/students', f.requireRole([Admin, User]), f.getStudents);
+app.put('/students', f.requireRole([Admin]), f.setStudent);
 app.post('/deleteStudent', f.requireRole([Admin]), f.deleteStudent);
 
 app.get('/colels', f.requireRole([Admin]), f.getColel);
