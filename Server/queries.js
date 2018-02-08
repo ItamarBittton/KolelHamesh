@@ -12,7 +12,7 @@ function getStudents(req) {
     return `SELECT      t1.*, t2.name
             FROM        tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
             WHERE       t1.colel_id = ${sql.v(req.currentUser.colel_id)} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
-            ORDER BY    t1.last_name, t1.first_name;`;
+            ORDER BY    t1.is_deleted, t1.last_name, t1.first_name;`;
 }
 
 const setStudent = (id) => (
