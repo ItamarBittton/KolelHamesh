@@ -52,10 +52,17 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/scores.html',
                 controller: 'scoresController'
             })
+            // דוחות
             .state('reports', {
                 url: '/reports',
                 templateUrl: 'templates/reports.html',
                 controller: 'reportsController'
+            })
+            // סטטיסטיקה
+            .state('statics', {
+                url: '/statics',
+                templateUrl: 'templates/statics.html',
+                controller: 'staticsController'
             });
     }
 ]);

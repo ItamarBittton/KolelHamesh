@@ -1,0 +1,9 @@
+.settings-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.settings-row > div {
+    display: flex;
+}
