@@ -1,92 +1,72 @@
 <div class="row">
-    <div class="col-lg-5">
+    <div class="col-lg-3">
         <rd-widget>
             <form name="dailyForm" novalidate>
                 <rd-widget-header icon="icon-graph" title="פרטי הסיכום">
-                    <button ng-click="" lass="btn btn-sm btn-info">הצג</button>
+                    <button ng-click="getStatics()" lass="btn btn-sm btn-info">הצג</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xxlarge no-padding">
                     <style>
                         .settings-row {
-                            display: flex;
-                            flex-direction: row;
-                            justify-content: space-evenly;
+                            /* display: flex;
+                            flex-direction: row; */
+                            /* justify-content: space-evenly; */
                         }
-
+                        
                         .settings-row>div {
-                            display: flex;
+                            /* display: flex; */
                         }
                     </style>
-                    <div class="settings-row">
+                    <div class="settings-row form-group form-md-line-input">
                         <div>
                             <label>בחר סוג סיכום:</label>
-                            <select ng-model="staticsType" ng-change="changeStaticsType(sortType, staticsType)" class="form-control">
+                            <select ng-model="staticsType" class="form-control">
                                 <option value="1">אישי</option>
                                 <option value="2">כללי</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="settings-row form-group form-md-line-input">
                         <div>
                             <label>בחר תחום סיכום:</label>
-                            <select ng-model="sortType" ng-change="changeStaticsType(sortType, staticsType)" class="form-control">
+                            <select ng-model="sortType" class="form-control">
                                 <option value="1">שעות לימוד</option>
                                 <option value="2">מאמרים בעל-פה</option>
                                 <option value="3">אברכים לא קבועים</option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-6 control-label">תאריך התחלה:</label>
-                        <div class="col-md-6">
-                            <input type="text" ng-value="date.toLocaleDateString()" class="form-control">
+                    <div class="settings-row form-group form-md-line-input">
+                        <div>
+                            <label>בחר סוג טווח:</label>
+                            <select ng-model="dateType" ng-change="changeStaticsType(sortType, staticsType)" class="form-control">
+                                <option value="1">יומי</option>
+                                <option value="2">חודשי</option>
+                                <option value="3">שנתי</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input">
-                        <label class="col-md-6 control-label">תאריך סיום:</label>
-                        <div class="col-md-6">
-                            <input type="text" ng-value="date.toLocaleDateString()" class="form-control">
+                    <div class="settings-row form-group form-md-line-input">
+                        <div>
+                            <label>בחר כמות:</label>
+                            <input type="number" ng-model="amountOfHistory" />
                         </div>
                     </div>
-
-                    <div class="form-group form-md-line-input" ng-if="isOneTimeAllow">
-                        <label class="col-md-4 control-label">סמן כולם כ:</label>
-                        <div class="col-md-8">
-                            <div class="btn-group btn-group-justified">
-                                <span class="btn btn-sm btn-default" ng-click="changeAll(0)">
-                                    <i class="fa fa-check-square"></i> נוכח
-                                </span>
-                                <span class="btn btn-sm btn-default" ng-click="changeAll(-1)">
-                                    <i class="fa fa-times"></i> חסר
-                                </span>
-                                <span class="btn btn-sm btn-default" ng-click="changeAll(-2)">
-                                    <i class="fa fa-thumbs-o-up"></i> ח.מ.
-                                </span>
-                                <span class="btn btn-sm btn-default" ng-click="changeAll(-3)">
-                                    <i class="fa fa-black-tie"></i> חג
-                                </span>
-                            </div>
-                            <!--<div class="col-md-8">
-                                <select ng-model="changeAllValue" ng-change="changeAll(changeAllValue)" class="form-control">
-                                    <option value="null">בחר אפשרות</option>
-                                    <option ng-repeat="(key, date) in dropList.options" value="{{ date.value }}">{{date.name}}</option>
-                                </select>-->
-                        </div>
-                    </div>
-                    <student-list students="students" drop-list="dropList"></student-list>
                 </rd-widget-body>
             </form>
         </rd-widget>
     </div>
 
-    <div ng-class="{'col-lg-12':!disable, 'col-md-7':disable}">
+    <div ng-class="col-md-7">
         <rd-widget>
             <rd-widget-header icon="icon-people" title="סיכומים">
-                <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth" ng-change="changeMonth(currentMonth)"
-                    class="form-control pull-left">
-                    <option value="" disabled>החלף חודש</option>
+                <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control pull-left">
+                    <option value="" disabled>החלף גרף</option>
                     <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                 </select>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
             </rd-widget-body>
         </rd-widget>
     </div>
