@@ -62,7 +62,7 @@ const setStudent = function (req, res) {
         (data) => {
             if (data.error) res.send({ error: 'הייתה בעיה בעדכון האברך' })
             else {
-                res.send({success : 'עדכון האברך בוצע בהצלחה!'})
+                res.send({ success: 'עדכון האברך בוצע בהצלחה!' })
             }
         })
 }
@@ -365,6 +365,7 @@ function editColel(req, res) {
         is_only_daily: reqColel.is_only_daily || false,
         is_prev_month: reqColel.is_prev_month || false,
         is_one_time_allow: reqColel.is_one_time_allow || false,
+        is_report_allow: reqColel.is_report_allow || false,
         schedule: reqColel.schedule,
         note: reqColel.note || false,
         group_type: 1
@@ -548,6 +549,10 @@ function updDefinitions(req, res) {
 function newReport(req, res) {
     var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
         path = `/files/${name}_${req.body.month}.xlsx`;
+
+    if (req.currentUser.permission === 'User') {
+        req.body.type = 5;
+    }
 
     sql.q(queries.getReport(req), function (data) {
         if (data.error) {
