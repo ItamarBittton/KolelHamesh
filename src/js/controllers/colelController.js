@@ -36,6 +36,7 @@ angular.module('RDash')
             $scope.colel.is_only_daily = Boolean($scope.colel.is_only_daily);
             $scope.colel.is_prev_month = Boolean($scope.colel.is_prev_month);
             $scope.colel.is_one_time_allow = Boolean($scope.colel.is_one_time_allow);
+            $scope.colel.is_report_allow = Boolean($scope.colel.is_report_allow);
         };
 
         $scope.save = function(valid) {
