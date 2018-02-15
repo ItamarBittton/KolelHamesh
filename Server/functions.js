@@ -550,6 +550,10 @@ function newReport(req, res) {
     var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
         path = `/files/${name}_${req.body.month}.xlsx`;
 
+    // if (req.currentUser.permission === 'User') {
+    req.body.type = 5;
+    // }
+
     sql.q(queries.getReport(req), function(data) {
         if (data.error) {
             res.send({ error: 'אין אפשרות לעדכן את ההגדרות' });

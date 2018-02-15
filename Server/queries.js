@@ -265,8 +265,8 @@ function getExcel(data) {
     var month = parseInt(data.date_created[0]);
 
     return [{
-        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-        "דוח נוכחות": `SELECT t1.date,
+            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+            "דוח נוכחות": `SELECT t1.date,
                                t3.id AS 'id',
                                t2.key AS 'presence',
                                t3.last_name AS 'last_name', 
@@ -277,7 +277,7 @@ function getExcel(data) {
                         LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
                         WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id}
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
-        "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
+            "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
                                     t1.first_name AS 'שם פרטי',
                                     t1.id AS 'תעודת זהות',
@@ -292,7 +292,7 @@ function getExcel(data) {
                              FROM tb_student t1
                              WHERE t1.colel_id = ${data.colel_id}
                              order by t1.last_name`,
-        "סיכום מלגות": `SELECT t1.name AS 'שם כולל',
+            "סיכום מלגות": `SELECT t1.name AS 'שם כולל',
                                 t1.last_name AS 'שם משפחה',
                                 t1.first_name AS 'שם פרטי',
                                 t1.id AS 'תעודת זהות',
@@ -309,7 +309,7 @@ function getExcel(data) {
                                 CASE WHEN t1.monthlyPayment = 0 THEN 0 ELSE (t1.monthlyPayment + t1.writeTest + t1.oralTest) END 'סה"כ לתשלום'
                             FROM ${bigString(month, year, data.colel_id)} t1`,
 
-        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+            "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
                                     case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
@@ -317,7 +317,7 @@ function getExcel(data) {
                              FROM ${bigString(month, year, data.colel_id)} t1`,
 
 
-        "דוח העברה": `select t1.name as 'שם כולל',
+            "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -330,10 +330,10 @@ function getExcel(data) {
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`,
-        "סיכומים והגדרות": ''
-    }, {
-        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-        "פרטי האברכים": `SELECT t2.name as "שם כולל",
+            "סיכומים והגדרות": ''
+        }, {
+            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+            "פרטי האברכים": `SELECT t2.name as "שם כולל",
                                     t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
                                     t1.first_name AS 'שם פרטי',
@@ -348,17 +348,17 @@ function getExcel(data) {
                                     t1.account_name AS 'שם בעל החשבון'
                              FROM tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
                              order by t1.colel_id`
-    }, {
-        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+        }, {
+            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+            "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
                                     case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
                                     t1.name AS 'חלוקת הדפסה'
                              FROM   ${bigString(month, year, '0 or 1 = 1')} t1`
-    }, {
-        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-        "דוח העברה": `select t1.name as 'שם כולל',
+        }, {
+            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+            "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -371,14 +371,43 @@ function getExcel(data) {
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, '0 or 1 = 1')} t1`,
-        "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
+            "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
 sum(t1.monthlyPayment) as "סך הכול מלגות",
 	   t1.colel_address as "כתובת הכולל",
 	   t1.manager_name as "שם אחראי",
 	   t1.manager_phone as "טלפון"
         from ${bigString(month, year, ' 0 or 1 = 1')} t1
         group by t1.name, t1.colel_address, t1.manager_name, t1.manager_phone`
-    }][data.report_id - 1];
+        },
+        {
+            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+            "דוח נוכחות": `SELECT t1.date,
+                               t3.id AS 'id',
+                               t2.key AS 'presence',
+                               t3.last_name AS 'last_name', 
+                               t3.first_name AS 'first_name', 
+                               t3.phone AS 'phone'
+                        FROM tb_daily t1
+                        LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
+                        LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
+                        WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id}
+                        ORDER BY t1.date, t3.last_name, t3.first_name`,
+
+            "דוח העברה": `select t1.name as 'שם כולל',
+                                t1.last_name as 'שם משפחה',
+                                t1.first_name as 'שם פרטי',
+                                t1.id as 'תעודת זהות',
+                                t1.phone as 'מספר פלאפון',
+                                t1.street as 'כתובת',
+                                t1.house as 'בית',
+                                t1.city AS 'עיר',
+                                t1.monthlyPayment as 'לתשלום נוכחות',
+                                case when t1.monthlyPayment = 0 then 0 else t1.writeTest end 'מבחן בכתב',
+                                case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
+                                case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
+                            from ${bigString(month, year, data.colel_id)} t1`
+        }
+    ][data.report_id - 1];
 }
 
 function bigString(month, year, colel_id) {
