@@ -33,29 +33,12 @@
                     </div>
                     <div class="settings-row form-group form-md-line-input">
                         <div>
-                            <label>בחר תחום סיכום:</label>
-                            <select ng-model="sortType" class="form-control">
-                                <option value="1">שעות לימוד</option>
-                                <option value="2">מאמרים בעל-פה</option>
-                                <option value="3">אברכים לא קבועים</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="settings-row form-group form-md-line-input">
-                        <div>
                             <label>בחר סוג טווח:</label>
                             <select ng-model="dateType" ng-change="changeStaticsType(sortType, staticsType)" class="form-control">
                                 <option value="1">יומי</option>
                                 <option value="2">חודשי</option>
                                 <option value="3">שנתי</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="settings-row form-group form-md-line-input">
-                        <div>
-                            <label>בחר כמות:</label>
-                            <input type="number" ng-model="amountOfHistory" class="form-control" />
-
                         </div>
                     </div>
                 </rd-widget-body>
