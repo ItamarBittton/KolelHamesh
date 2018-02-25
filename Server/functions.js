@@ -572,21 +572,16 @@ const getStatics = (req, res) => {
     let { staticsType, startDate, endDate, dateType } = req.params;
     startDate = helper.jsDateToMySql(new Date(parseInt(startDate)));
     endDate = helper.jsDateToMySql(new Date(parseInt(endDate)));
-    const colel_id = staticsType == 1 ? req.req.currentUser.colel_id : 2;
-    const dateTypeStr = dateType == 1 ? 'day(' : dateType == 2 ? 'month(' : 'year(';
+    const colel_id = staticsType == 1 ? req.currentUser.colel_id : 2;
+    const dateTypeStr = dateType == 1 ? 'day' : dateType == 2 ? 'month' : 'year';
 
-    let query = `SELECT ${dateTypeStr}t1.date) as 'date', t2.id as 'colel_id', SUM(t1.amount) as 'oneTimeStudents'
-                 FROM ${process.env.database}.tb_onetime_student t1,
-                      ${process.env.database}.tb_colel t2
-                 WHERE t1.colel_id = t2.id and
-                       t1.date between '${startDate}' and '${endDate}'
-                 GROUP BY ${dateTypeStr}date), t2.id
-                 ORDER BY year(t1.date), month(t1.month), day(t1.month)`;
-    sql.q(query, function (results) {
+
+    sql.mq(queries.getStatics(dateTypeStr, startDate, endDate), function (results) {
         if (results.error) {
-            res.send({ error: 'אין אפשרות לעדכן את ההגדרות' });
+            res.send({ error: 'אין אפשרות להציג את הסיכומים' });
         } else {
-            res.send({ success: 'ההגדרות עודכנו בהצלחה!' });
+            res.send({ success: 'הבקשה בוצעה בהצלחה',
+                       data: results.results });
         }
     });
 };

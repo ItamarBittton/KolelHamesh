@@ -13,7 +13,9 @@ angular.module('RDash')
             Data.get('getStatics/' + $scope.statics.staticsType +
                 '/' + new Date(startDate[2], startDate[1], startDate[0]).getTime() +
                 '/' + new Date(endDate[2], endDate[1], endDate[0]).getTime() +
-                '/' + $scope.statics.dateType)
+                '/' + $scope.statics.dateType).then(function(res){
+                    console.log(res);
+                })
         }
 
         $scope.$on('$viewContentLoaded', function () {
