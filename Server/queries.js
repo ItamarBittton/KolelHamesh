@@ -452,13 +452,14 @@ function bigString(month, year, colel_id) {
                 )`;
 }
 
-const getStatics = (dateTypeStr, startDate, endDate) => {
+const getStatics = (dateTypeStr, startDate, endDate, colel_id) => {
     return [
         `SELECT ${dateTypeStr}(t1.date) as 'date', t2.name as 'colel_id', SUM(t1.amount) as 'data'
                 FROM ${process.env.database}.tb_onetime_student t1,
                     ${process.env.database}.tb_colel t2
                 WHERE t1.colel_id = t2.id and
-                    t1.date between '${startDate}' and '${endDate}'
+                    t1.date between '${startDate}' and '${endDate}' and
+                    (t1.colel_id = ${colel_id} or -2 = ${colel_id})
                 GROUP BY ${dateTypeStr}(t1.date), t2.name
                 ORDER BY t2.name, t1.date`,
 
