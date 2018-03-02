@@ -1,5 +1,10 @@
 angular.module('RDash')
     .controller('staticsController', function ($scope, Data) {
+
+        Data.get('colelList').then(function(res) {
+            $scope.colelList = res.colelList;
+        })
+        
         $scope.changeStaticsType = function (sortType, staticsType) {
             // if (sortType && staticsType) {
             //     $scope.secondSec = true;
@@ -17,6 +22,8 @@ angular.module('RDash')
             { desc: "עמודות טווח", val: "rangeColumn", type: 1 },
 
         ]
+
+        $scope.colelList = [];
 
         // test
         $scope.statics.staticsType = '2';
@@ -172,75 +179,4 @@ angular.module('RDash')
             });
         });
 
-        $scope.show = function () {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                title: {
-                    text: "Multi-Series Line Chart"
-                },
-                data: [{
-                    type: "line",
-                    dataPoints: [
-                        { x: 10, y: 21 },
-                        { x: 20, y: 25 },
-                        { x: 30, y: 20 },
-                        { x: 40, y: 25 },
-                        { x: 50, y: 27 },
-                        { x: 60, y: 28 },
-                        { x: 70, y: 28 },
-                        { x: 80, y: 24 },
-                        { x: 90, y: 26 }
-
-                    ]
-                },
-                {
-                    type: "line",
-                    dataPoints: [
-                        { x: 10, y: 31 },
-                        { x: 20, y: 35 },
-                        { x: 30, y: 30 },
-                        { x: 40, y: 35 },
-                        { x: 50, y: 35 },
-                        { x: 60, y: 38 },
-                        { x: 70, y: 38 },
-                        { x: 80, y: 34 },
-                        { x: 90, y: 44 }
-
-                    ]
-                },
-                {
-                    type: "line",
-                    dataPoints: [
-                        { x: 10, y: 45 },
-                        { x: 20, y: 50 },
-                        { x: 30, y: 40 },
-                        { x: 40, y: 45 },
-                        { x: 50, y: 45 },
-                        { x: 60, y: 48 },
-                        { x: 70, y: 43 },
-                        { x: 80, y: 41 },
-                        { x: 90, y: 28 }
-
-                    ]
-                },
-                {
-                    type: "line",
-                    dataPoints: [
-                        { x: 10, y: 71 },
-                        { x: 20, y: 55 },
-                        { x: 30, y: 50 },
-                        { x: 40, y: 65 },
-                        { x: 50, y: 95 },
-                        { x: 60, y: 68 },
-                        { x: 70, y: 28 },
-                        { x: 80, y: 34 },
-                        { x: 90, y: 14 }
-
-                    ]
-                }
-                ]
-            });
-
-            chart.render();
-        }
     });

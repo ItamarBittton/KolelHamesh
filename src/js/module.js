@@ -6,7 +6,8 @@ angular.module('RDash', [
     'ui.mask',
     'ngMaterial',
     'angularUtils.directives.dirPagination',
-    'zt.angular-loading'
+    'zt.angular-loading',
+    'isteven-multi-select'
 ]).config(function (NotificationProvider, $qProvider, $mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function (date) {
 

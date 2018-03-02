@@ -35,12 +35,14 @@
                         }
                     </style>
                     <div class="settings-row form-group form-md-line-input">
-                        <div>
+                        <!-- <div>
                             <label>בחר סוג סיכום:</label>
-                            <select ng-model="statics.staticsType" multiple="multiple" class="form-control">
+                            <select ng-model="statics.staticsType" multiple class="form-control">
                                 <option value="1">אישי</option>
                                 <option value="2">כללי</option>
                             </select>
+                        </div> -->
+                        <div isteven-multi-select input-model="colelList" output-model="outputBrowsers" button-label="name" item-label="name" tick-property="ticked">
                         </div>
                     </div>
                     <div class="settings-row form-group form-md-line-input">
