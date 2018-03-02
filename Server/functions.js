@@ -570,10 +570,10 @@ function newReport(req, res) {
 
 const getStatics = (req, res) => {
     let { staticsType, startDate, endDate, dateType } = req.params;
-    startDate = helper.jsDateToMySql(new Date(parseInt(startDate)));
-    endDate = helper.jsDateToMySql(new Date(parseInt(endDate)));
+    startDate = helper.jsDateToMySql(new Date(parseInt(startDate) + 1000 * 60 * 60 * 2));
+    endDate = helper.jsDateToMySql(new Date(parseInt(endDate) + 1000 * 60 * 60 * 2));
     const colel_id = staticsType == 1 ? req.currentUser.colel_id : -staticsType;
-    const dateTypeStr = dateType == 1 ? 'day' : dateType == 2 ? 'month' : 'year';
+    const dateTypeStr = dateType == 1 ? "DATE_FORMAT(t1.date,'%m-%d-%y')" : dateType == 2 ? "DATE_FORMAT(t1.date,'%m-%y')" : 'year(t1.date)';
 
 
     sql.mq(queries.getStatics(dateTypeStr, startDate, endDate, colel_id), function(results) {

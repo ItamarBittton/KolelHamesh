@@ -12,31 +12,32 @@
                             flex-direction: row; */
                             /* justify-content: space-evenly; */
                         }
-                        
+
                         .settings-row>div {
                             /* display: flex; */
                         }
-                        
+
                         #chartContainer {
                             width: 100%;
                             /* position: absolute; */
                         }
-                        
+
                         .canvasjs-chart-container {
                             position: absolute !important;
+                            text-align: right !important;
                         }
-                        
+
                         .canvasjs-chart-tooltip {
-                            right: 5px !important;
-                            left: auto !important;
+                            left: 45%!important;
                             top: 5px !important;
                             bottom: auto !important;
+                            position: fixed !important;
                         }
                     </style>
                     <div class="settings-row form-group form-md-line-input">
                         <div>
                             <label>בחר סוג סיכום:</label>
-                            <select ng-model="statics.staticsType" class="form-control">
+                            <select ng-model="statics.staticsType" multiple class="form-control">
                                 <option value="1">אישי</option>
                                 <option value="2">כללי</option>
                             </select>
@@ -69,10 +70,15 @@
         </rd-widget>
     </div>
 
-    <div ng-class="{'col-lg-12':!display, 'col-md-9':display}">
+    <div ng-if="!display" ng-class="{'col-lg-12':!display}">
         <rd-widget>
             <rd-widget-header icon="icon-people" title="סיכומים">
-
+                <button ng-click="restart()" class="btn btn-sm btn-info">התחל מחדש</button>
+                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px;" ng-model="chartType" ng-change="renderChart(chartType)"
+                    class="form-control pull-left">
+                    <option value="" disabled>החלף תצוגה</option>
+                    <option ng-repeat="cT in chartTypes" value="{{ cT }}">{{cT.desc}}</option>
+                </select>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
                 <div id="chartContainer"></div>
