@@ -1,10 +1,10 @@
 angular.module('RDash')
     .controller('staticsController', function ($scope, Data) {
 
-        Data.get('colelList').then(function(res) {
+        Data.get('colelList').then(function (res) {
             $scope.colelList = res.colelList;
         })
-        
+
         $scope.changeStaticsType = function (sortType, staticsType) {
             // if (sortType && staticsType) {
             //     $scope.secondSec = true;
@@ -24,7 +24,7 @@ angular.module('RDash')
         ]
 
         $scope.colelList = [];
-
+        $scope.statics.outputColelList = [];
         // test
         $scope.statics.staticsType = '2';
         $scope.statics.startDate = '01/01/2018';
@@ -33,6 +33,11 @@ angular.module('RDash')
 
         $scope.restart = function () {
             $scope.display = true;
+
+            $scope.statics.staticsType = '2';
+            $scope.statics.startDate = '01/01/2018';
+            $scope.statics.endDate = '27/02/2018';
+            $scope.statics.dateType = '1';
         }
 
         $scope.renderChart = function (chartType) {
@@ -43,9 +48,10 @@ angular.module('RDash')
             var currentColelId = $scope.oneTimeStudents[0].colel_id;
 
             for (var i = 0; i < $scope.oneTimeStudents.length; i++) {
-                var currentData = $scope.oneTimeStudents[i]
+                var currentData = $scope.oneTimeStudents[i];
+                dataPoints.push({ x: new Date(currentData.date), y: currentData.data });
+
                 if (currentColelId === currentData.colel_id) {
-                    dataPoints.push({ x: new Date(currentData.date), y: currentData.data })
                 } else {
                     data.push({
                         type: chartType.val,
@@ -119,19 +125,21 @@ angular.module('RDash')
         $scope.getStatics = function () {
             var startDate = $scope.statics.startDate.split('/');
             var endDate = $scope.statics.endDate.split('/');
-
+            
             $scope.display = false;
-            Data.get('getStatics/' + $scope.statics.staticsType +
-                '/' + new Date(startDate[2], startDate[1] - 1, startDate[0]).getTime() +
-                '/' + new Date(endDate[2], endDate[1] - 1, endDate[0]).getTime() +
-                '/' + $scope.statics.dateType).then(function (res) {
-                    $scope.oneTimeStudents = res.data[0];
-                    $scope.oral_score = res.data[1];
-                    $scope.hours = res.data[2];
+            Data.post('getStatics', {
+                colelList: $scope.statics.outputColelList,
+                startDate: new Date(startDate[2], startDate[1] - 1, startDate[0]).getTime(),
+                endDate: new Date(endDate[2], endDate[1] - 1, endDate[0]).getTime(),
+                dateType: $scope.statics.dateType
+            }).then(function (res) {
+                $scope.oneTimeStudents = res.data[0];
+                $scope.oral_score = res.data[1];
+                $scope.hours = res.data[2];
 
-                    $scope.renderChart(JSON.stringify({ val: 'line', type: 1 }));
+                $scope.renderChart(JSON.stringify({ val: 'line', type: 1 }));
 
-                })
+            })
         }
 
         $scope.$on('$viewContentLoaded', function () {

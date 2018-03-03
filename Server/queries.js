@@ -459,7 +459,7 @@ const getStatics = (dateTypeStr, startDate, endDate, colel_id) => {
                     ${process.env.database}.tb_colel t2
                 WHERE t1.colel_id = t2.id and
                     t1.date between '${startDate}' and '${endDate}' and
-                    (t1.colel_id = ${colel_id} or -2 = ${colel_id})
+                    t1.colel_id in (${colel_id})
                 GROUP BY ${dateTypeStr}, t2.name
                 ORDER BY t2.name, t1.date`,
 
