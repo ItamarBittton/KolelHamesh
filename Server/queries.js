@@ -463,7 +463,7 @@ const getStatics = (dateTypeStr, startDate, endDate, colel_id) => {
                 GROUP BY ${dateTypeStr}, t2.name
                 ORDER BY t2.name, t1.date`,
 
-        `SELECT MAKEDATE(t1.year, t1.month) as 'date', t2.id as 'colel_id', count(t1.oral_score) as 'data'
+        `SELECT MAKEDATE(t1.year, t1.month) as 'date', t2.name as 'colel_id', count(t1.oral_score) as 'data'
                 FROM ${process.env.database}.tb_score t1,
                     ${process.env.database}.tb_colel t2,
                     ${process.env.database}.tb_student t3
@@ -475,7 +475,7 @@ const getStatics = (dateTypeStr, startDate, endDate, colel_id) => {
                 GROUP BY MAKEDATE(t1.year, t1.month), t2.id
                 ORDER BY MAKEDATE(t1.year, t1.month), t2.id`,
 
-        `SELECT ${dateTypeStr} as 'date', t2.id as 'colel_id', (count(t1.presence) * t4.lesson_last) as 'data'
+        `SELECT ${dateTypeStr} as 'date', t2.name as 'colel_id', (count(t1.presence) * t4.lesson_last) / 60 as 'data'
                 FROM ${process.env.database}.tb_daily t1,
                     ${process.env.database}.tb_colel t2,
                     ${process.env.database}.tb_student t3,
@@ -485,8 +485,8 @@ const getStatics = (dateTypeStr, startDate, endDate, colel_id) => {
                       t2.group_type = t4.group_type and
                       t1.presence = 0 and
                       t1.date between '${startDate}' and '${endDate}'
-                GROUP BY ${dateTypeStr}, t2.id
-                ORDER BY t2.name, ${dateTypeStr}`
+                GROUP BY ${dateTypeStr}, t2.name
+                ORDER BY t2.name, t1.date`
 
     ]
 }

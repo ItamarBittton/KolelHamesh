@@ -76,9 +76,13 @@
         <rd-widget>
             <rd-widget-header icon="icon-people" title="סיכומים">
                 <button ng-click="restart()" class="btn btn-sm btn-info">התחל מחדש</button>
-                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px" ng-model="chartType" ng-change="renderChart(chartType)" class="form-control pull-left">
+                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px" ng-model="chartType" ng-change="changeChart(chartType)" class="form-control pull-left">
                     <option value="" disabled="disabled">החלף תצוגה</option>
                     <option ng-repeat="cT in chartTypes" value="{{ cT }}">{{cT.desc}}</option>
+                </select>
+                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px" ng-model="staticType" ng-change="changeStaticType(staticType)" class="form-control pull-left">
+                    <option value="" disabled="disabled">החלף סיכום</option>
+                    <option ng-repeat="sT in staticTypes" value="{{ sT.val }}">{{sT.desc}}</option>
                 </select>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
