@@ -56,7 +56,7 @@ app.get('/getProhibitions', f.requireRole([Admin, User]), f.isOnlyDaily);
 app.get('/scores/:date', f.requireRole([Admin, User]), f.getScores);
 app.put('/scores', f.requireRole([Admin, User]), f.putScores);
 
-app.get('/colelList', f.requireRole([Admin]), f.getColelList);
+app.get('/colelList', f.requireRole([Admin, User]), f.getColelList);
 app.put('/updColel', f.requireRole([Admin]), f.updColelId);
 
 app.get('/prevDates', f.requireRole([Admin, User]), f.getPreviousDate);
@@ -70,7 +70,7 @@ app.put('/newReport', f.requireRole([Admin]), f.newReport);
 app.post('/updateAll', f.requireRole([Admin]), f.updateAll);
 app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);
 
-app.post('/getStatics', f.requireRole([Admin]), f.getStatics);
+app.post('/getStatics', f.requireRole([Admin, User]), f.getStatics);
 var port = process.env.PORT || 8080;
 
 app.listen(port, function() {

@@ -36,10 +36,10 @@ angular.module('RDash')
         $scope.restart = function() {
             $scope.display = true;
 
-            $scope.statics.staticsType = '';
-            $scope.statics.startDate = '';
-            $scope.statics.endDate = '';
-            $scope.statics.dateType = '';
+            // $scope.statics.staticsType = '';
+            // $scope.statics.startDate = '';
+            // $scope.statics.endDate = '';
+            // $scope.statics.dateType = '';
         }
 
         $scope.changeStaticType = function(staticType){
@@ -122,7 +122,7 @@ angular.module('RDash')
                     contentFormatter: function(e) {
                         var str = "";
                         for (var i = 0; i < e.entries.length; i++) {
-                            var temp = " <strong>" + e.entries[i].dataSeries.legendText + ":</strong>" + e.entries[i].dataPoint.y + " <br/>";
+                            var temp = $scope.role === 'User' ? '' : " <strong>" + e.entries[i].dataSeries.legendText + ":</strong>" +  e.entries[i].dataPoint.y + " <br/>";
                             str = str.concat(temp);
                         }
                         return (str);
@@ -130,6 +130,10 @@ angular.module('RDash')
                 },
                 data: data
             });
+
+            if($scope.role === "User"){
+                chart.options.axisY.valueFormatString = " "
+            }
 
             chart.render();
         }
