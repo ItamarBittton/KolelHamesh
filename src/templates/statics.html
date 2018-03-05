@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-lg-3">
+        <rd-widget ng-show="display">
+            <form name="dailyForm" novalidate>
+                <rd-widget-header icon="icon-graph" title="פרטי הסיכום">
+                    <button ng-click="getStatics()" class="btn btn-sm btn-info">הצג</button>
+                </rd-widget-header>
+                <rd-widget-body classes="xxlarge no-padding">
+                    <style>
+                        .settings-row {
+                            /* display: flex;
+                            flex-direction: row; */
+                            /* justify-content: space-evenly; */
+                        }
+
+                        .settings-row>div {
+                            /* display: flex; */
+                        }
+
+                        #chartContainer {
+                            width: 100%;
+                            /* position: absolute; */
+                        }
+
+                        .canvasjs-chart-container {
+                            position: absolute !important;
+                            text-align: right !important;
+                        }
+
+                        .canvasjs-chart-tooltip {
+                            left: 45%!important;
+                            top: 5px !important;
+                            bottom: auto !important;
+                            position: fixed !important;
+                        }
+                    </style>
+                    <div class="settings-row form-group form-md-line-input">
+                        <!-- <div>
+                            <label>בחר סוג סיכום:</label>
+                            <select ng-model="statics.staticsType" multiple class="form-control">
+                                <option value="1">אישי</option>
+                                <option value="2">כללי</option>
+                            </select>
+                        </div> -->
+                        <div isteven-multi-select input-model="colelList" output-model="statics.outputColelList" button-label="name" item-label="name"
+                            tick-property="ticked">
+                        </div>
+                    </div>
+                    <div class="settings-row form-group form-md-line-input">
+                        <div>
+                            <label>בחר תאריך התחלה:</label>
+                            <input class="form-control" type="text" ng-model="statics.startDate" id="datepicker">
+                        </div>
+                    </div>
+                    <div class="settings-row form-group form-md-line-input">
+                        <div>
+                            <label>בחר תאריך סיום</label>
+                            <input class="form-control" type="text" ng-model="statics.endDate" id="endDatepicker">
+                        </div>
+                    </div>
+                    <div class="settings-row form-group form-md-line-input">
+                        <div>
+                            <label>בחר סוג טווח:</label>
+                            <select ng-model="statics.dateType" class="form-control">
+                                <option value="1">יומי</option>
+                                <option value="2">חודשי</option>
+                                <option value="3">שנתי</option>
+                            </select>
+                        </div>
+                    </div>
+                </rd-widget-body>
+            </form>
+        </rd-widget>
+    </div>
+
+    <div ng-if="!display" ng-class="{'col-lg-12':!display}">
+        <rd-widget>
+            <rd-widget-header icon="icon-people" title="סיכומים">
+                <button ng-click="restart()" class="btn btn-sm btn-info">התחל מחדש</button>
+                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px;" ng-model="chartType" ng-change="changeChart(chartType)"
+                    class="form-control pull-left">
+                    <option value="" disabled>החלף תצוגה</option>
+                    <option ng-repeat="cT in chartTypes" value="{{ cT }}">{{cT.desc}}</option>
+                </select>
+                <select style="margin-bottom: 0px; width: 120px; margin-right: 10px;" ng-model="staticType" ng-change="changeStaticType(staticType)"
+                    class="form-control pull-left">
+                    <option value="" disabled>החלף סיכום</option>
+                    <option ng-repeat="sT in staticTypes" value="{{ sT.val }}">{{sT.desc}}</option>
+                </select>
+            </rd-widget-header>
+            <rd-widget-body classes="xxlarge no-padding">
+                <div id="chartContainer"></div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
