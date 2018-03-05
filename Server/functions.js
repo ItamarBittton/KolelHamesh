@@ -365,6 +365,7 @@ function editColel(req, res) {
         is_only_daily: reqColel.is_only_daily || false,
         is_prev_month: reqColel.is_prev_month || false,
         is_one_time_allow: reqColel.is_one_time_allow || false,
+        is_report_allow: reqColel.is_report_allow || false,
         schedule: reqColel.schedule,
         note: reqColel.note || false,
         group_type: 1
@@ -549,7 +550,11 @@ function newReport(req, res) {
     var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
         path = `/files/${name}_${req.body.month}.xlsx`;
 
-    sql.q(queries.getReport(req), function(data) {
+    if (req.currentUser.permission === 'User') {
+        req.body.type = 5;
+    }
+
+    sql.q(queries.getReport(req), function (data) {
         if (data.error) {
             res.send({ error: 'אין אפשרות לעדכן את ההגדרות' });
         } else if (data.results.length && data.results.filter(result => result.date_created === req.body.month).length) {
