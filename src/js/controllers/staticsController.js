@@ -17,9 +17,9 @@ angular.module('RDash')
         ]
 
         $scope.staticTypes = [
-            {desc: "אברכים נוספים", val: 0},
-            {desc: "מאמרים בעל-פה", val: 1},
-            {desc: "שעות לימוד", val: 2}
+            { desc: "אברכים נוספים", val: 0 },
+            { desc: "מאמרים בעל-פה", val: 1 },
+            { desc: "שעות לימוד", val: 2 }
         ];
 
         $scope.colelList = [];
@@ -42,7 +42,7 @@ angular.module('RDash')
             // $scope.statics.dateType = '';
         }
 
-        $scope.changeStaticType = function(staticType){
+        $scope.changeStaticType = function(staticType) {
             $scope.currentData = $scope.data[staticType || 0];
             $scope.renderChart($scope.currentChart, $scope.currentData)
         }
@@ -64,7 +64,7 @@ angular.module('RDash')
 
             dataType.forEach(function(tempData) {
                 currentData = tempData;
-                if(currentData.colel_id != currentColelId){
+                if (currentData.colel_id != currentColelId) {
                     data.push({
                         type: chartType.val,
                         showInLegend: true,
@@ -122,7 +122,7 @@ angular.module('RDash')
                     contentFormatter: function(e) {
                         var str = "";
                         for (var i = 0; i < e.entries.length; i++) {
-                            var temp = $scope.role === 'User' ? '' : " <strong>" + e.entries[i].dataSeries.legendText + ":</strong>" +  e.entries[i].dataPoint.y + " <br/>";
+                            var temp = $scope.role === 'User' ? '' : " <strong>" + e.entries[i].dataSeries.legendText + ":</strong>" + e.entries[i].dataPoint.y + " <br/>";
                             str = str.concat(temp);
                         }
                         return (str);
@@ -131,7 +131,7 @@ angular.module('RDash')
                 data: data
             });
 
-            if($scope.role === "User"){
+            if ($scope.role === "User") {
                 chart.options.axisY.valueFormatString = " "
             }
 
