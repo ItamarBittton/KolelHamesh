@@ -453,17 +453,17 @@ function updateAllColels(req, res) {
 }
 
 function updateDateOfAllStudents(req, res) {
-    let date = req.body.date;
+    let date = req.body.date + (1000 * 60 * 60 * 24);
 
     date = new Date(date);
 
-    sql.q(`INSERT INTO ${process.env.database}.tb_daily (student_id, date, presence, comment)
-           select id, '${helper.jsDateToMySql(date)}', -3, NULL
+    sql.q(`INSERT INTO ${process.env.database}.tb_daily (student_id, date, presence)
+           select id, '${helper.jsDateToMySql(date)}', -3
            from ${process.env.database}.tb_student
+           where is_deleted = 0
            ON DUPLICATE KEY UPDATE student_id = id,
                                    date = '${helper.jsDateToMySql(date)}',
-                                   presence = -3, 
-                                   comment = NULL`, function(data) {
+                                   presence = -3`, function(data) {
         if (data.error) {
             res.send({
                 error: 'היתה בעיה בעת עדכון הנתונים'

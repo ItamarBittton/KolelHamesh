@@ -554,4 +554,14 @@ svg rect{
 .dateForAll{
   display: flex;
   margin-right: 20px;
+  align-items: baseline;
+}
+
+.colel-header {
+  display: flex;
+  align-items: baseline;
+}
+
+div.pull-left > div > div > md-input-container {
+  margin: 0;
 }
