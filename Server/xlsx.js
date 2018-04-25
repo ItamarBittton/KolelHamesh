@@ -241,7 +241,7 @@ function makeReport(path, userData, res) {
                 });
             });
 
-            workbook.xlsx.writeFile(`./dist${path}`).then(function () {
+            workbook.xlsx.writeFile(`./dist${path.replace(/"/g, "")}`).then(function () {
                 res.send({
                     success: 'הדוח הונפק בהצלחה!',
                     url: path
