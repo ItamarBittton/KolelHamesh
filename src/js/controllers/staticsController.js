@@ -161,7 +161,7 @@ angular.module('RDash')
         }
 
         $scope.$on('$viewContentLoaded', function() {
-            $("#datepicker").datepicker({
+            var datePickerSettings = {
                 closeText: "סגור",
                 prevText: "הקודם",
                 nextText: "הבא",
@@ -181,28 +181,10 @@ angular.module('RDash')
                 isRTL: true,
                 showMonthAfterYear: false,
                 yearSuffix: ""
-            });
-            $("#endDatepicker").datepicker({
-                closeText: "סגור",
-                prevText: "הקודם",
-                nextText: "הבא",
-                currentText: "היום",
-                monthNames: ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
-                    "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
-                ],
-                monthNamesShort: ["ינו", "פבר", "מרץ", "אפר", "מאי", "יוני",
-                    "יולי", "אוג", "ספט", "אוק", "נוב", "דצמ"
-                ],
-                dayNames: ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"],
-                dayNamesShort: ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"],
-                dayNamesMin: ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"],
-                weekHeader: "Wk",
-                dateFormat: "dd/mm/yy",
-                firstDay: 0,
-                isRTL: true,
-                showMonthAfterYear: false,
-                yearSuffix: ""
-            });
+            };
+
+            $("#datepicker").datepicker(datePickerSettings);
+            $("#endDatepicker").datepicker(datePickerSettings);
         });
 
     });

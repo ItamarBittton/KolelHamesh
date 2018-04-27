@@ -97,14 +97,14 @@ function getDailyOptions(req) {
             ORDER BY t1.id`;
 }
 
-function getDailyCount(req, month) {
+function getDailyCount(req, month, year) {
     return `SELECT DAYOFMONTH(date) AS monthday, COUNT(*) AS count, (select count(*) 
                                                                      from tb_student 
                                                                      where is_deleted = 1 
                                                                      and colel_id = ${req.currentUser.colel_id}) as deletedCount
             FROM tb_daily t1
             LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
-            WHERE MONTH(date) = ${month} AND t2.colel_id = ${req.currentUser.colel_id} AND t2.is_deleted = 0
+            WHERE MONTH(date) = ${month} AND t2.colel_id = ${req.currentUser.colel_id} AND t2.is_deleted = 0 and t2.added_date <= date
             GROUP BY MONTH(date), DAYOFMONTH(date)`;
 }
 

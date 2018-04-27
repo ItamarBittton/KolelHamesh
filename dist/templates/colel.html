@@ -151,9 +151,10 @@
                         </span>
 
 
-                        <md-input-container>
-                            <md-datepicker ng-model="chosenDate"></md-datepicker>
-                        </md-input-container>
+                        <!-- <md-input-container> -->
+                            <input class="form-control" type="text" ng-model="chosenDate" id="datepicker">
+                            <!-- <md-datepicker ng-model="chosenDate"></md-datepicker> -->
+                        <!-- </md-input-container> -->
 
                         <button ng-click="updateAllStudents(chosenDate)" class="btn btn-sm btn-info">שמור</button>
                     </div>

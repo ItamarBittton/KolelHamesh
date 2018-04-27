@@ -158,6 +158,7 @@ function approveRecomend(req, res) {
             if (recomend.type !== 'מחיקה') {
                 if (recomend.table_name === 'tb_student') {
                     recomend.data.newObj.colel_id = recomend.colel_update;
+                    recomend.data.newObj.added_date = helper.jsDateToMySql(new Date());
                 }
                 sql.q(sql.ia(recomend.table_name, [recomend.data.newObj], (recomend.type !== 'הוספה')), function(data) {
                     if (data.error) {
@@ -200,7 +201,7 @@ function getDailyReport(req, res) {
         res.send({ error: 'אין לך הרשאה לצפות בנתונים בתאריך הנל' });
     } else {
         sql.mq([queries.getDailyReport(req), queries.getDailyOptions(req),
-            queries.getTempStudents(req), queries.getDailyCount(req, selectedDate[1])
+            queries.getTempStudents(req), queries.getDailyCount(req, selectedDate[1], selectedDate[0])
         ], function(data) {
             if (data.error) {
                 res.send({ error: 'אין אפשרות לצפות בנתונים בתאריך הנל' });
