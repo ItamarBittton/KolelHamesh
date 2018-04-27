@@ -186,7 +186,8 @@ function deleteColel(id) {
 function prevMonths(req) {
     return `SELECT year(t1.date) AS year, month(t1.date) AS month 
             FROM tb_daily t1
-            GROUP BY year(t1.date), month(t1.date)`;
+            GROUP BY year(t1.date), month(t1.date)
+            ORDER BY year(t1.date) DESC, month(t1.date) DESC`;
 }
 
 function prevMonth(req) {
@@ -197,7 +198,8 @@ function prevMonth(req) {
                   t1.student_id IN (SELECT t2.id 
                                     FROM tb_student t2 
                                     WHERE t2.colel_id = ${req.currentUser.colel_id})
-            GROUP BY year(t1.date), month(t1.date)`;
+            GROUP BY year(t1.date), month(t1.date)
+            ORDER BY year(t1.date) DESC, month(t1.date) DESC`;
 }
 
 function getDefinitions() {
@@ -235,18 +237,18 @@ function getStats(req) {
     return `SELECT (SELECT SUM(amount) FROM tb_onetime_student WHERE ${colelId}) AS 'extraStudents',
                    (SELECT COUNT(*) FROM tb_student WHERE ${colelId}) AS 'students',
                    (SELECT COUNT(*) FROM tb_score t1
-		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+		                       JOIN tb_student t2 ON (t1.student_id = t2.id and t2.is_deleted = 0)
                     WHERE t1.oral_score = 100 AND
                           t1.month = month(CURRENT_DATE) AND
                           ${t2colelID}) AS 'testsMonth',
                    (SELECT COUNT(*) FROM tb_score t1
-		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+		                      JOIN tb_student t2 ON (t1.student_id = t2.id and t2.is_deleted = 0)
                     WHERE t1.oral_score = 100 AND
                           ${t2colelID}) AS 'testsTotal',
                    (SELECT (COUNT(*) * 90 - SUM(t1.presence)) / 60
                     FROM (SELECT t1.student_id, t1.date, t1.presence, t2.colel_id
                           FROM tb_daily t1
-		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+		                      JOIN tb_student t2 ON (t1.student_id = t2.id and t2.is_deleted = 0)
                     WHERE t1.presence >= 0 AND 
                           year(t1.date) = year(CURRENT_DATE) AND
                           month(t1.date) = month(CURRENT_DATE) AND
@@ -254,7 +256,7 @@ function getStats(req) {
                    (SELECT ((COUNT(*) + extraStudents) * 90 - SUM(t1.presence)) / 60
                     FROM (SELECT t1.student_id, t1.date, t1.presence, t2.colel_id
                           FROM tb_daily t1
-		                       LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
+		                       JOIN tb_student t2 ON (t1.student_id = t2.id and t2.is_deleted = 0)
                     WHERE t1.presence >= 0 AND
                           ${t2colelID}) t1) AS 'hoursTotal'`;
 }
@@ -275,7 +277,10 @@ function getExcel(data) {
                         FROM tb_daily t1
                         LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
                         LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
-                        WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id}
+                        WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id} 
+                              AND not (t3.is_deleted = 1 and t3.id in (select t4.student_id 
+                                                                       from tb_daily t4
+                                                                       where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t3.id))
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
             "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
@@ -291,6 +296,9 @@ function getExcel(data) {
                                     t1.account_name AS 'שם בעל החשבון'
                              FROM tb_student t1
                              WHERE t1.colel_id = ${data.colel_id}
+                             AND not (t1.is_deleted = 1 and t1.id in (select t4.student_id 
+                                from tb_daily t4
+                                where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t1.id))
                              order by t1.last_name`,
             "סיכום מלגות": `SELECT t1.name AS 'שם כולל',
                                 t1.last_name AS 'שם משפחה',
@@ -478,6 +486,7 @@ function bigString(month, year, colel_id) {
                                                                                                                  month(t10.date) = ${month} and
                                                                                                                  t1.id = t10.student_id
                                                                                                            group by t10.student_id))
+                      and not (t1.is_deleted = 1 and t2.present = 0)
                 order by t7.name, t1.last_name
                 )`;
 }
