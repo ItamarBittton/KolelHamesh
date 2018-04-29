@@ -57,6 +57,22 @@
                     <option value="" disabled>החלף חודש</option>
                     <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                 </select>
+                <div ng-if="role === 'Admin'" class="btn-group" auto-close="outsideClick" uib-dropdown dropdown-append-to-body>
+                        <button id="btn-append-to-body" type="button" class="btn btn-default" uib-dropdown-toggle>
+                            העתק נוכחות
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+                            <li role="menuitem">
+                                <label for="">העתקה</label>
+                                <input class="form-control" type="text" ng-model="chosenDate" id="datepicker">
+                                <input class="form-control" type="text" ng-model="chosenDate" id="datepicker">
+                            </li>
+                            <li role="menuitem">
+                                <button ng-click="updateAllStudents(chosenDate)" class="btn btn-sm btn-info">שמור</button>
+                            </li>
+                        </ul>
+                    </div>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
                 <my-calendar view-date="viewDate" status="status" show="show(date)"></my-calendar>

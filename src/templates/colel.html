@@ -146,7 +146,7 @@
 
                     <div class="btn-group" auto-close="outsideClick" uib-dropdown dropdown-append-to-body>
                         <button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
-                            עדכן את כולם כשבת\חג בתאריך:
+                            עדכן את כולם כשבת\חג בתאריך
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
@@ -154,7 +154,7 @@
                                 <input class="form-control" type="text" ng-model="chosenDate" id="datepicker">
                             </li>
                             <li role="menuitem">
-                                <button ng-click="updateAllStudents(chosenDate)" class="btn btn-sm btn-info">שמור</button>
+                                <button ng-disabled="!chosenDate" ng-click="updateAllStudents(chosenDate)" class="btn btn-sm btn-info">שמור</button>
                             </li>
                         </ul>
                     </div>

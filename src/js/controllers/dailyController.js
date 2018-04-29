@@ -32,7 +32,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     };
 
     $scope.students = [];
-
+    $scope.role = $scope.$parent.role;
     Data.get('getProhibitions').then(function (data) {
         if (data) {
             $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
