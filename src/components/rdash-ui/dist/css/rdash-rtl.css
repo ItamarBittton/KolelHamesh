@@ -559,7 +559,6 @@ svg rect{
 
 .colel-header {
   display: flex;
-  align-items: baseline;
 }
 
 div.pull-left > div > div > md-input-container {

@@ -70,6 +70,7 @@ app.put('/newReport', f.requireRole([Admin]), f.newReport);
 app.post('/updateAll', f.requireRole([Admin]), f.updateAll);
 app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);
 
+app.post('/copyDates', f.requireRole([Admin]), f.copyDates)
 app.post('/getStatics', f.requireRole([Admin, User]), f.getStatics);
 var port = process.env.PORT || 8080;
 

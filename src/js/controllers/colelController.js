@@ -6,7 +6,7 @@ angular.module('RDash')
             daily: false,
             prevMonth: false
         };
-        $scope.chosenDate = new Date();
+        // $scope.chosenDate = new Date();
         Data.get('colels').then(updateColels);
 
         $scope.add = function() {
@@ -91,7 +91,8 @@ angular.module('RDash')
         };
 
         $scope.updateAllStudents = function(date) {
-            Data.post('updateAllStudents', { date: date.getTime() }).then(function(res) {
+            date = date.split('/');
+            Data.post('updateAllStudents', { date: new Date(date[2], date[1] - 1, date[0]).getTime() }).then(function(res) {
 
             })
         }
@@ -114,4 +115,31 @@ angular.module('RDash')
             // @ts-ignore
             window.open(location.origin, [colel.name, colel.password].join(';'));
         };
+
+        $scope.$on('$viewContentLoaded', function() {
+            var datePickerSettings = {
+                closeText: "סגור",
+                prevText: "הקודם",
+                nextText: "הבא",
+                currentText: "היום",
+                monthNames: ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+                    "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
+                ],
+                monthNamesShort: ["ינו", "פבר", "מרץ", "אפר", "מאי", "יוני",
+                    "יולי", "אוג", "ספט", "אוק", "נוב", "דצמ"
+                ],
+                dayNames: ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"],
+                dayNamesShort: ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"],
+                dayNamesMin: ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"],
+                weekHeader: "Wk",
+                dateFormat: "dd/mm/yy",
+                firstDay: 0,
+                isRTL: true,
+                showMonthAfterYear: false,
+                yearSuffix: ""
+            };
+
+            $("#datepicker").datepicker(datePickerSettings);
+        });
+
     });

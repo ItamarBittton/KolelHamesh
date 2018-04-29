@@ -56,6 +56,27 @@
                     <option value="" disabled="disabled">החלף חודש</option>
                     <option ng-repeat="date in prevDates" value="{{ date }}">{{date.month}}/{{date.year}}</option>
                 </select>
+                <div ng-if="role === 'Admin'" class="btn-group" auto-close="outsideClick" uib-dropdown dropdown-append-to-body>
+                        <button id="btn-append-to-body" type="button" class="btn btn-default" uib-dropdown-toggle>
+                            העתק נוכחות
+                            <span class="caret"></span>
+                        </button>
+                        <ul ng-init="onloadFun()" class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+                                <li role="menuitem">
+                                    <label for="">העתקה</label>
+                                    <input class="form-control" type="text" ng-model="dates.copyStartDate" id="copyStartDate">
+                                    <input class="form-control" type="text" ng-model="dates.copyEndDate" id="copyEndDate">
+                                </li>
+                                <li role="menuitem">
+                                    <label for="">הדבקה</label>
+                                    <input class="form-control" type="text" ng-model="dates.pasteStartDate" id="pasteStartDate">
+                                    <input class="form-control" type="text" ng-model="dates.pasteEndDate" id="pasteEndDate">
+                                </li>
+                                <li role="menuitem">
+                                    <button ng-disabled="!dates.copyStartDate && !dates.copyEndDate && !dates.pasteStartDate && !dates.pasteEndDate" ng-click="copyDates()" class="btn btn-sm btn-info">שמור</button>
+                                </li>
+                            </ul>
+                    </div>
             </rd-widget-header>
             <rd-widget-body classes="xxlarge no-padding">
                 <my-calendar view-date="viewDate" status="status" show="show(date)"></my-calendar>
