@@ -104,7 +104,7 @@ function getDailyCount(req, month, year) {
                                                                      and colel_id = ${req.currentUser.colel_id}) as deletedCount
             FROM tb_daily t1
             LEFT OUTER JOIN tb_student t2 ON (t1.student_id = t2.id)
-            WHERE MONTH(date) = ${month} AND t2.colel_id = ${req.currentUser.colel_id} AND t2.is_deleted = 0 and t2.added_date <= date
+            WHERE MONTH(date) = ${month} AND year(date) = ${year} AND t2.colel_id = ${req.currentUser.colel_id} AND t2.is_deleted = 0 and t2.added_date <= t1.date
             GROUP BY MONTH(date), DAYOFMONTH(date)`;
 }
 
