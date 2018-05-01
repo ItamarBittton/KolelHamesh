@@ -3,7 +3,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     $scope.dropList = [];
     $scope.isOnlyDaily = true;
     $scope.status = [];
-    $scope.dates ={};
+    $scope.dates = {};
     var dateFormat = "dd/mm/yy";
 
     $scope.show = function (date) {
@@ -31,7 +31,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
             copyEndDate: new Date(copyEnd[2], copyEnd[1] - 1, copyEnd[0]).getTime(),
             pasteStartDate: new Date(pasteStart[2], pasteStart[1] - 1, pasteStart[0]).getTime(),
             pasteEndDate: new Date(pasteEnd[2], pasteEnd[1] - 1, pasteEnd[0]).getTime(),
-        }).then(function(res) {
+        }).then(function (res) {
             $scope.data = res.data;
             $scope.currentData = $scope.data[0];
             // $scope.oneTimeStudents = res.data[0];
@@ -71,7 +71,11 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
     });
 
     $scope.changeMonth = function (currentMonth) {
-        if (currentMonth) $scope.viewDate = JSON.parse(currentMonth);
+        if (currentMonth) {
+            currentMonth = JSON.parse(currentMonth);
+            $scope.viewDate = currentMonth;
+            $scope.show(new Date(currentMonth.year, currentMonth.month - 1))
+        }
     };
 
     $scope.save = function (valid) {

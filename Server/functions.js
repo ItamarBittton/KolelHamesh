@@ -217,10 +217,10 @@ function getDailyReport(req, res) {
                     }
                 });
 
-                var day = new Date().getDate();
-                for (var i = 1; i < day; i++) {
+                var day = ((new Date().getMonth() + 1 == selectedDate[1]) ? new Date() : new Date(selectedDate.join('-'))).getDate();
+                for (var i = 0; i < day; i++) {
                     // If this day is empty and is between Sunday-Thursday.
-                    if (!count[i] && new Date(`2017-${selectedDate[1]}-${i}`).getDay() < 5) {
+                    if (!count[i]/* && new Date(selectedDate[0], selectedDate[1], i).getDay() < 5*/) {
                         count[i] = 'red';
                     }
                 }
@@ -460,9 +460,9 @@ function updateDateOfAllStudents(req, res) {
 
     sql.q(`INSERT INTO ${process.env.database}.tb_daily (student_id, date, presence)
            select id, '${helper.jsDateToMySql(date)}', -3
-           from ${process.env.database}.tb_student
+           from ${process.env.database}.tb_student t3
            where is_deleted = 0
-           ON DUPLICATE KEY UPDATE date = '${helper.jsDateToMySql(date)}',
+           ON DUPLICATE KEY UPDATE student_id = t3.student_id, date = '${helper.jsDateToMySql(date)}',
                                    presence = -3`, function (data) {
             if (data.error) {
                 res.send({
@@ -605,11 +605,15 @@ const copyDates = (req, res, next) => {
                                                   (select student_id, DATE_ADD(date, INTERVAL DATEDIFF('${pasteEndDate}', '${pasteStartDate}') DAY), presence 
                                                    from tb_daily t1 
                                                    where t1.date BETWEEN '${copyStartDate}' AND '${copyEndDate}'
-                                                         AND ${req.currentUser.colel_id} = (select t2.colel_id from tb_student t2 where t1.student_id = t2.id))
-                                                         AND NOT t1.student_id = (select t3.id from tb_student t3 where t3.id = t1.student_id and t3.is_deleted = 1)
+                                                         AND ${req.currentUser.colel_id} = (select t2.colel_id from tb_student t2 where t1.student_id = t2.id)
+                                                         AND NOT t1.student_id = (select t3.id 
+                                                                                  from tb_student t3 
+                                                                                  where t3.id = t1.student_id and
+                                                                                        t3.is_deleted = 1))
                                                          ON DUPLICATE KEY UPDATE 
-                                                                    date = DATE_ADD(date, INTERVAL DATEDIFF('${pasteEndDate}', '${pasteStartDate}') DAY),
-                                                                    presence = presence`
+                                                                    student_id = t1.student_id,
+                                                                    date = DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteEndDate}', '${pasteStartDate}') DAY),
+                                                                    presence = t1.presence`
         , function (results) {
             if (results.error) {
                 res.send({ error: 'אין אפשרות להעתיק את הנתונים' });
