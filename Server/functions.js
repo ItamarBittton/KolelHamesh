@@ -220,7 +220,7 @@ function getDailyReport(req, res) {
                 var day = ((new Date().getMonth() + 1 == selectedDate[1]) ? new Date() : new Date(selectedDate.join('-'))).getDate();
                 for (var i = 0; i < day; i++) {
                     // If this day is empty and is between Sunday-Thursday.
-                    if (!count[i]/* && new Date(selectedDate[0], selectedDate[1], i).getDay() < 5*/) {
+                    if (!count[i] /* && new Date(selectedDate[0], selectedDate[1], i).getDay() < 5*/) {
                         count[i] = 'red';
                     }
                 }
@@ -595,26 +595,28 @@ const getStatics = (req, res) => {
 };
 
 const copyDates = (req, res, next) => {
-    let { copyStartDate, copyEndDate, pasteStartDate, pasteEndDate } = req.body;
-    copyStartDate = helper.jsDateToMySql(new Date(parseInt(copyStartDate) + 1000 * 60 * 60 * 24));
-    copyEndDate = helper.jsDateToMySql(new Date(parseInt(copyEndDate) + 1000 * 60 * 60 * 24));
-    pasteStartDate = helper.jsDateToMySql(new Date(parseInt(pasteStartDate) + 1000 * 60 * 60 * 24));
-    pasteEndDate = helper.jsDateToMySql(new Date(parseInt(pasteEndDate) + 1000 * 60 * 60 * 24));
+
+    function setSelectedDateToMySqlFormat(dateAsTime){
+        return helper.jsDateToMySql(new Date(new Date(parseInt(dateAsTime) + 1000 * 60 * 60 * 24).setUTCHours(0, 0, 0, 0)))
+    }
+
+    let { copyStartDate, copyEndDate, pasteStartDate } = req.body;
+    
+    copyStartDate = setSelectedDateToMySqlFormat(copyStartDate);
+    copyEndDate = setSelectedDateToMySqlFormat(copyEndDate);
+    pasteStartDate = setSelectedDateToMySqlFormat(pasteStartDate);
 
     sql.q(`INSERT INTO ${process.env.database}.tb_daily (student_id, date, presence) 
-                                                  (select student_id, DATE_ADD(date, INTERVAL DATEDIFF('${pasteEndDate}', '${pasteStartDate}') DAY), presence 
-                                                   from tb_daily t1 
+                                                  (select t1.student_id, DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteStartDate}', '${copyStartDate}') DAY), t1.presence 
+                                                   from tb_daily t1, tb_student t3
                                                    where t1.date BETWEEN '${copyStartDate}' AND '${copyEndDate}'
                                                          AND ${req.currentUser.colel_id} = (select t2.colel_id from tb_student t2 where t1.student_id = t2.id)
-                                                         AND NOT t1.student_id = (select t3.id 
-                                                                                  from tb_student t3 
-                                                                                  where t3.id = t1.student_id and
-                                                                                        t3.is_deleted = 1))
+                                                         AND t1.student_id = t3.id 
+                                                         AND t3.is_deleted = 0)
                                                          ON DUPLICATE KEY UPDATE 
-                                                                    student_id = t1.student_id,
-                                                                    date = DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteEndDate}', '${pasteStartDate}') DAY),
-                                                                    presence = t1.presence`
-        , function (results) {
+                                                                    -- student_id = t1.student_id,
+                                                                    date = DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteStartDate}', '${copyStartDate}') DAY),
+                                                                    presence = t1.presence`, function (results) {
             if (results.error) {
                 res.send({ error: 'אין אפשרות להעתיק את הנתונים' });
             } else {
