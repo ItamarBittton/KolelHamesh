@@ -631,7 +631,7 @@ const copyDates = (req, res, next) => {
                              and t1.is_deleted = 0
                              AND ${req.currentUser.colel_id} = t1.colel_id
                         group by t1.id`, function (results) {
-                        
+
                         const studentsWithNoData = results.results;
                         let arrayToInsert = [];
 
@@ -645,18 +645,25 @@ const copyDates = (req, res, next) => {
                                 })
                             })
                         }
+                        if (arrayToInsert.length) {
+                            res.send({
+                                success: 'הבקשה בוצעה בהצלחה',
+                                data: results.results
+                            });
+                        } else {
 
-                        sql.q(sql.ia('tb_daily', arrayToInsert, true), function(results){
-                            if(results.error){
-                                res.send({error: 'היתה בעיה בהעתקת נתוני אברכים חדשים'})
-                            } else {
+                            sql.q(sql.ia('tb_daily', arrayToInsert, true), function (results) {
+                                if (results.error) {
+                                    res.send({ error: 'היתה בעיה בהעתקת נתוני אברכים חדשים' })
+                                } else {
 
-                                res.send({
-                                    success: 'הבקשה בוצעה בהצלחה',
-                                    data: results.results
-                                });
-                            }
-                        })
+                                    res.send({
+                                        success: 'הבקשה בוצעה בהצלחה',
+                                        data: results.results
+                                    });
+                                }
+                            })
+                        }
                     })
             }
 
