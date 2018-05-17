@@ -596,12 +596,15 @@ const getStatics = (req, res) => {
 
 const copyDates = (req, res, next) => {
 
-    function setSelectedDateToMySqlFormat(dateAsTime){
+    function setSelectedDateToMySqlFormat(dateAsTime) {
         return helper.jsDateToMySql(new Date(new Date(parseInt(dateAsTime) + 1000 * 60 * 60 * 24).setUTCHours(0, 0, 0, 0)))
     }
 
     let { copyStartDate, copyEndDate, pasteStartDate } = req.body;
-    
+
+    const daysDiff = helper.calcDaysDiff(copyEndDate, copyStartDate);
+    const copyOfPasteStateDate = new Date(parseInt(pasteStartDate) + 1000 * 60 * 60 * 24).setUTCHours(0, 0, 0, 0);
+
     copyStartDate = setSelectedDateToMySqlFormat(copyStartDate);
     copyEndDate = setSelectedDateToMySqlFormat(copyEndDate);
     pasteStartDate = setSelectedDateToMySqlFormat(pasteStartDate);
@@ -611,8 +614,7 @@ const copyDates = (req, res, next) => {
                                                    from tb_daily t1, tb_student t3
                                                    where t1.date BETWEEN '${copyStartDate}' AND '${copyEndDate}'
                                                          AND ${req.currentUser.colel_id} = (select t2.colel_id from tb_student t2 where t1.student_id = t2.id)
-                                                         AND t1.student_id = t3.id 
-                                                         AND t3.is_deleted = 0)
+                                                         AND t1.student_id = t3.id)
                                                          ON DUPLICATE KEY UPDATE 
                                                                     -- student_id = t1.student_id,
                                                                     date = DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteStartDate}', '${copyStartDate}') DAY),
@@ -620,10 +622,41 @@ const copyDates = (req, res, next) => {
             if (results.error) {
                 res.send({ error: 'אין אפשרות להעתיק את הנתונים' });
             } else {
-                res.send({
-                    success: 'הבקשה בוצעה בהצלחה',
-                    data: results.results
-                });
+                sql.q(`SELECT t1.id as "student_id"
+                       from ${process.env.database}.tb_student t1 
+                       where not t1.id in (select t2.student_id 
+                                           from ${process.env.database}.tb_daily t2 
+                                           where t2.date BETWEEN '${copyStartDate}' AND '${copyEndDate}'
+                                                 and t1.id = t2.student_id)
+                             and t1.is_deleted = 0
+                             AND ${req.currentUser.colel_id} = t1.colel_id
+                        group by t1.id`, function (results) {
+                        
+                        const studentsWithNoData = results.results;
+                        let arrayToInsert = [];
+
+                        for (let i = 0; i <= daysDiff; i++) {
+                            studentsWithNoData.map(stud => {
+                                arrayToInsert.push({
+                                    student_id: stud.student_id,
+                                    date: helper.jsDateToMySql(new Date(copyOfPasteStateDate + 1000 * 60 * 60 * 24 * i)),
+                                    presence: -1
+                                })
+                            })
+                        }
+
+                        sql.q(sql.ia('tb_daily', arrayToInsert, true), function(results){
+                            if(results.error){
+                                res.send({error: 'היתה בעיה בהעתקת נתוני אברכים חדשים'})
+                            } else {
+
+                                res.send({
+                                    success: 'הבקשה בוצעה בהצלחה',
+                                    data: results.results
+                                });
+                            }
+                        })
+                    })
             }
 
         })
