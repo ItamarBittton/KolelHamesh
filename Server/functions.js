@@ -645,7 +645,7 @@ const copyDates = (req, res, next) => {
                                 })
                             })
                         }
-                        if (arrayToInsert.length) {
+                        if (!arrayToInsert.length) {
                             res.send({
                                 success: 'הבקשה בוצעה בהצלחה',
                                 data: results.results
