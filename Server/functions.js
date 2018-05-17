@@ -548,7 +548,7 @@ function updDefinitions(req, res) {
 
 function newReport(req, res) {
     var name = req.body.type == 1 ? (req.body.colelName) : req.body.typeName,
-        path = `/files/${name}_${req.body.month}.xlsx`;
+        path = `/files/${name.replace(/"/g, "")}_${req.body.month}.xlsx`;
 
     if (req.currentUser.permission === 'User') {
         req.body.type = 5;

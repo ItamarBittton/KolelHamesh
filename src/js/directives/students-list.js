@@ -21,7 +21,7 @@ angular
                             <td>{{student.first_name}}</td>
                             <td>{{student.phone}}</td>
                             <td>
-                            <select ng-disabled="{{student.is_deleted}}"
+                            <select
                             ng-model="student.presence" 
                             ng-options="def.value as def.name for def in dropList.options" class="form-control">
                             </select>
