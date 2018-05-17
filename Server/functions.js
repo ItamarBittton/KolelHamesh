@@ -636,11 +636,12 @@ const copyDates = (req, res, next) => {
                         let arrayToInsert = [];
 
                         for (let i = 0; i <= daysDiff; i++) {
+                            const currentDate = new Date(copyOfPasteStateDate + 1000 * 60 * 60 * 24 * i);
                             studentsWithNoData.map(stud => {
                                 arrayToInsert.push({
                                     student_id: stud.student_id,
-                                    date: helper.jsDateToMySql(new Date(copyOfPasteStateDate + 1000 * 60 * 60 * 24 * i)),
-                                    presence: -1
+                                    date: helper.jsDateToMySql(currentDate),
+                                    presence: currentDate.getDay() < 5 ? -1 : -3
                                 })
                             })
                         }
