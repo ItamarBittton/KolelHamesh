@@ -278,9 +278,9 @@ function getExcel(data) {
                         LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
                         LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
                         WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id} 
-                              AND not (t3.is_deleted = 1 and t3.id in (select t4.student_id 
+                              AND t3.id in (select t4.student_id 
                                                                        from tb_daily t4
-                                                                       where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t3.id))
+                                                                       where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t3.id)
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
             "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
@@ -480,12 +480,11 @@ function bigString(month, year, colel_id) {
                                                 
                                     tb_colel t7 
                                     left outer join tbk_settings t8 on (t7.group_type = t8.group_type)
-                where t1.colel_id = ${colel_id} and t1.colel_id = t7.id and (t1.is_deleted = 0 or t1.id = (select t10.student_id 
+                where t1.colel_id = ${colel_id} and t1.colel_id = t7.id and (t1.id in (select t10.student_id 
                                                                                                            from tb_daily t10 
                                                                                                            where year(t10.date) = ${year} and
                                                                                                                  month(t10.date) = ${month} and
-                                                                                                                 t1.id = t10.student_id
-                                                                                                           group by t10.student_id))
+                                                                                                                 t1.id = t10.student_id))
                       and not (t1.is_deleted = 1 and t2.present = 0)
                 order by t7.name, t1.last_name
                 )`;
