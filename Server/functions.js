@@ -613,10 +613,9 @@ const copyDates = (req, res, next) => {
                                                   (select t1.student_id, DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteStartDate}', '${copyStartDate}') DAY), t1.presence 
                                                    from tb_daily t1, tb_student t3
                                                    where t1.date BETWEEN '${copyStartDate}' AND '${copyEndDate}'
-                                                         AND ${req.currentUser.colel_id} = (select t2.colel_id from tb_student t2 where t1.student_id = t2.id)
+                                                         AND ${req.currentUser.colel_id} in (select t2.colel_id from tb_student t2 where t1.student_id = t2.id)
                                                          AND t1.student_id = t3.id)
                                                          ON DUPLICATE KEY UPDATE 
-                                                                    -- student_id = t1.student_id,
                                                                     date = DATE_ADD(t1.date, INTERVAL DATEDIFF('${pasteStartDate}', '${copyStartDate}') DAY),
                                                                     presence = t1.presence`, function (results) {
             if (results.error) {
