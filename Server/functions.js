@@ -436,6 +436,17 @@ function deleteColel(req, res) {
     });
 }
 
+function registrationColel(req, res){
+    var id = sql.v(req.body.id);
+
+    sql.q(queries.registrationColel(id), function (data) {
+        if (data.error) {
+            res.send({ error: 'אירעה שגיאה בעת רישום מחדש של הנתונים' });
+        }
+        res.send({ success: 'הפעולה בוצעה בהצלחה' });
+    });
+}
+
 function updateAllColels(req, res) {
     var column = req.body.column;
     var value = req.body.value || false;
@@ -685,7 +696,7 @@ module.exports = {
     editColel: editColel,
     newColel: newColel,
     deleteColel: deleteColel,
-
+    registrationColel: registrationColel,
     getRecomends: getRecomends,
     newRecomend: newRecomend,
     approveRecomend: approveRecomend,

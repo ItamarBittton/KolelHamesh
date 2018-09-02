@@ -41,6 +41,8 @@ app.get('/colels', f.requireRole([Admin]), f.getColel);
 app.put('/colels', f.requireRole([Admin]), f.newColel);
 app.post('/colels', f.requireRole([Admin]), f.editColel);
 app.post('/deleteColel', f.requireRole([Admin]), f.deleteColel);
+app.post('/registrationColel', f.requireRole([Admin]), f.registrationColel);
+
 
 app.get('/recomends', f.requireRole([Admin, User]), f.getRecomends);
 app.post('/recomends', f.requireRole([Admin, User]), f.newRecomend);
