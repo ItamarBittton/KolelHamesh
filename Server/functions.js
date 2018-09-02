@@ -462,7 +462,7 @@ function updateDateOfAllStudents(req, res) {
            select id, '${helper.jsDateToMySql(date)}', -3
            from ${process.env.database}.tb_student t3
            where is_deleted = 0
-           ON DUPLICATE KEY UPDATE student_id = t3.student_id, date = '${helper.jsDateToMySql(date)}',
+           ON DUPLICATE KEY UPDATE date = '${helper.jsDateToMySql(date)}',
                                    presence = -3`, function (data) {
             if (data.error) {
                 res.send({
