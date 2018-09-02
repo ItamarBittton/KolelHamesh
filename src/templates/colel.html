@@ -5,7 +5,8 @@
                 <rd-widget-header icon="icon-note" title="פרטי הכולל">
                     <button ng-click="save(colelForm.$valid)" ng-class="{'disabled': colelForm.$invalid}" class="btn btn-sm btn-info">שמור</button>
                     <button ng-click="close()" class="btn btn-sm btn-warning">בטל</button>
-                    <button ng-click="delete()" class="btn btn-sm btn-danger">מחק</button>
+                    <button ng-click="delete()" class="btn btn-sm btn-danger" ng-if="!colel.is_deleted">מחק</button>
+                    <button ng-click="registration()" class="btn btn-sm btn-success" ng-if="colel.is_deleted">החזר</button>
                 </rd-widget-header>
                 <rd-widget-body classes="xxlarge no-padding">
                     <div class="form-group form-md-line-input" ng-class="{ 'has-error': (formErrors || colelForm.name.$dirty) && colelForm.name.$invalid }">
@@ -201,7 +202,7 @@
                             <td>כניסה אחרונה</td>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="colel in colels track by $index">
+                            <tr ng-repeat="colel in colels track by $index" ng-class="{ 'archive' : colel.is_deleted }">
                                 <td>
                                     <a style="cursor:pointer" ng-click="goTo(colel)">{{ colel.name }}</a>
                                 </td>

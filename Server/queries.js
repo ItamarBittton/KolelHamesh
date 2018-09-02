@@ -129,7 +129,7 @@ function getScores(req) {
             LEFT OUTER JOIN tb_score t2 ON (t1.id = t2.student_id AND t2.year = ${year} AND t2.month = ${month})
             LEFT OUTER JOIN tb_comment t4 ON (t1.id = t4.student_id AND t4.year = ${year} AND t4.month = ${month})
             WHERE t1.colel_id = ${req.currentUser.colel_id} and (t1.is_deleted = 0 || 'Admin' = '${req.currentUser.permission}') 
-            ORDER BY t1.last_name, t1.first_name`;
+            ORDER BY t1.is_deleted, t1.last_name, t1.first_name`;
 }
 
 function getTestTypes() {
@@ -140,7 +140,7 @@ function getTestTypes() {
 function getColels() {
     return `SELECT t1.id, t1.name 
             FROM tb_colel t1 
-            ORDER BY t1.name`;
+            ORDER BY t1.is_deleted, t1.name`;
 }
 
 function updateUser(req) {
@@ -150,23 +150,10 @@ function updateUser(req) {
 }
 
 function getColel() {
-    return `SELECT t1.id,
-                   t1.name,
-                   t1.address, 
-                   t1.mail_address, 
-                   t1.phone, 
-                   t1.manager_name, 
-                   t1.is_only_daily, 
-                   t1.is_one_time_allow,
-                   t1.is_report_allow, 
-                   t1.is_prev_month, 
-                   t1.schedule, 
-                   t1.note, 
-                   t2.password,
-                   t2.last_login
+    return `SELECT *
             FROM tb_colel t1
             LEFT OUTER JOIN tb_user t2 ON (t1.id = t2.colel_id AND NOT t2.permission = 'Admin')
-            ORDER BY t1.name`;
+            ORDER BY t1.is_deleted, t1.name`;
 }
 
 function updateColel(reqColel, password) {
@@ -177,10 +164,21 @@ function updateColel(reqColel, password) {
 }
 
 function deleteColel(id) {
-    return `DELETE colel, user
-            FROM tb_colel as colel, tb_user as user
-            WHERE colel.id = user.colel_id AND
-                  colel.id = ${id}`;
+    return `UPDATE ${process.env.database}.tb_colel
+            SET is_deleted = 1
+            WHERE id = ${id};
+            UPDATE ${process.env.database}.tb_student
+            SET is_deleted = 1
+            WHERE colel_id = ${id}`;
+}
+
+function registrationColel(id) {
+    return `UPDATE ${process.env.database}.tb_colel
+            SET is_deleted = 0
+            WHERE id = ${id};
+            UPDATE ${process.env.database}.tb_student
+            SET is_deleted = 0
+            WHERE colel_id = ${id}`;
 }
 
 function prevMonths(req) {
@@ -267,8 +265,8 @@ function getExcel(data) {
     var month = parseInt(data.date_created[0]);
 
     return [{
-            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-            "דוח נוכחות": `SELECT t1.date,
+        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+        "דוח נוכחות": `SELECT t1.date,
                                t3.id AS 'id',
                                t2.key AS 'presence',
                                t3.last_name AS 'last_name', 
@@ -282,7 +280,7 @@ function getExcel(data) {
                                                                        from tb_daily t4
                                                                        where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t3.id)
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
-            "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
+        "פרטי האברכים": `SELECT t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
                                     t1.first_name AS 'שם פרטי',
                                     t1.id AS 'תעודת זהות',
@@ -300,7 +298,7 @@ function getExcel(data) {
                                 from tb_daily t4
                                 where MONTH(t4.date) = ${month} AND YEAR(t4.date) = ${year} AND t4.student_id = t1.id))
                              order by t1.last_name`,
-            "סיכום מלגות": `SELECT t1.name AS 'שם כולל',
+        "סיכום מלגות": `SELECT t1.name AS 'שם כולל',
                                 t1.last_name AS 'שם משפחה',
                                 t1.first_name AS 'שם פרטי',
                                 t1.id AS 'תעודת זהות',
@@ -317,7 +315,7 @@ function getExcel(data) {
                                 CASE WHEN t1.monthlyPayment = 0 THEN 0 ELSE (t1.monthlyPayment + t1.writeTest + t1.oralTest) END 'סה"כ לתשלום'
                             FROM ${bigString(month, year, data.colel_id)} t1`,
 
-            "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
                                     case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
@@ -325,7 +323,7 @@ function getExcel(data) {
                              FROM ${bigString(month, year, data.colel_id)} t1`,
 
 
-            "דוח העברה": `select t1.name as 'שם כולל',
+        "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -338,10 +336,10 @@ function getExcel(data) {
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`,
-            "סיכומים והגדרות": ''
-        }, {
-            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-            "פרטי האברכים": `SELECT t2.name as "שם כולל",
+        "סיכומים והגדרות": ''
+    }, {
+        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+        "פרטי האברכים": `SELECT t2.name as "שם כולל",
                                     t1.supported_id AS 'מספר נתמך',
                                     t1.last_name AS 'שם משפחה',
                                     t1.first_name AS 'שם פרטי',
@@ -356,17 +354,17 @@ function getExcel(data) {
                                     t1.account_name AS 'שם בעל החשבון'
                              FROM tb_student t1 left outer join tb_colel t2 on (t1.colel_id = t2.id)
                              order by t1.colel_id`
-        }, {
-            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-            "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
+    }, {
+        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+        "milgot": `SELECT t1.supported_id AS 'מספר נתמך',
                                     case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סכום',
                                     concat( t1.last_name, ' ', t1.first_name) AS 'שם להצגה',
                                     '${month + '-' + year}' AS 'תאריך',
                                     t1.name AS 'חלוקת הדפסה'
                              FROM   ${bigString(month, year, '0 or 1 = 1')} t1`
-        }, {
-            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-            "דוח העברה": `select t1.name as 'שם כולל',
+    }, {
+        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+        "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -379,17 +377,17 @@ function getExcel(data) {
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, '0 or 1 = 1')} t1`,
-            "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
+        "סיכום מלגות ופרטי כוללים": `select t1.name as "שם הכולל",
 sum(t1.monthlyPayment) as "סך הכול מלגות",
 	   t1.colel_address as "כתובת הכולל",
 	   t1.manager_name as "שם אחראי",
 	   t1.manager_phone as "טלפון"
         from ${bigString(month, year, ' 0 or 1 = 1')} t1
         group by t1.name, t1.colel_address, t1.manager_name, t1.manager_phone`
-        },
-        {
-            "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
-            "דוח נוכחות": `SELECT t1.date,
+    },
+    {
+        "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
+        "דוח נוכחות": `SELECT t1.date,
                                t3.id AS 'id',
                                t2.key AS 'presence',
                                t3.last_name AS 'last_name', 
@@ -401,7 +399,7 @@ sum(t1.monthlyPayment) as "סך הכול מלגות",
                         WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id}
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
 
-            "דוח העברה": `select t1.name as 'שם כולל',
+        "דוח העברה": `select t1.name as 'שם כולל',
                                 t1.last_name as 'שם משפחה',
                                 t1.first_name as 'שם פרטי',
                                 t1.id as 'תעודת זהות',
@@ -414,7 +412,7 @@ sum(t1.monthlyPayment) as "סך הכול מלגות",
                                 case when t1.monthlyPayment = 0 then 0 else t1.oralTest end 'מבחן בע"פ',
                                 case when t1.monthlyPayment = 0 then 0 else (t1.monthlyPayment + t1.writeTest + t1.oralTest) end 'סה"כ לתשלום'
                             from ${bigString(month, year, data.colel_id)} t1`
-        }
+    }
     ][data.report_id - 1];
 }
 
@@ -551,6 +549,7 @@ module.exports = {
     getColel: getColel,
     updateColel: updateColel,
     deleteColel: deleteColel,
+    registrationColel: registrationColel,
     prevMonths: prevMonths,
     prevMonth: prevMonth,
     getDefinitions: getDefinitions,
