@@ -19,6 +19,10 @@ const setStudent = (id) => (
     `UPDATE ${process.env.database}.tb_student set is_deleted = 0 where id = '${id}'`
 );
 
+const insertReportMonth = (date, colel_id) => (
+    `INSERT INTO ${process.env.database}.tb_report_months (colel_id, month, year) VALUES (${colel_id}, ${date.month}, ${date.year})`
+);
+
 function deleteStudent(id) {
     return `DELETE student
             FROM tb_student as student
@@ -118,6 +122,12 @@ function getColelPermissions(req) {
     return `SELECT t1.is_only_daily, t1.is_one_time_allow
             FROM tb_colel t1 
             WHERE t1.id = ${sql.v(req.currentUser.colel_id)}`;
+}
+
+function getReportMonths(req) {
+    return `SELECT *
+            FROM ${process.env.database}.tb_report_months t1
+            WHERE t1.colel_id = ${req.currentUser.colel_id}`;
 }
 
 function getScores(req) {
@@ -559,5 +569,7 @@ module.exports = {
     getReport: getReport,
     getStats: getStats,
     getExcel: getExcel,
-    getStatics: getStatics
+    getStatics: getStatics,
+    getReportMonths: getReportMonths,
+    insertReportMonth: insertReportMonth
 };
