@@ -272,10 +272,11 @@ function updateDailyReport(req, res) {
 }
 
 function isOnlyDaily(req, res) {
-    sql.q(queries.getColelPermissions(req), function (data) {
+    sql.mq([queries.getColelPermissions(req), queries.getReportMonths(req)], function (data) {
         res.send({
             is_only_daily: data.results[0].is_only_daily,
-            is_one_time_allow: data.results[0].is_one_time_allow
+            is_one_time_allow: data.results[0].is_one_time_allow,
+            reportMonths: data.results[1]
         });
     });
 }
@@ -485,6 +486,23 @@ function updateDateOfAllStudents(req, res) {
                 });
             }
         });
+}
+
+
+function setLockedMonth(req, res){
+    let date = req.body.date;
+
+    sql.q(queries.insertReportMonth(date, req.currentUser.colel_id), function(data){
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        } else {
+            res.send({
+                success: 'החודש הנבחר נחסם לעדכון'
+            });
+        }
+    })
 }
 
 function getPreviousDate(req, res) {
@@ -721,6 +739,7 @@ module.exports = {
     updateAllStudents: updateDateOfAllStudents,
 
     copyDates: copyDates,
+    setLockedMonth: setLockedMonth,
 
     getStatics: getStatics
 };

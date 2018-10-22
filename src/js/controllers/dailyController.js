@@ -62,6 +62,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         if (data) {
             $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
             $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' || data.is_one_time_allow;
+            $scope.reportMonths = data.reportMonths;
             $scope.show(new Date());
 
             Data.get('prevDates').then(function (data) {
@@ -77,6 +78,26 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
             $scope.show(new Date(currentMonth.year, currentMonth.month - 1))
         }
     };
+
+    $scope.lockMonth = function () {
+        if (!$scope.checkIfMonth()) {
+            Data.post('setLockedMonth', { date: $scope.viewDate }).then(function (data) {
+                console.log(data);
+            })
+        }
+    };
+
+    $scope.checkIfMonth = function () {
+        var viewDate = $scope.viewDate;
+        var bool = false;
+        $scope.reportMonths.forEach(function (val) {
+            if (val.year == viewDate.year && val.month == viewDate.month) {
+                bool = true;
+            }
+        });
+
+        return bool;
+    }
 
     $scope.save = function (valid) {
         if (!valid) {
@@ -149,6 +170,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
         return date;
     }
+
     $scope.close = function () {
         $scope.formErrors = undefined;
         $scope.students = undefined;
