@@ -43,7 +43,7 @@
                             </select>-->
                         </div>
                     </div>
-                    <student-list students="students" drop-list="dropList"></student-list>
+                    <student-list ng-if="showStudents" is-disabled="checkIfMonth()" students="students" drop-list="dropList"></student-list>
                 </rd-widget-body>
             </form>
         </rd-widget>

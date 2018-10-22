@@ -20,18 +20,18 @@
                                 <td>הערות</td>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="student in students" ng-class="{ 'archive' : student.is_deleted }">
+                                <tr ng-if="loadStudents" ng-repeat="student in students" ng-class="{ 'archive' : student.is_deleted }">
                                     <td>{{student.last_name}}</td>
                                     <td>{{student.first_name}}</td>
                                     <td>
-                                        <select ng-model="student.oral" ng-options="def.value as def.name for def in [{name: 'עבר', value: 100}, {name: 'לא עבר', value: 0}]" class="form-control" ng-disabled="{{student.is_deleted}}">
+                                        <select ng-disabled="checkIfMonth()" ng-model="student.oral" ng-options="def.value as def.name for def in [{name: 'עבר', value: 100}, {name: 'לא עבר', value: 0}]" class="form-control" ng-disabled="{{student.is_deleted}}">
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" ng-model="student.write" class="form-control" ng-disabled="{{student.is_deleted}}">
+                                        <input ng-disabled="checkIfMonth()" type="number" ng-model="student.write" class="form-control" ng-disabled="{{student.is_deleted}}">
                                     </td>
                                     <td>
-                                        <input type="text" ng-model="student.comment" class="form-control" ng-disabled="{{student.is_deleted}}">
+                                        <input ng-disabled="checkIfMonth()" type="text" ng-model="student.comment" class="form-control" ng-disabled="{{student.is_deleted}}">
                                     </td>
                                 </tr>
                             </tbody>

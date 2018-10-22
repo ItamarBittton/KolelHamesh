@@ -12,8 +12,27 @@ angular.module('RDash')
             Data.get('scores/' + $scope.date).then(function (data) {
                 $scope.students = data.scores;
                 $scope.title = data.test_type;
+                $scope.reportMonths = data.reportMonths;
+                $scope.loadStudents = true;
             });
         };
+
+        $scope.checkIfMonth = function () {
+            var date = $scope.date.split('-');
+
+            date = {
+                year: date[0],
+                month: date[1]
+            }
+            var bool = false;
+            $scope.reportMonths.forEach(function (val) {
+                if (val.year == date.year && val.month == date.month) {
+                    bool = true;
+                }
+            });
+    
+            return bool;
+        }
 
         Data.get('prevDates').then(function (data) {
             $scope.prevDates = data.prevDates;

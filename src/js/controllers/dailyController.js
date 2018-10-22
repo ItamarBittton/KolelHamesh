@@ -63,6 +63,7 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
             $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
             $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' || data.is_one_time_allow;
             $scope.reportMonths = data.reportMonths;
+            $scope.showStudents = true;
             $scope.show(new Date());
 
             Data.get('prevDates').then(function (data) {

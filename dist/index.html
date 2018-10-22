@@ -52,6 +52,16 @@
                             <span class="menu-icon icon-notebook"></span>
                         </a>
                     </li>
+                    <li class="sidebar-title"></li>
+                    <li ng-if="reportMonths.length" class="sidebar-title">
+                        <span>הנפק דוח</span>
+                        <select ng-model="currMonth" class="pull-left form-control colelSelect">
+                            <option ng-repeat="month in reportMonths" value="month">{{month.month + '-' + month.year}}</option>
+                        </select>
+
+                        <button ng-click="downloadReport()" style="margin-left: 20px;" class="pull-left btn btn-info btn-sm">הורד
+                            דוח</button>
+                    </li>
                     <!-- <li class="sidebar-list">
                         <a ui-sref="statics" ui-sref-active="active">סיכומים
                             <span class="menu-icon icon-graph"></span>

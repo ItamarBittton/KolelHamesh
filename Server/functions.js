@@ -282,10 +282,11 @@ function isOnlyDaily(req, res) {
 }
 
 function getScores(req, res) {
-    sql.mq([queries.getScores(req), queries.getTestTypes()], function (data) {
+    sql.mq([queries.getScores(req), queries.getTestTypes(), queries.getReportMonths(req)], function (data) {
         res.send({
             scores: data.results[0] || [],
-            test_type: data.results[1] || []
+            test_type: data.results[1] || [],
+            reportMonths: data.results[2] || []
         });
     });
 }
@@ -488,6 +489,20 @@ function updateDateOfAllStudents(req, res) {
         });
 }
 
+function getLockedMonths(req, res){
+
+    sql.q(queries.getReportMonths(req), function(data){
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת שליפת הנתונים'
+            });
+        } else {
+            res.send({
+                reportMonths: data.results
+            });
+        }
+    })
+}
 
 function setLockedMonth(req, res){
     let date = req.body.date;
@@ -739,6 +754,7 @@ module.exports = {
     updateAllStudents: updateDateOfAllStudents,
 
     copyDates: copyDates,
+    getLockedMonths: getLockedMonths,
     setLockedMonth: setLockedMonth,
 
     getStatics: getStatics

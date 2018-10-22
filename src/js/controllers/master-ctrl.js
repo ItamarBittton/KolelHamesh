@@ -62,12 +62,16 @@ angular.module('RDash')
                 $state.reload();
             });
         };
-
+        
         if ($scope.role == 'Admin') {
             Data.get('colelList').then(function (data) {
                 $scope.currColel = data.colel_id;
                 $scope.colelList = data.colelList;
             });
+        } else {
+            Data.get('getLockedMonths').then(function(data){
+               $scope.reportMonths = data.reportMonths
+            })
         }
 
         var state;
