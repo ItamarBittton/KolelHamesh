@@ -54,8 +54,8 @@ angular.module('RDash')
         };
 
         $scope.delete = function () {
-
-            Data.post('deleteColel', { id: $scope.colel.id }).then(Data.get('colels').then(updateColels));
+            debugger;
+            Data.post('deleteColel', { id: $scope.colel.colel_id }).then(Data.get('colels').then(updateColels));
             $scope.close();
 
         };
