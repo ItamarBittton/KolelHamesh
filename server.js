@@ -67,7 +67,7 @@ app.get('/definitions', f.requireRole([Admin]), f.getDefinitions);
 app.put('/definitions', f.requireRole([Admin]), f.updDefinitions);
 
 app.get('/reports', f.requireRole([Admin]), f.getReports);
-app.put('/newReport', f.requireRole([Admin]), f.newReport);
+app.put('/newReport', f.requireRole([Admin, User]), f.newReport);
 
 app.post('/updateAll', f.requireRole([Admin]), f.updateAll);
 app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);

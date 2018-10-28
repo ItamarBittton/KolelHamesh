@@ -595,7 +595,7 @@ function newReport(req, res) {
         path = `/files/${name.replace(/"/g, "")}_${req.body.month}.xlsx`;
 
     if (req.currentUser.permission === 'User') {
-        req.body.type = 5;
+        req.body.type = 1;
     }
 
     sql.q(queries.getReport(req), function (data) {
@@ -608,8 +608,9 @@ function newReport(req, res) {
             });
         } else {
             xlsx.makeReport(path, {
+                is_admin: req.currentUser.permission === 'Admin',
                 report_id: req.body.type,
-                colel_id: req.body.colel,
+                colel_id: req.body.colel || req.body.colel_id,
                 date_created: req.body.month,
                 url: path
             }, res);

@@ -241,6 +241,12 @@ function makeReport(path, userData, res) {
                 });
             });
 
+            if(!userData.is_admin){
+                workbook.removeWorksheet(2);
+                workbook.removeWorksheet(3);
+                workbook.removeWorksheet(4);
+            }
+
             workbook.xlsx.writeFile(`./dist${path}`).then(function () {
                 res.send({
                     success: 'הדוח הונפק בהצלחה!',

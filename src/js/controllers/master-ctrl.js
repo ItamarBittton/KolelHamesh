@@ -14,7 +14,10 @@ angular.module('RDash')
         $scope.userName = $cookies.get('user') || 'משתמש';
 
         $scope.downloadReport = function(chosenMonth) {
-            console.log($scope.currMonth)
+            chosenMonth.typeName = 'דוח סיכום חודשי';
+            chosenMonth.month = chosenMonth.month + "-" + chosenMonth.year;
+            
+            Data.put('newReport', chosenMonth).then(console.log)
         }
 
         $scope.getWidth = function() {
