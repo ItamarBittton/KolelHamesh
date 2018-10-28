@@ -125,7 +125,7 @@ function getColelPermissions(req) {
 }
 
 function getReportMonths(req) {
-    return `SELECT *
+    return `SELECT *, CONCAT(t1.month, '-', t1.year) as view
             FROM ${process.env.database}.tb_report_months t1
             WHERE t1.colel_id = ${req.currentUser.colel_id}`;
 }

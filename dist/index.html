@@ -29,40 +29,39 @@
                 <span ng-if="role === 'User'" ng-show="isAgreed()">
                     <li class="sidebar-title">
                         <span>תפריט מנהל כולל</span>
-                    </li>
+                </li>
 
-                    <li class="sidebar-list">
-                        <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
+                <li class="sidebar-list">
+                    <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
                             <span class="menu-icon icon-clock"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="scores" ui-sref-active="active">ציונים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="scores" ui-sref-active="active">ציונים
                             <span class="menu-icon icon-layers"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="students" ui-sref-active="active">אברכים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="students" ui-sref-active="active">אברכים
                             <span class="menu-icon icon-people"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-title"></li>
-                    <li class="sidebar-list">
-                        <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
+                </li>
+                <li class="sidebar-title"></li>
+                <li class="sidebar-list">
+                    <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
                             <span class="menu-icon icon-notebook"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-title"></li>
-                    <li ng-if="reportMonths.length" class="sidebar-title">
-                        <span>הנפק דוח</span>
-                        <select ng-model="currMonth" class="pull-left form-control colelSelect">
-                            <option ng-repeat="month in reportMonths" value="month">{{month.month + '-' + month.year}}</option>
+                </li>
+                <li class="sidebar-title"></li>
+                <li ng-if="reportMonths.length" class="sidebar-title">
+                    <span>הנפק דוח</span>
+                    <select ng-model="selected" ng-options="month as month.view for month in reportMonths" class="pull-left form-control colelSelect">
                         </select>
 
-                        <button ng-click="downloadReport()" style="margin-left: 20px;" class="pull-left btn btn-info btn-sm">הורד
+                    <button ng-click="downloadReport(selected)" style="margin-left: 20px;" class="pull-left btn btn-info btn-sm">הורד
                             דוח</button>
-                    </li>
-                    <!-- <li class="sidebar-list">
+                </li>
+                <!-- <li class="sidebar-list">
                         <a ui-sref="statics" ui-sref-active="active">סיכומים
                             <span class="menu-icon icon-graph"></span>
                         </a>
@@ -71,50 +70,49 @@
                 <span ng-if="role === 'Admin'">
                     <li class="sidebar-title">
                         <span>תפריט מנהל רשת</span>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="recomends" ui-sref-active="active">רשימת המלצות
                             <span class="menu-icon icon-notebook"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="colels" ui-sref-active="active">כוללים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="colels" ui-sref-active="active">כוללים
                             <span class="menu-icon icon-cup"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-title"></li>
-                    <li class="sidebar-title">
-                        <span>צפה כ:</span>
-                        <select ng-model="currColel" ng-options="colel.id as colel.name for colel in colelList" class="pull-left form-control colelSelect"
-                            ng-change="changedColel(e)">
+                </li>
+                <li class="sidebar-title"></li>
+                <li class="sidebar-title">
+                    <span>צפה כ:</span>
+                    <select ng-model="currColel" ng-options="colel.id as colel.name for colel in colelList" class="pull-left form-control colelSelect" ng-change="changedColel(e)">
                         </select>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="daily" ui-sref-active="active">דוח נוכחות
                             <span class="menu-icon icon-clock"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="scores" ui-sref-active="active">ציונים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="scores" ui-sref-active="active">ציונים
                             <span class="menu-icon icon-layers"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="students" ui-sref-active="active">אברכים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="students" ui-sref-active="active">אברכים
                             <span class="menu-icon icon-user"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-title"></li>
-                    <li class="sidebar-list">
-                        <a ui-sref="reports">דוחות והגדרות
+                </li>
+                <li class="sidebar-title"></li>
+                <li class="sidebar-list">
+                    <a ui-sref="reports">דוחות והגדרות
                             <span class="menu-icon icon-settings"></span>
                         </a>
-                    </li>
-                    <li class="sidebar-list">
-                        <a ui-sref="statics" ui-sref-active="active">סיכומים
+                </li>
+                <li class="sidebar-list">
+                    <a ui-sref="statics" ui-sref-active="active">סיכומים
                             <span class="menu-icon icon-graph"></span>
                         </a>
-                    </li>
+                </li>
                 </span>
             </ul>
 
