@@ -520,6 +520,22 @@ function setLockedMonth(req, res){
     })
 }
 
+function releseLockedMonth(req, res){
+    let date = req.body.date;
+
+    sql.q(queries.deleteReportMonth(date, req.currentUser.colel_id), function(data){
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        } else {
+            res.send({
+                success: 'החודש הנבחר נחסם לעדכון'
+            });
+        }
+    })
+}
+
 function getPreviousDate(req, res) {
     var date = new Date().getDate();
 
@@ -757,6 +773,6 @@ module.exports = {
     copyDates: copyDates,
     getLockedMonths: getLockedMonths,
     setLockedMonth: setLockedMonth,
-
+    releseLockedMonth:releseLockedMonth,
     getStatics: getStatics
 };

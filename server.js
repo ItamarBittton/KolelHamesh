@@ -77,6 +77,7 @@ app.post('/getStatics', f.requireRole([Admin, User]), f.getStatics);
 
 app.get('/getLockedMonths', f.requireRole([User, Admin]), f.getLockedMonths)
 app.post('/setLockedMonth', f.requireRole([Admin]), f.setLockedMonth)
+app.put('/setLockedMonth', f.requireRole([Admin]), f.releseLockedMonth)
 
 var port = process.env.PORT || 8080;
 

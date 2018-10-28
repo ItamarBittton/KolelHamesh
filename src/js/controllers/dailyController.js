@@ -58,20 +58,24 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
 
     $scope.students = [];
     $scope.role = $scope.$parent.role;
-    Data.get('getProhibitions').then(function (data) {
-        if (data) {
-            $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
-            $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' || data.is_one_time_allow;
-            $scope.reportMonths = data.reportMonths;
-            $scope.showStudents = true;
-            $scope.show(new Date());
+    getProhibitions();
+    function getProhibitions(){
 
-            Data.get('prevDates').then(function (data) {
-                $scope.prevDates = data.prevDates;
-            });
-        }
-    });
-
+        Data.get('getProhibitions').then(function (data) {
+            if (data) {
+                $scope.isOnlyDaily = $scope.$parent.role === 'Admin' ? false : data.is_only_daily;
+                $scope.isOneTimeAllow = $scope.$parent.role === 'Admin' || data.is_one_time_allow;
+                $scope.reportMonths = data.reportMonths;
+                $scope.showStudents = true;
+                $scope.show(new Date());
+                
+                Data.get('prevDates').then(function (data) {
+                    $scope.prevDates = data.prevDates;
+                });
+            }
+        });
+    }
+        
     $scope.changeMonth = function (currentMonth) {
         if (currentMonth) {
             currentMonth = JSON.parse(currentMonth);
@@ -84,9 +88,17 @@ angular.module('RDash').controller("dailyController", function ($scope, Data, $f
         if (!$scope.checkIfMonth()) {
             Data.post('setLockedMonth', { date: $scope.viewDate }).then(function (data) {
                 console.log(data);
+                getProhibitions();
             })
         }
     };
+
+    $scope.releseMonth = function () {
+        Data.put('setLockedMonth', { date: $scope.viewDate }).then(function(data){
+            console.log(data)
+            getProhibitions();
+        })
+    }
 
     $scope.checkIfMonth = function () {
         var viewDate = $scope.viewDate;

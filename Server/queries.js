@@ -23,6 +23,10 @@ const insertReportMonth = (date, colel_id) => (
     `INSERT INTO ${process.env.database}.tb_report_months (colel_id, month, year) VALUES (${colel_id}, ${date.month}, ${date.year})`
 );
 
+const deleteReportMonth = (date, colel_id) => (
+    `DELETE FROM ${process.env.database}.tb_report_months where colel_id = ${colel_id} and month = ${date.month} and year = ${date.year}`
+);
+
 function deleteStudent(id) {
     return `DELETE student
             FROM tb_student as student
@@ -571,5 +575,6 @@ module.exports = {
     getExcel: getExcel,
     getStatics: getStatics,
     getReportMonths: getReportMonths,
-    insertReportMonth: insertReportMonth
+    insertReportMonth: insertReportMonth,
+    deleteReportMonth: deleteReportMonth
 };
