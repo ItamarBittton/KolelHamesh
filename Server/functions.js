@@ -282,10 +282,11 @@ function isOnlyDaily(req, res) {
 }
 
 function getScores(req, res) {
-    sql.mq([queries.getScores(req), queries.getTestTypes()], function (data) {
+    sql.mq([queries.getScores(req), queries.getTestTypes(), queries.getReportMonths(req)], function (data) {
         res.send({
             scores: data.results[0] || [],
-            test_type: data.results[1] || []
+            test_type: data.results[1] || [],
+            reportMonths: data.results[2] || []
         });
     });
 }
@@ -488,11 +489,41 @@ function updateDateOfAllStudents(req, res) {
         });
 }
 
+function getLockedMonths(req, res){
+
+    sql.q(queries.getReportMonths(req), function(data){
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת שליפת הנתונים'
+            });
+        } else {
+            res.send({
+                reportMonths: data.results
+            });
+        }
+    })
+}
 
 function setLockedMonth(req, res){
     let date = req.body.date;
 
     sql.q(queries.insertReportMonth(date, req.currentUser.colel_id), function(data){
+        if (data.error) {
+            res.send({
+                error: 'היתה בעיה בעת עדכון הנתונים'
+            });
+        } else {
+            res.send({
+                success: 'החודש הנבחר נחסם לעדכון'
+            });
+        }
+    })
+}
+
+function releseLockedMonth(req, res){
+    let date = req.body.date;
+
+    sql.q(queries.deleteReportMonth(date, req.currentUser.colel_id), function(data){
         if (data.error) {
             res.send({
                 error: 'היתה בעיה בעת עדכון הנתונים'
@@ -580,7 +611,7 @@ function newReport(req, res) {
         path = `/files/${name.replace(/"/g, "")}_${req.body.month}.xlsx`;
 
     if (req.currentUser.permission === 'User') {
-        req.body.type = 5;
+        req.body.type = 1;
     }
 
     sql.q(queries.getReport(req), function (data) {
@@ -593,8 +624,9 @@ function newReport(req, res) {
             });
         } else {
             xlsx.makeReport(path, {
+                is_admin: req.currentUser.permission === 'Admin',
                 report_id: req.body.type,
-                colel_id: req.body.colel,
+                colel_id: req.body.colel || req.body.colel_id,
                 date_created: req.body.month,
                 url: path
             }, res);
@@ -739,7 +771,8 @@ module.exports = {
     updateAllStudents: updateDateOfAllStudents,
 
     copyDates: copyDates,
+    getLockedMonths: getLockedMonths,
     setLockedMonth: setLockedMonth,
-
+    releseLockedMonth:releseLockedMonth,
     getStatics: getStatics
 };

@@ -43,7 +43,7 @@
                             </select>-->
                         </div>
                     </div>
-                    <student-list students="students" drop-list="dropList"></student-list>
+                    <student-list ng-if="showStudents" is-disabled="checkIfMonth()" students="students" drop-list="dropList"></student-list>
                 </rd-widget-body>
             </form>
         </rd-widget>
@@ -52,8 +52,11 @@
     <div ng-if="!isOnlyDaily" ng-class="{'col-lg-12':!disable, 'col-md-7':disable}">
         <rd-widget>
             <rd-widget-header icon="icon-people" title="בחר תאריך על מנת לצפות ברשימת התלמידים">
-                <button id="btn-append-to-body" type="button" class="btn btn-warning pull-left" ng-click="lockMonth(currentMonth)">
+                <button ng-if="!checkIfMonth()" id="btn-append-to-body" type="button" class="btn btn-warning pull-left" ng-click="lockMonth(currentMonth)">
                     נעל חודש
+                </button>
+                <button ng-if="checkIfMonth()" id="btn-append-to-body" type="button" class="btn btn-info pull-left" ng-click="releseMonth(currentMonth)">
+                    שחרר חודש
                 </button>
                 <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control pull-left">
                     <option value="" disabled="disabled">החלף חודש</option>

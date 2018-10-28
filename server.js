@@ -67,7 +67,7 @@ app.get('/definitions', f.requireRole([Admin]), f.getDefinitions);
 app.put('/definitions', f.requireRole([Admin]), f.updDefinitions);
 
 app.get('/reports', f.requireRole([Admin]), f.getReports);
-app.put('/newReport', f.requireRole([Admin]), f.newReport);
+app.put('/newReport', f.requireRole([Admin, User]), f.newReport);
 
 app.post('/updateAll', f.requireRole([Admin]), f.updateAll);
 app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);
@@ -75,7 +75,9 @@ app.post('/updateAllStudents', f.requireRole([Admin]), f.updateAllStudents);
 app.post('/copyDates', f.requireRole([Admin]), f.copyDates)
 app.post('/getStatics', f.requireRole([Admin, User]), f.getStatics);
 
+app.get('/getLockedMonths', f.requireRole([User, Admin]), f.getLockedMonths)
 app.post('/setLockedMonth', f.requireRole([Admin]), f.setLockedMonth)
+app.put('/setLockedMonth', f.requireRole([Admin]), f.releseLockedMonth)
 
 var port = process.env.PORT || 8080;
 

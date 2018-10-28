@@ -3,7 +3,8 @@ angular
         return {
             scope: {
                 students: "=",
-                dropList: "="
+                dropList: "=",
+                isDisabled: "<"
             },
             template: `
             <div>
@@ -21,7 +22,7 @@ angular
                             <td>{{student.first_name}}</td>
                             <td>{{student.phone}}</td>
                             <td>
-                            <select
+                            <select ng-disabled="isDisabled"
                             ng-model="student.presence" 
                             ng-options="def.value as def.name for def in dropList.options" class="form-control">
                             </select>
