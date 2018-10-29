@@ -17,7 +17,9 @@ angular.module('RDash')
             chosenMonth.typeName = 'דוח סיכום חודשי';
             chosenMonth.month = chosenMonth.month + "-" + chosenMonth.year;
             
-            Data.put('newReport', chosenMonth).then(console.log)
+            Data.put('newReport', chosenMonth).then(function(res){
+                $scope.url = res.url;
+            })
         }
 
         $scope.getWidth = function() {

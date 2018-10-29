@@ -248,14 +248,14 @@ function makeReport(path, userData, res) {
             }
 
             workbook.xlsx.writeFile(`./dist${path}`).then(function () {
-                if(!userData.is_admin){
-                    res.download(path)
-                } else {
+                // if(!userData.is_admin){
+                //     res.download(`./dist${path}`)
+                // } else {
                     res.send({
                         success: 'הדוח הונפק בהצלחה!',
                         url: path
                     });
-                }
+                // }
             }).catch(function (err) {
                 res.send({ error: 'ארעה שגיאה במהלך הנפקת הדוח' });
             });

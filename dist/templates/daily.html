@@ -55,7 +55,7 @@
                 <button ng-if="!checkIfMonth()" id="btn-append-to-body" type="button" class="btn btn-warning pull-left" ng-click="lockMonth(currentMonth)">
                     נעל חודש
                 </button>
-                <button ng-if="checkIfMonth()" id="btn-append-to-body" type="button" class="btn btn-info pull-left" ng-click="releseMonth(currentMonth)">
+                <button ng-if="checkIfMonth()" id="btn-append-to-body" type="button" class="btn btn-warning pull-left" ng-click="releseMonth(currentMonth)">
                     שחרר חודש
                 </button>
                 <select ng-if="prevDates" style="margin-bottom: 0px; width: 120px" ng-model="currentMonth" ng-change="changeMonth(currentMonth)" class="form-control pull-left">
