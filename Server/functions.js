@@ -359,7 +359,7 @@ function editColel(req, res) {
     var reqColel = req.body.colel;
 
     var Colel = {
-        id: reqColel.id,
+        id: reqColel.colel_id,
         name: reqColel.name,
         address: reqColel.address,
         mail_address: reqColel.mail_address,
