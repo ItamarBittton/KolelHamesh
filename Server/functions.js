@@ -274,8 +274,8 @@ function updateDailyReport(req, res) {
 function isOnlyDaily(req, res) {
     sql.mq([queries.getColelPermissions(req), queries.getReportMonths(req)], function (data) {
         res.send({
-            is_only_daily: data.results[0].is_only_daily,
-            is_one_time_allow: data.results[0].is_one_time_allow,
+            is_only_daily: data.results[0][0].is_only_daily,
+            is_one_time_allow: data.results[0][0].is_one_time_allow,
             reportMonths: data.results[1]
         });
     });
