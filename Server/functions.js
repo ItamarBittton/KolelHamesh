@@ -627,6 +627,7 @@ function newReport(req, res) {
                 is_admin: req.currentUser.permission === 'Admin',
                 report_id: req.body.type,
                 colel_id: req.body.colel || req.body.colel_id,
+                group_type: req.currentUser.group_type,
                 date_created: req.body.month,
                 url: path
             }, res);

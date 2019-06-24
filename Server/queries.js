@@ -277,6 +277,7 @@ function getExcel(data) {
     data.date_created = data.date_created.split('-');
     var year = parseInt(data.date_created[1]);
     var month = parseInt(data.date_created[0]);
+    var group_type = data.group_type;
 
     return [{
         "log": `SELECT NULL LIMIT 0`, //sql.ia("tb_report_history", [data]),
@@ -287,7 +288,7 @@ function getExcel(data) {
                                t3.first_name AS 'first_name', 
                                t3.phone AS 'phone'
                         FROM tb_daily t1
-                        LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
+                        LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = ${group_type})
                         LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
                         WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id} 
                               AND t3.id in (select t4.student_id 
@@ -408,7 +409,7 @@ sum(t1.monthlyPayment) as "סך הכול מלגות",
                                t3.first_name AS 'first_name', 
                                t3.phone AS 'phone'
                         FROM tb_daily t1
-                        LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = 1)
+                        LEFT OUTER JOIN tbk_presence_status t2 ON (t1.presence = t2.value AND group_type = ${group_type})
                         LEFT OUTER JOIN tb_student t3 ON (t1.student_id = t3.id)
                         WHERE MONTH(t1.date) = ${month} AND YEAR(t1.date) = ${year} AND t3.colel_id = ${data.colel_id}
                         ORDER BY t1.date, t3.last_name, t3.first_name`,
